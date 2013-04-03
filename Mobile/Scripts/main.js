@@ -68,10 +68,8 @@ var app = {
         if (this.currentPage === page)
             return;
 
-        if (this.currentPage.onShow)
-            this.currentPage.onShow();
         // Cleaning up: remove old pages that were moved out of the viewport
-        //$('.stage-right, .stage-left').remove(); //.not('.homePage')
+         //.not('.homePage')
 
         if (page.index < this.currentPage.index) {
             // Always apply a Back transition (slide from left) when we go back to the search page
@@ -91,8 +89,16 @@ var app = {
             $(self.currentPage.el).attr('class', 'page transition ' + currentPageDest);
             // Slide in the new page
             $(page.el).attr('class', 'page stage-center transition');
+
+            if (page.onShow)
+                page.onShow();
+
             self.currentPage = page;
+            
+            $('.stage-right, .stage-left').remove();
         });
+
+        
 
     },
 

@@ -2,9 +2,13 @@ html {
     height: 100%;
 }
 
+*{
+	font-family: Helvetica, Arial, 'DejaVu Sans', 'Liberation Sans', Freesans, sans-serif;
+    font-size: 18px;
+	color: #666;
+}
+
 body {
-    font-family: Helvetica, Arial, 'DejaVu Sans', 'Liberation Sans', Freesans, sans-serif;
-    font-size: 16px;
     margin: 0;
     padding: 0;
     height: 100%;
@@ -18,10 +22,11 @@ body {
 
 .header {
     background: #666;
-    height: 35px;
-    line-height: 35px;
+    height: 44px;
+    line-height: 44px;
     width: 100%;
     color: #fff;
+	border-bottom:1px solid #fff;
 }
 
 .header h1 {
@@ -31,6 +36,16 @@ body {
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
+	color: #fff;
+}
+
+textarea
+{
+	resize: none;
+	width:100%;
+	height:72px;
+	border:2px solid #666;
+	margin-bottom:5px;
 }
 
 button {
@@ -39,7 +54,7 @@ button {
     padding: 5px;
 	border: 1px solid #666;
 	background-color: white;
-	font-size: 16px;
+	font-size: 18px;
 }
 
 .buttonlist > button
@@ -47,6 +62,7 @@ button {
 	border: none;
 	width:100%;
 	border-bottom:1px solid #666;
+	padding:8px;
 	text-align:left;
 	margin: 0px;
 }
@@ -66,7 +82,7 @@ h1 {
 }
 
 h2 {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: normal;
     padding: 0px;
     margin: 0px;
@@ -76,8 +92,8 @@ h2 {
     overflow: hidden;
     -webkit-overflow-scrolling: touch;
     position: absolute;
-    top: 35px;
-	bottom:35px;
+    top: 45px;
+	bottom:44px;
     left: 0px;
     right: 0px;
 }
@@ -94,15 +110,15 @@ h2 {
 }
 		.footer > button
         {
-			padding: 0 5px;
-			font-size: 16px;
+			padding: 0 10px;
+			font-size: 18px;
 			margin: 0;
 			border: none;
 			display: inline-block;
             background-color: transparent;
             color:white;
-            height: 35px;
-            line-height: 35px;
+            height: 44px;
+            line-height: 44px;
         }
             .footer > button.selected
             {

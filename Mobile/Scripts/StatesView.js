@@ -2,7 +2,6 @@ var StatesView = function (store) {
     this.index = 2;
     this.initialize = function() {
         this.el = $('<div/>');
-        this.el.on('click', 'button', this.setState); //, 
         this.loadData();
     };
 
@@ -10,6 +9,10 @@ var StatesView = function (store) {
         this.el.html(StatesView.template());
         return this;
     };
+
+    this.onShow = function () {
+        this.el.on('click', 'button', this.setState);
+    }
 
     this.setState = function ()
     {
