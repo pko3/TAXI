@@ -3,7 +3,7 @@
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "sk.dflexnr.taxi"
         versionCode = "10"
-        version     = "1.2.1">
+        version     = "1.2.0">
  
     <name>TAXI</name>
  
