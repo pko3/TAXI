@@ -47,6 +47,14 @@ var SettingsView = function (messages) {
             data.ErrorMessage = Service.connectionError;
             $(".waiting").hide();
             $("#settingsForm").html(SettingsView.templateForm(data));
+
+            $("input").bind('focus', function (event) {
+                app.scrollTop();
+            });
+            $("select").bind('focus', function (event) {
+                app.scrollTop();
+            });
+
             $("#settingsForm").show();
             $("#settingsSave").show();
     };

@@ -12,6 +12,9 @@ var app = {
     registerEvents: function () {
         var self = this;
         $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
+
+        
+
         // Check of browser supports touch events...
         //if (document.documentElement.hasOwnProperty && document.documentElement.hasOwnProperty('ontouchstart')) {
         //    // ... if yes: register touch event listener to change the "selected" state of the item
@@ -110,6 +113,10 @@ var app = {
             
             $('.stage-right, .stage-left').remove();
         });
+    },
+    scrollTop: function () {
+            window.scrollTo(0, 0);
+        document.body.scrollTop = 0;
     },
     initialize: function() {
         var self = this;
