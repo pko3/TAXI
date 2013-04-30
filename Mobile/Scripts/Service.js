@@ -1,40 +1,121 @@
 ﻿var Service = {
-    _settings: {
-        id:"12"
+    online: false,
+    isAuthenticated: false,
+    isComplet: function () {
+        return this.isAuthenticated && this._settings && this._settings.transporterId;
     },
-    initialize: function(callback){
-        Service.callLater(callback);
+    connectionError: null,
+    _settings: {
+        name: null,
+        password: null,
+        transporterId: null,
+        url: null,
+        sessionId: null
+    },
+    initialize: function (callback) {
+        //Cross domain !!!
+        $.support.cors = true;
+        $.ajaxSetup({
+            cache: false,
+            timeout: 30000,
+            error: function (jqXHR, textStatus, errorThrown) {
+                switch (jqXHR.status) {
+                    case 403: Service.connectionError = "Chybné prihlásenie"; break;
+                    case 404: Service.connectionError = "Služba sa nenašla: " + this.url; break;
+                    default: Service.connectionError = "Služba sa nenašla: " + this.url; break;
+                }
+            }
+        });
+
+        this.login(callback);
+        //callback();
+    },
+    login: function (callback) {
+        this.getSettings();
+        if (this._settings.url && this._settings.name && this._settings.password)
+            this.callService("login", { UserName: this._settings.name, Password: this._settings.password, RememberMe:true }, function (d) {
+                Service.isAuthenticated = true;
+                PositionService.startWatch();
+                if (callback)
+                    callback();
+            }, function (d) {
+                PositionService.stopWatch();
+                if (d.ErrorMessage)
+                    Service.connectionError = d.ErrorMessage;
+                else
+                    Service.connectionError = "Chybné prihlásenie";
+                Service.isAuthenticated = false;
+                if (callback)
+                    callback();
+            });
+        else
+            app.settings();
     },
     getOrders: function (callback) {
-        Service.callLater(callback, [
-            { title:"Ahoj", description:"", id:"", fk:"" }
-        ]);
+        this.callService("data/transporterorders", { IdTransporter: this._settings.transporterId }, callback);
     },
-    getStates: function (callback) {
-        Service.callLater(callback, [
-            { title: "Voľné", index: 0, selected: true },
-            { title: "Obsadené zakázkou", index: 1, selected: false },
-            { title: "Inak obsadené", index: 2, selected: false },
-            { title: "Čaká", index: 3, selected: false },
-            { title: "Tranzit", index: 4, selected: false },
-            { title: "Prestávka", index: 5, selected: false },
-            { title: "Porucha", index: 6, selected: false },
-        ]);
+    getMessages: function (callback) {
+        this.callService("data/transporterMessages", null, callback);
+    },
+    getTransporters: function (callback) {
+        var self = this;
+        this.callService("data/transporterssimple", null, function (d) {
+            if (d.Items) {
+                $.each(d.Items, function () {
+                    if (this.Id == self._settings.transporterId)
+                        this.selected = true;
+                });
+                if (callback)
+                    callback(d);
+            }
+            else
+            {
+                Service.connectionError = "Zoznam vozidiel je nedostupný";
+            }
+        }, function () { callback([]) });
+    },
+    getTransporter: function () {
+
+    },
+    setTransporter: function (state) {
+
     },
     getSettings: function () {
-        if (!Service._settings)
-            Service._settings = JSON.parse(window.localStorage.getItem("settings"));
+        if (!Service._settings || !Service._settings.url)
+            Service._settings = JSON.parse(window.localStorage.getItem("settings")) || {};
         return Service._settings;
     },
     saveSettings: function (data) {
         Service._settings = data;
         window.localStorage.setItem("settings", JSON.stringify(Service._settings));
     },
-    callLater: function(callback, data) {
-        if (callback) {
-            setTimeout(function() {
-                callback(data);
-            });
+    callService: function (method, data, successDelegate, errorDelegate) {
+        Service.connectionError = null;
+        if (!this._settings.url) {
+            Service.connectionError = "Chýba adresa servisu";
+            if (errorDelegate)
+                errorDelegate(d);
+        }
+        else {
+            $.post(this._settings.url + "/app/" + method, data)
+                .done(function (d) {
+                    if (d && d.ErrorMessage) {
+                        Service.connectionError = d.ErrorMessage + " :" + this.url;
+                        if (errorDelegate)
+                            errorDelegate(d);
+                        else
+                            app.showAlert(d.ErrorMessage + " :" + this.url, "Error");
+                    }
+                    else if (successDelegate)
+                        successDelegate(d);
+                })
+                .fail(function () {
+                    Service.connectionError = "Connection error :" + this.url;
+                    if (errorDelegate)
+                        errorDelegate({ ErrorMessage: "Connection error :" + this.url });
+                    else
+                        app.showAlert("Connection error :" + this.url, "Error");
+                });
         }
     }
 }

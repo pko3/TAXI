@@ -12,7 +12,7 @@ var MapView = function (store) {
     };
 
     this.onShow = function(){
-        Map.resize();
+        Map.showPosition();
     }
 
     this.initialize();
@@ -30,18 +30,11 @@ var Map = {
     mapDiv: null,
     initialize: function (el) {
 
-        var sc = $('<div class="scroll"/>').appendTo(el);
+        var header = $('<div class="header"><button data-route="orders" class="icon ico_back">&nbsp;</button></div>').appendTo(el);
+        var sc = $('<div class="scroll"/>').appendTo(header);
         Map.mapDiv = $('<div id="mapDiv"/>').appendTo(sc);
         Map.mapMessage = $('<div id="mapMessage">Waiting ...</div>').appendTo(sc);
         Map.mapOut = $('<div id="mapOut"/>').appendTo(sc);
-
-        Map.message("Waiting watch position ...");
-        try {
-            Map.watchID = navigator.geolocation.watchPosition(Map.success, Map.error, { frequency: 2000 });
-        }
-        catch (err) {
-            Map.message("Error: " + err.message, true);
-        }
     },
     success: function (position) {
         Map.date = new Date().toTimeString();
@@ -84,8 +77,16 @@ var Map = {
             Map.map.setCenter(Map.point);
         }
     },
-    resize: function(){
+    showPosition: function () {
         if (Map.map) {
+            Map.message("H¾adám pozíciu ...");
+            try {
+                Map.watchID = navigator.geolocation.getCurrentPosition(Map.success, Map.error); //, { frequency: 2000 }
+            }
+            catch (err) {
+                Map.message("Error: " + err.message, true);
+            }
+
             google.maps.event.trigger(Map.map, "resize");
             Map.map.setCenter(Map.point);
         }

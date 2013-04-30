@@ -2,8 +2,6 @@ var OrdersView = function() {
     this.index = 1;
     this.initialize = function() {
         this.el = $('<div/>');
-        //this.el.on('keyup', '.search-key', this.findByName); //, 
-        this.loadData();
     };
 
     this.render = function() {
@@ -13,14 +11,22 @@ var OrdersView = function() {
 
     this.loadData = function () {
         var self = this;
+        $('.orders-list').hide();
+        $(".waiting").show();
         Service.getOrders(function (orders) {
-            $('.orders-list').html(OrdersView.liTemplate(orders));
+            $('.orders-list').html(OrdersView.liTemplate(orders.Items));
             if (self.iscroll) 
                self.iscroll.refresh();
             else 
-               self.iscroll = new iScroll($('.scroll', self.el)[0], { hScrollbar: false, vScrollbar: false });
+                self.iscroll = new iScroll($('.scroll', self.el)[0], { hScrollbar: false, vScrollbar: false });
+            $(".waiting").hide();
+            $('.orders-list').show();
         });
     };
+
+    this.onShow = function () {
+        this.loadData();
+    }
     this.initialize();
 }
 

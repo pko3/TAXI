@@ -2,7 +2,7 @@ var StatesView = function (store) {
     this.index = 2;
     this.initialize = function() {
         this.el = $('<div/>');
-        this.loadData();
+        //this.loadData();
     };
 
     this.render = function() {
@@ -11,28 +11,28 @@ var StatesView = function (store) {
     };
 
     this.onShow = function () {
-        this.el.on('click', 'button', this.setState);
+        //$("#states").on('click', 'button', function () {
+        //    if ($("#states").hasClass("collapsed"))
+        //        $("#states").removeClass("collapsed");
+        //    else {
+        //        $(this).addClass("selected");
+        //        $("#states").addClass("collapsed");
+        //    }
+        //});
     }
 
-    this.setState = function ()
-    {
-        $("[data-state]").removeClass("selected");
-        $(this).addClass("selected");
-        //app.showAlert($(this).attr("data-state"), "data-state");
-    }
-
-    this.loadData = function () {
-        var self = this;
-        Service.getStates(function (states) {
-            $('.states-list').html(StatesView.liTemplate(states));
-            if (self.iscroll)
-               self.iscroll.refresh();
-            else
-               self.iscroll = new iScroll($('.scroll', self.el)[0], { hScrollbar: false, vScrollbar: false });
-        });
-    };
+    //this.loadData = function () {
+    //    var self = this;
+    //    Service.getStates(function (states) {
+    //        $('#states').html(StatesView.liTemplate(states));
+    //        if (self.iscroll)
+    //           self.iscroll.refresh();
+    //        else
+    //           self.iscroll = new iScroll($('.scroll', self.el)[0], { hScrollbar: false, vScrollbar: false });
+    //    });
+    //};
     this.initialize();
 }
 
 StatesView.template = Handlebars.compile($("#states-tpl").html());
-StatesView.liTemplate = Handlebars.compile($("#states-li-tpl").html());
+//StatesView.liTemplate = Handlebars.compile($("#states-li-tpl").html());

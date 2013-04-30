@@ -4,5 +4,7 @@
 /// <reference path="Service.js" />
 /// <reference path="MessageView.js" />
 /// <reference path="OrdersView.js" />
+/// <reference path="PositionService.js" />
 /// <reference path="main.js" />
+
 
