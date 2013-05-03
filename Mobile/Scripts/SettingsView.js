@@ -13,14 +13,14 @@ var SettingsView = function (messages) {
         var self = this;
         this.el.html(SettingsView.template());
         $("#settingsForm").hide();
-        $(".waiting").show();
+        $(".waitingDiv").show();
         $("#settingsSave").click(function () { self.save(); }).hide();
         this.loadForm();
     };
     this.save = function () {
         $("#settingsSave").hide();
         $("#settingsForm").hide();
-        $(".waiting").show();
+        $(".waitingDiv").show();
 
         var self = this, d = $("#settingsForm-form").serializeArray(), data = {};
         //serializeObject
@@ -30,7 +30,7 @@ var SettingsView = function (messages) {
         Service.login(function () {
             if (Service.isComplet())
                 app.home();
-            else 
+            else
                 self.loadForm();
         });
     };
@@ -45,7 +45,7 @@ var SettingsView = function (messages) {
     };
     this.showForm = function (data) {
             data.ErrorMessage = Service.connectionError;
-            $(".waiting").hide();
+            $(".waitingDiv").hide();
             $("#settingsForm").html(SettingsView.templateForm(data));
 
             $("input").bind('focus', function (event) {

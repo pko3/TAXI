@@ -1,5 +1,6 @@
 ﻿var Service = {
     online: false,
+    transporter: null,
     isAuthenticated: false,
     isComplet: function () {
         return this.isAuthenticated && this._settings && this._settings.transporterId;
@@ -74,11 +75,8 @@
             }
         }, function () { callback([]) });
     },
-    getTransporter: function () {
-
-    },
-    setTransporter: function (state) {
-
+    getDetail: function (entity, id, callback) {
+        this.callService("item/" + entity + "_" + id, null, callback, callback);
     },
     getSettings: function () {
         if (!Service._settings || !Service._settings.url)
@@ -110,6 +108,7 @@
                         successDelegate(d);
                 })
                 .fail(function () {
+                    $(".waitingDiv").hide();
                     Service.connectionError = "Connection error :" + this.url;
                     if (errorDelegate)
                         errorDelegate({ ErrorMessage: "Connection error :" + this.url });

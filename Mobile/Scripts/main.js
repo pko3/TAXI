@@ -12,9 +12,7 @@ var app = {
     registerEvents: function () {
         var self = this;
         $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
-
         
-
         // Check of browser supports touch events...
         //if (document.documentElement.hasOwnProperty && document.documentElement.hasOwnProperty('ontouchstart')) {
         //    // ... if yes: register touch event listener to change the "selected" state of the item
@@ -75,7 +73,7 @@ var app = {
                 if (page.onShow) 
                     page.onShow();
                 else
-                    $(".waiting").hide();
+                    $(".waitingDiv").hide();
             });
             return;
         }
@@ -107,7 +105,7 @@ var app = {
             if (page.onShow)
                 page.onShow();
             else
-                $(".waiting").hide();
+                $(".waitingDiv").hide();
 
             self.currentPage = page;
             
@@ -117,6 +115,18 @@ var app = {
     scrollTop: function () {
             window.scrollTo(0, 0);
         document.body.scrollTop = 0;
+    },
+    refreshTransporter: function ()
+    {
+        var settings = Service.getSettings();
+        Service.getDetail("Transporter", settings.transporterId, function (d) {
+            Service.transporter = d;
+            $("#taxiHeader")
+                .removeClass()
+                .addClass(d.Status)
+                .empty()
+                .html("<h1>" + d.SPZ + "<h1>");
+        });
     },
     initialize: function() {
         var self = this;

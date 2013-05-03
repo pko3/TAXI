@@ -28,6 +28,8 @@ var Map = {
     mapOut: null,
     mapMessage: null,
     mapDiv: null,
+    mess: null,
+    error: null,
     initialize: function (el) {
 
         var header = $('<div class="header"><button data-route="orders" class="icon ico_back">&nbsp;</button></div>').appendTo(el);
@@ -35,6 +37,11 @@ var Map = {
         Map.mapDiv = $('<div id="mapDiv"/>').appendTo(sc);
         Map.mapMessage = $('<div id="mapMessage">Waiting ...</div>').appendTo(sc);
         Map.mapOut = $('<div id="mapOut"/>').appendTo(sc);
+
+        if (Map.mess)
+        {
+            Map.message(Map.mess, Map.error);
+        }
     },
     success: function (position) {
         Map.date = new Date().toTimeString();
@@ -54,8 +61,15 @@ var Map = {
         Map.message("Error: " + err.message, true);
     },
     message: function (t, error) {
-        Map.mapMessage.html(t);
-        Map.mapMessage.css("color", error ? "red" : "black");
+        if (Map.mapMessage) {
+            Map.mapMessage.html(t);
+            Map.mapMessage.css("color", error ? "red" : "black");
+        }
+        else
+        {
+            Map.mess = t;
+            Map.error = error;
+        }
     },
     setMap: function (position) {
         if (google.maps) {

@@ -4,9 +4,12 @@
 <link href="css/styles.css" rel="stylesheet">
 </head>
 <body>
-<div class='waiting'/>   
+<div class='waitingDiv'/>   
 <script id="orders-tpl" type="text/x-handlebars-template">
-<div class='header'> 
+<div id="taxiHeader" > 
+    <h1>TAXI</h1>
+</div>
+<div class='footer'> 
     <button id="newOrder" class="icon ico_order">&nbsp;</button>
     <button data-route="states" class="icon ico_stop">&nbsp;</button>
     <button data-route="message" class="icon ico_message">&nbsp;</button>
@@ -18,7 +21,7 @@
 </script>
 <script id="orders-li-tpl" type="text/x-handlebars-template">
     {{#.}}
-    <div id="{{this.GUID}}" >{{this.StartCity}} {{this.StartAddress}}<br/>{{this.description}}</div>
+    <div id="{{this.GUID}}" class="{{this.Status}}" data_GUID_Offer="{{this.GUID_Offer}}" data_StatusOffer="{{this.StatusOffer}}" data_Id="{{this.GUID}}" data_Status="{{this.Status}}"><div class="icon down">&nbsp;</div><div class="content">{{this.StartCity}} {{this.StartAddress}}<br/>{{this.description}}</div><div class="icon up">&nbsp;</div></div>
     {{/.}}
 </script>
 

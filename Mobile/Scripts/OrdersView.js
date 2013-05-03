@@ -12,17 +12,36 @@ var OrdersView = function() {
     this.loadData = function () {
         var self = this;
         $('.orders-list').hide();
-        $(".waiting").show();
+        $(".waitingDiv").show();
         Service.getOrders(function (orders) {
             $('.orders-list').html(OrdersView.liTemplate(orders.Items));
             if (self.iscroll) 
                self.iscroll.refresh();
             else 
                 self.iscroll = new iScroll($('.scroll', self.el)[0], { hScrollbar: false, vScrollbar: false });
-            $(".waiting").hide();
+            $(".waitingDiv").hide();
+            $(".up").click(function () { self.changeOffer($(this).parent(), "Up"); });
+            $(".down").click(function () { self.changeOffer($(this).parent(), "Down"); });
             $('.orders-list').show();
         });
+        app.refreshTransporter();
     };
+    this.changeOffer = function (btn, action) {
+        
+        var settings = Service.getSettings(), self = this;
+        var data = {
+            Action: action,
+            GUID_Transporter: settings.transporterId,
+            Status_Transporter: settings.transporterState,
+            GUID: btn.attr("data_GUID_Offer"),
+            Status: btn.attr("data_StatusOffer"),
+            GUID_TransporterOrder: btn.attr("data_Id"),
+            Status_TransporterOrder: btn.attr("data_Status"),
+        };
+
+        btn.removeClass().addClass("refWaiting");
+        Service.callService("offer", data, function () { self.loadData(); }, function () { self.loadData(); });
+    }
 
     this.onShow = function () {
         this.loadData();
