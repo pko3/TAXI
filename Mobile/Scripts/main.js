@@ -137,7 +137,7 @@ var app = {
         });
     }
 };
-
+//document.addEventListener("deviceready", onDeviceReady, false);
 //$(window).load(function(){
     app.initialize();
 //});

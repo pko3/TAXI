@@ -21,7 +21,6 @@ var MapView = function (store) {
 //MapView.template = Handlebars.compile($("#map-tpl").html());
 
 var Map = {
-    watchID: null,
     date: null,
     marker: null,
     map: null,
@@ -29,7 +28,7 @@ var Map = {
     mapMessage: null,
     mapDiv: null,
     mess: null,
-    error: null,
+    messError: null,
     initialize: function (el) {
 
         var header = $('<div class="header"><button data-route="orders" class="icon ico_back">&nbsp;</button></div>').appendTo(el);
@@ -40,7 +39,7 @@ var Map = {
 
         if (Map.mess)
         {
-            Map.message(Map.mess, Map.error);
+            Map.message(Map.mess, Map.messError);
         }
     },
     success: function (position) {
@@ -56,19 +55,24 @@ var Map = {
         //'Timestamp: ' + new Date(position.timestamp) + '<br />';
          Map.mapOut.html(d);
          Map.setMap(position);
+         if (PositionService.watchID == null)
+         {
+             Map.message("Sp˙öùam sledovanie polohy", false);
+             PositionService.startWatch();
+         }
     },
     error: function (err) {
         Map.message("Error: " + err.message, true);
     },
-    message: function (t, error) {
+    message: function (t, err) {
         if (Map.mapMessage) {
             Map.mapMessage.html(t);
-            Map.mapMessage.css("color", error ? "red" : "black");
+            Map.mapMessage.css("color", err ? "red" : "black");
         }
         else
         {
             Map.mess = t;
-            Map.error = error;
+            Map.messError = err;
         }
     },
     setMap: function (position) {
@@ -92,17 +96,14 @@ var Map = {
         }
     },
     showPosition: function () {
-        if (Map.map) {
+       // if (Map.map) {
             Map.message("Hæad·m pozÌciu ...");
             try {
-                Map.watchID = navigator.geolocation.getCurrentPosition(Map.success, Map.error); //, { frequency: 2000 }
+                navigator.geolocation.getCurrentPosition(Map.success, Map.error); //, { frequency: 2000 }
             }
             catch (err) {
                 Map.message("Error: " + err.message, true);
             }
-
-            google.maps.event.trigger(Map.map, "resize");
-            Map.map.setCenter(Map.point);
-        }
+        //}
     }
 };

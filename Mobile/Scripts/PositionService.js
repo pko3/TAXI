@@ -4,9 +4,12 @@
     watchID: null,
     startWatch: function () {
         try {
-            this.watchID = navigator.geolocation.watchPosition(this.success, this.error, { frequency: 2000 });
+            //{ maximumAge: 3000, timeout: 5000, enableHighAccuracy: true };
+            //{ frequency: 3000 };
+            this.watchID = navigator.geolocation.watchPosition(this.success, this.error, { frequency: 5000 });
         }
         catch (err) {
+            this.watchID = null;
             Map.message(err.message, true);
         }
     },
@@ -20,5 +23,6 @@
     },
     stopWatch: function () {
         navigator.geolocation.clearWatch(this.watchID);
+        this.watchID = null;
     }
 }

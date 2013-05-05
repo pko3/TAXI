@@ -10,12 +10,18 @@ var StatesView = function (store) {
     };
 
     this.onShow = function () {
-        this.loadData();
+        var self = this;
+        $("#statesSave").click(function () { self.save(); });
     }
-
-    this.loadData = function () {
-
+        
+    this.save = function () {
+        var self = this, d = $("#statesForm-form").serializeArray(), data = {};
+        //serializeObject
+        $.each(d, function (i, v) { data[v.name] = v.value; });
+        data["GUID_Transporter"] = Service.transporter.GUID;
+        Service.callService("TaxiSetHistory", data, function () { app.home(); });
     };
+
     this.initialize();
 }
 
