@@ -28,18 +28,20 @@
 <script id="states-tpl" type="text/x-handlebars-template">
 <div class='header'><button data-route="orders" class="icon ico_back">&nbsp;</button><button id="statesSave" class="icon ico_submit">&nbsp;</button></div>
 <div class="scroll">
-<form id="statesForm-form">
-    <!--Free||Busy||WithCustomer||Offline	-->
-    <select name="HistoryAction"> 	
-        <option value="Prestávka">Prestávka</option>
-        <option value="Porucha">Porucha</option>
-        <option value="Koniec zmeny">Koniec zmeny</option>
-    </select>
-    <input  name="HistoryActionDescription" type="text" placeholder="Poznámka" />
-    <input  name="Payment" type="number" placeholder="Cena" />
-</form>
+<form id="statesForm"></form>
 </div>
 </script>
+<script id="statesForm-template" type="text/x-handlebars-template">
+        <select id="HistoryAction" name="HistoryAction"> 	
+            <option value="Prestávka">Prestávka</option>
+            <option value="Porucha">Porucha</option>
+            <option value="Koniec zmeny">Koniec zmeny</option>
+        </select>
+    <input  name="HistoryActionDescription" value="{{this.HistoryActionDescription}}" type="text" placeholder="Poznámka" />
+    <input  name="Payment" type="number" value="{{this.Payment}}" placeholder="Cena" />
+    {{#if this.ErrorMessage}}<div class="error">{{this.ErrorMessage}}</div>{{/if}}
+</script>
+
 <!--<script id="states-li-tpl" type="text/x-handlebars-template">
     {{#.}}
     <button data-state="{{this.index}}" {{#if this.selected}}class="selected"{{/if}}">{{this.title}}</button>
@@ -63,7 +65,7 @@
     <select name="transporterId" id="transporterId">
         <option value="" style="color:#f00;">Vyberte vozidlo</option>
         {{#each this.transportes}}
-         <option value="{{Id}}" {{#if selected}}selected="selected"{{/if}}">{{SPZ}}</option>
+         <option value="{{Id}}" {{#if selected}}selected="selected"{{/if}}>{{SPZ}}</option>
         {{/each}}
     </select>
     <input type="text" placeholder="Meno" name="name" id="name" value="{{this.name}}"/>

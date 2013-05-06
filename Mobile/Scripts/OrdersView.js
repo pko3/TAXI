@@ -12,14 +12,14 @@ var OrdersView = function() {
     this.loadData = function () {
         var self = this;
         $('.orders-list').hide();
-        $(".waitingDiv").show();
+        app.waiting();
         Service.getOrders(function (orders) {
             $('.orders-list').html(OrdersView.liTemplate(orders.Items));
             if (self.iscroll) 
                self.iscroll.refresh();
             else 
                 self.iscroll = new iScroll($('.scroll', self.el)[0], { hScrollbar: false, vScrollbar: false });
-            $(".waitingDiv").hide();
+            app.waiting(false);
             $(".up").click(function () { self.changeOffer($(this).parent(), "Up"); });
             $(".down").click(function () { self.changeOffer($(this).parent(), "Down"); });
             $('.orders-list').show();

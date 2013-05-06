@@ -108,7 +108,7 @@
                         successDelegate(d);
                 })
                 .fail(function () {
-                    $(".waitingDiv").hide();
+                    app.waiting(false);
                     Service.connectionError = "Connection error :" + this.url;
                     if (errorDelegate)
                         errorDelegate({ ErrorMessage: "Connection error :" + this.url });

@@ -10,20 +10,47 @@ var StatesView = function (store) {
     };
 
     this.onShow = function () {
+        this.showForm({});
+    };
+
+    this.showForm = function (data) {
         var self = this;
         $("#statesSave").click(function () { self.save(); });
-    }
+        app.waiting(false);
+        $("#statesForm").html(StatesView.formTemplate(data));
+
+        $("input").bind('focus', function (event) {
+            app.scrollTop();
+        });
+        $("select").bind('focus', function (event) {
+            app.scrollTop();
+        });
+        $("#HistoryAction").val(data.HistoryAction);
+        $("#statesForm").show();
+    };
         
     this.save = function () {
-        var self = this, d = $("#statesForm-form").serializeArray(), data = {};
+        var f = $("#statesForm");
+        f.hide();
+        app.waiting();
+        var self = this, d = f.serializeArray(), data = {};
         //serializeObject
         $.each(d, function (i, v) { data[v.name] = v.value; });
         data["GUID_Transporter"] = Service.transporter.GUID;
-        Service.callService("TaxiSetHistory", data, function () { app.home(); });
+        Service.callService("TaxiSetHistory", data,
+            function () { app.home(); },
+            function (d) {
+                data.ErrorMessage = d.ErrorMessage;
+                f.show(data);
+                app.waiting(false);
+            });
+    };
+    this.clear = function () {
+
     };
 
     this.initialize();
 }
 
 StatesView.template = Handlebars.compile($("#states-tpl").html());
-//StatesView.liTemplate = Handlebars.compile($("#states-li-tpl").html());
+StatesView.formTemplate = Handlebars.compile($("#statesForm-template").html());

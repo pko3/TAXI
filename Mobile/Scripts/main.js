@@ -73,7 +73,7 @@ var app = {
                 if (page.onShow) 
                     page.onShow();
                 else
-                    $(".waitingDiv").hide();
+                    app.waiting(false);
             });
             return;
         }
@@ -105,12 +105,18 @@ var app = {
             if (page.onShow)
                 page.onShow();
             else
-                $(".waitingDiv").hide();
+                self.waiting(true);
 
             self.currentPage = page;
             
             $('.stage-right, .stage-left').remove();
         });
+    },
+    waiting : function(show){
+        if(show == false)
+            $(".waitingDiv").hide();
+        else
+            $(".waitingDiv").show();
     },
     scrollTop: function () {
             window.scrollTo(0, 0);

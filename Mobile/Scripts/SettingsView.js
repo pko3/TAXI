@@ -13,14 +13,14 @@ var SettingsView = function (messages) {
         var self = this;
         this.el.html(SettingsView.template());
         $("#settingsForm").hide();
-        $(".waitingDiv").show();
+        app.waiting();
         $("#settingsSave").click(function () { self.save(); }).hide();
         this.loadForm();
     };
     this.save = function () {
         $("#settingsSave").hide();
         $("#settingsForm").hide();
-        $(".waitingDiv").show();
+        app.waiting();
 
         var self = this, d = $("#settingsForm-form").serializeArray(), data = {};
         //serializeObject
@@ -45,7 +45,7 @@ var SettingsView = function (messages) {
     };
     this.showForm = function (data) {
             data.ErrorMessage = Service.connectionError;
-            $(".waitingDiv").hide();
+            app.waiting(false);
             $("#settingsForm").html(SettingsView.templateForm(data));
 
             $("input").bind('focus', function (event) {
