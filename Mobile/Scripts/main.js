@@ -122,6 +122,18 @@ var app = {
             window.scrollTo(0, 0);
         document.body.scrollTop = 0;
     },
+    refreshData: function (dataIds) {
+        if (dataIds) {
+            $.each(dataIds, function () {
+                if(this == "orders"){
+                    if (app.currentPageName == "orders")
+                        app.currentPage.loadData();
+                }
+                else if(this == "transporters")
+                    app.refreshTransporter();
+            });
+        }
+    },
     refreshTransporter: function ()
     {
         var settings = Service.getSettings();

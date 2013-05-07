@@ -40,7 +40,7 @@ var OrdersView = function() {
         };
 
         btn.removeClass().addClass("refWaiting");
-        Service.callService("offer", data, function () { self.loadData(); }, function () { self.loadData(); });
+        Service.callService("offer", data); //, function () { self.loadData(); }, function () { self.loadData(); }
     }
 
     this.onShow = function () {

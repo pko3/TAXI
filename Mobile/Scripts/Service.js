@@ -36,6 +36,7 @@
         if (this._settings.url && this._settings.name && this._settings.password)
             this.callService("login", { UserName: this._settings.name, Password: this._settings.password, RememberMe:true }, function (d) {
                 Service.isAuthenticated = true;
+                Notification.initialize();
                 PositionService.startWatch();
                 if (callback)
                     callback();
