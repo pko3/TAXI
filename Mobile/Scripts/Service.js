@@ -5,13 +5,14 @@
     isComplet: function () {
         return this.isAuthenticated && this._settings && this._settings.transporterId;
     },
-    connectionError: null,
+    connectionError: undefined,
     _settings: {
-        name: null,
-        password: null,
-        transporterId: null,
-        url: null,
-        sessionId: null
+        name: undefined,
+        password: undefined,
+        userId: undefined,
+        transporterId: undefined,
+        url: undefined,
+        sessionId: undefined
     },
     initialize: function (callback) {
         //Cross domain !!!
@@ -34,12 +35,17 @@
     login: function (callback) {
         this.getSettings();
         if (this._settings.url && this._settings.name && this._settings.password)
-            this.callService("login", { UserName: this._settings.name, Password: this._settings.password, RememberMe:true }, function (d) {
+            this.callService("login", { UserName: this._settings.name, Password: this._settings.password, RememberMe: true, TransporterId: this._settings.transporterId }, function (d) {
                 Service.isAuthenticated = true;
+                var s = Service.getSettings();
+                s.userId = d.userId;
+                s.sessionId = d.sessionId;
+                Service.saveSettings(s);
                 Notification.initialize();
                 PositionService.startWatch();
-                if (callback)
-                    callback();
+
+                Service.callService("TaxiSetHistory", { GUID_Transporter: s.transporterId, GUID_sysUser_Driver: s.userId, HistoryAction: "Driver login", IsTransporter: true },
+                    function () { if (callback) callback(); });
             }, function (d) {
                 PositionService.stopWatch();
                 if (d.ErrorMessage)
@@ -85,7 +91,8 @@
         return Service._settings;
     },
     saveSettings: function (data) {
-        Service._settings = data;
+        if(data)
+            Service._settings = data;
         window.localStorage.setItem("settings", JSON.stringify(Service._settings));
     },
     callService: function (method, data, successDelegate, errorDelegate) {

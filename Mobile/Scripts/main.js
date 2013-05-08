@@ -8,7 +8,9 @@ var app = {
             alert(title ? (title + ": " + message) : message);
         }
     },
-
+    info: function(t){
+        $("#taxiInfo").html(t);
+    },
     registerEvents: function () {
         var self = this;
         $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
@@ -141,9 +143,10 @@ var app = {
             Service.transporter = d;
             $("#taxiHeader")
                 .removeClass()
-                .addClass(d.Status)
+                .addClass(d.Status);
+            $("#taxiText")
                 .empty()
-                .html("<h1>" + d.SPZ + "<h1>");
+                .html(d.TransporterNo + " " + d.Title  + " " + d.SPZ);
         });
     },
     initialize: function() {

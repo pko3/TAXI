@@ -55,11 +55,8 @@ var Map = {
         //'Timestamp: ' + new Date(position.timestamp) + '<br />';
          Map.mapOut.html(d);
          Map.setMap(position);
-         if (PositionService.watchID == null)
-         {
-             Map.message("Sp˙öùam sledovanie polohy", false);
-             PositionService.startWatch();
-         }
+         PositionService.lat = position.coords.latitude;
+         PositionService.lng = position.coords.longitude;
     },
     error: function (err) {
         Map.message("Error: " + err.message, true);

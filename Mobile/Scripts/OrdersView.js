@@ -6,6 +6,7 @@ var OrdersView = function() {
 
     this.render = function() {
         this.el.html(OrdersView.template());
+
         return this;
     };
 
@@ -27,10 +28,11 @@ var OrdersView = function() {
         app.refreshTransporter();
     };
     this.changeOffer = function (btn, action) {
-        
+
         var settings = Service.getSettings(), self = this;
         var data = {
             Action: action,
+            IsTransporter: true,
             GUID_Transporter: settings.transporterId,
             Status_Transporter: settings.transporterState,
             GUID: btn.attr("data_GUID_Offer"),
@@ -41,11 +43,11 @@ var OrdersView = function() {
 
         btn.removeClass().addClass("refWaiting");
         Service.callService("offer", data); //, function () { self.loadData(); }, function () { self.loadData(); }
-    }
-
+    };
     this.onShow = function () {
+        $("#taxiHeader").click(function () { app.refreshData(["orders", "transporters"]); });
         this.loadData();
-    }
+    };
     this.initialize();
 }
 

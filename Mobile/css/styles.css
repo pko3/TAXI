@@ -16,6 +16,10 @@ body {
 /** {
     pointer-events: none;
 }*/
+#taxiInfo
+{
+	font-size: 14px;
+}
 #taxiHeader {
     background: #4286f5;
     height: 56px;
@@ -23,10 +27,13 @@ body {
     color: #fff;
 	border-bottom:1px solid #fff;
 	padding-left:10px;
+	padding-top:4px;
 }
-	#taxiHeader h1
+
+	#taxiText
 	{
 		color: #fff;
+		font-size:22px;
 	}
 /*Free||Busy||WithCustomer||Offline*/
 	#taxiHeader.Offline

@@ -39,11 +39,13 @@
                        };
                        $.connection.hub.stateChanged(function (change) {
                            if (change.newState === $.signalR.connectionState.reconnecting) {
-                               app.showAlert("Notification is reconnecting!");
+                               app.info("Notification is reconnecting!");
                            }
                            else if (change.newState === $.signalR.connectionState.connected) {
-                               app.showAlert("Notification is connected!");
+                               app.info("Notification is connected!");
                            }
+                           else
+                               app.info("Notification is " + change.newState);
                        });
                        this.connect();
                    }
@@ -73,7 +75,7 @@
                script.parentNode.insertBefore(this.newjs, script);
            },
            connect: function(){
-               $.connection.hub.start() //{jsonp: true}
+               $.connection.hub.start({ jsonp: true }) //{jsonp: true}
                            .done(function () {
                                self.isInitialized = true;
                            })

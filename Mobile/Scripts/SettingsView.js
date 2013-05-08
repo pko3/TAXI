@@ -28,8 +28,8 @@ var SettingsView = function (messages) {
 
         Service.saveSettings(data);
         Service.login(function () {
-            if (Service.isComplet())
-                app.home();
+            if (Service.isComplet()) 
+               app.home();
             else
                 self.loadForm();
         });

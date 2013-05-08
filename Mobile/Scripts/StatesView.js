@@ -28,7 +28,7 @@ var StatesView = function (store) {
         $("#HistoryAction").val(data.HistoryAction);
         $("#statesForm").show();
     };
-        
+            
     this.save = function () {
         var f = $("#statesForm");
         f.hide();
@@ -37,6 +37,7 @@ var StatesView = function (store) {
         //serializeObject
         $.each(d, function (i, v) { data[v.name] = v.value; });
         data["GUID_Transporter"] = Service.transporter.GUID;
+        data["IsTransporter"] = true;
         Service.callService("TaxiSetHistory", data,
             function () { app.home(); },
             function (d) {
