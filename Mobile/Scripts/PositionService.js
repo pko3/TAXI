@@ -7,19 +7,24 @@
         try {
             //{ maximumAge: 3000, timeout: 5000, enableHighAccuracy: true };
             //{ frequency: 3000 };
-            navigator.geolocation.getCurrentPosition(this.success, this.error);
-            this.watchID = navigator.geolocation.watchPosition(this.success, this.error, { frequency: 5000 });
+            //this.watchID = navigator.geolocation.watchPosition(this.success, this.error, { frequency: 5000 });
             if(this.poolID)
                 clearInterval(this.poolID);
             this.poolID = setInterval(function () {
-                app.info("Send...");
-                Service.callService("MobilePool", {
-                    Id : Service.transporter.GUID,
-                    Lat: PositionService.lat,
-                    Lng: PositionService.lng,
-                },
-                    function () { app.info(""); },
-                    function (d) { app.info(d.ErrorMessage); });
+                if (Service.isAuthenticated && Service.transporter) {
+                    app.info("Send...");
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        PositionService.lat = position.coords.latitude;
+                        PositionService.lng = position.coords.longitude;
+                        Service.callService("MobilePool", {
+                            Id: Service.transporter.GUID,
+                            Lat: PositionService.lat,
+                            Lng: PositionService.lng,
+                        },
+                        function () { app.info(""); },
+                        function (d) { app.info(d.ErrorMessage); });
+                    }, this.error);
+                }
             }, 60000);
         }
         catch (err) {

@@ -34,6 +34,8 @@ body {
 	{
 		color: #fff;
 		font-size:22px;
+		margin-top:4px;
+		margin-bottom:4px;
 	}
 /*Free||Busy||WithCustomer||Offline*/
 	#taxiHeader.Offline

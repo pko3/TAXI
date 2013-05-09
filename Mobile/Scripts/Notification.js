@@ -30,7 +30,7 @@
                        h.client.notifi = function (data) {
                            if (data) {
                                if (data.Message) {
-                                   app.showAlert(err, "Notification");
+                                   app.showAlert(data.Message, "Notification");
                                }
                                if (data.RefreshDataId) {
                                    app.refreshData(data.RefreshDataId);

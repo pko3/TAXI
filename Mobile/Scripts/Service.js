@@ -105,16 +105,26 @@
         else {
             $.post(this._settings.url + "/app/" + method, data)
                 .done(function (d) {
-                    if (d && d.ErrorMessage) {
-                        Service.connectionError = d.ErrorMessage + " :" + this.url;
-                        if (errorDelegate)
-                            errorDelegate(d);
-                        else
-                            app.showAlert(d.ErrorMessage + " :" + this.url, "Error");
+                    if (d) {
+                        if (d.Message) {
+                            app.info(d.Message, "Service");
+                        }
+                        if (d.RefreshDataId) {
+                            app.refreshData(d.RefreshDataId);
+                        }
+                        if (d.ErrorMessage) {
+                            Service.connectionError = d.ErrorMessage + " :" + this.url;
+                            if (errorDelegate)
+                                errorDelegate(d);
+                            else
+                                app.showAlert(d.ErrorMessage + " :" + this.url, "Error");
+                        }
+                        else if(successDelegate)
+                            successDelegate(d);
                     }
                     else if (successDelegate)
-                        successDelegate(d);
-                })
+                       successDelegate();
+                 })
                 .fail(function () {
                     app.waiting(false);
                     Service.connectionError = "Connection error :" + this.url;
