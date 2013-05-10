@@ -14,6 +14,10 @@
     <author href="http://dflexnr.sk" email="pko@dflexnr.sk">
         Peter Kotry
     </author>
+
+    <access origin="*" />
+    <preference name="load-url-timeout" value="60000" />
+  
     <feature name="http://api.phonegap.com/1.0/geolocation"/>
     <feature name="http://api.phonegap.com/1.0/network"/>
     <feature name="http://api.phonegap.com/1.0/notification"/>
