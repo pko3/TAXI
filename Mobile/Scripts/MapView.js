@@ -37,26 +37,25 @@ var Map = {
         Map.mapMessage = $('<div id="mapMessage">Waiting ...</div>').appendTo(sc);
         Map.mapOut = $('<div id="mapOut"/>').appendTo(sc);
 
-        if (Map.mess)
-        {
+        if (Map.mess) {
             Map.message(Map.mess, Map.messError);
         }
     },
     success: function (position) {
         Map.date = new Date().toTimeString();
         Map.message("Success " + Map.date);
-         var d = 'Latitude: ' + position.coords.latitude + '<br />' +
-        'Longitude: ' + position.coords.longitude + '<br />' +
-        //'Altitude: ' + position.coords.altitude + '<br />' +
-        //'Accuracy: ' + position.coords.accuracy + '<br />' +
-        //'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '<br />' +
-        //'Heading: ' + position.coords.heading + '<br />' +
-        'Speed: ' + Math.ceil(position.coords.speed * 3.6) + ' km/h<br />';// +
+        var d = 'Latitude: ' + position.coords.latitude + '<br />' +
+       'Longitude: ' + position.coords.longitude + '<br />' +
+       //'Altitude: ' + position.coords.altitude + '<br />' +
+       //'Accuracy: ' + position.coords.accuracy + '<br />' +
+       //'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '<br />' +
+       //'Heading: ' + position.coords.heading + '<br />' +
+       'Speed: ' + Math.ceil(position.coords.speed * 3.6) + ' km/h<br />';// +
         //'Timestamp: ' + new Date(position.timestamp) + '<br />';
-         Map.mapOut.html(d);
-         Map.setMap(position);
-         PositionService.lat = position.coords.latitude;
-         PositionService.lng = position.coords.longitude;
+        Map.mapOut.html(d);
+        Map.setMap(position);
+        PositionService.lat = position.coords.latitude;
+        PositionService.lng = position.coords.longitude;
     },
     error: function (err) {
         Map.message("Error: " + err.message, true);
@@ -66,14 +65,19 @@ var Map = {
             Map.mapMessage.html(t);
             Map.mapMessage.css("color", err ? "red" : "black");
         }
-        else
-        {
+        else {
             Map.mess = t;
             Map.messError = err;
         }
     },
     setMap: function (position) {
-        if (google.maps) {
+        if (!google || !google.maps) {
+            this.require("http://maps.google.com/maps/api/js?sensor=true", function () { Map.setMap2(position); });
+        }
+        else this.setMap2(position);
+    },
+    setMap2: function (position) {
+        if (google && google.maps) {
             Map.point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
             if (!Map.marker) {
                 Map.mapDiv.css("display", "block");
@@ -91,16 +95,35 @@ var Map = {
             Map.marker.setPosition(Map.point);
             Map.map.setCenter(Map.point);
         }
+        else Map.message("Mapy sú nedostupné");
     },
     showPosition: function () {
-       // if (Map.map) {
-            Map.message("H¾adám pozíciu ...");
-            try {
-                navigator.geolocation.getCurrentPosition(Map.success, Map.error); //, { frequency: 2000 }
-            }
-            catch (err) {
-                Map.message("Error: " + err.message, true);
-            }
+        // if (Map.map) {
+        Map.message("H¾adám pozíciu ...");
+        try {
+            navigator.geolocation.getCurrentPosition(Map.success, Map.error); //, { frequency: 2000 }
+        }
+        catch (err) {
+            Map.message("Error: " + err.message, true);
+        }
         //}
+    },
+    require: function (file, callback) {
+        var script = document.getElementsByTagName('script')[0], self = this;
+        this.newjs = document.createElement('script');
+
+        // IE
+        this.newjs.onreadystatechange = function () {
+            if (self.newjs.readyState === 'loaded' || self.newjs.readyState === 'complete') {
+                self.newjs.onreadystatechange = null;
+                callback();
+            }
+        };
+        // others
+        this.newjs.onload = function () {
+            callback();
+        };
+        this.newjs.src = file;
+        script.parentNode.insertBefore(this.newjs, script);
     }
 };

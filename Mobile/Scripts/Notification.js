@@ -1,18 +1,18 @@
 ﻿Notification =
        {
            isInitialized: false,
-           newjs: undefined,
+           //newjs: undefined,
            initialize: function () {
                if (!this.isInitialized) {
                    try {
                        
-                       if (this.newjs) {
+                       //if (this.newjs) {
                            Notification.hubLoad();
-                       }
-                       else {
-                           var s = Service.getSettings();
-                           this.require(s.url + "/signalr/hubs", function () { Notification.hubLoad(); });
-                       }
+                       //}
+                       //else {
+                       //    var s = Service.getSettings();
+                       //    this.require(s.url + "/signalr/hubs", function () { Notification.hubLoad(); });
+                       //}
                    }
                    catch (err) {
                        this.isInitialized = false;
@@ -54,25 +54,6 @@
                        app.showAlert(err, "Notification");
                    }
                }
-           },
-
-           require: function (file, callback) {
-               var script = document.getElementsByTagName('script')[0], self = this;
-               this.newjs = document.createElement('script');
-
-               // IE
-               this.newjs.onreadystatechange = function () {
-                   if (self.newjs.readyState === 'loaded' || self.newjs.readyState === 'complete') {
-                       self.newjs.onreadystatechange = null;
-                       callback();
-                   }
-               };
-               // others
-               this.newjs.onload = function () {
-                   callback();
-               };
-               this.newjs.src = file;
-               script.parentNode.insertBefore(this.newjs, script);
            },
            connect: function(){
                $.connection.hub.start({ jsonp: true }) //{jsonp: true}
