@@ -7,6 +7,20 @@ var OrdersView = function() {
     this.render = function() {
         this.el.html(OrdersView.template());
 
+        if (app.isDevice) {
+            $(window).unload(function () {
+                cordova.require('cordova/plugin/powermanagement').release(
+                        function () { app.info("powermanagement Release"); },
+                        function () { app.info("powermanagement Error Release"); }
+                );
+            });
+
+            cordova.require('cordova/plugin/powermanagement').acquire(
+                           function () { app.info("powermanagement Acquire"); },
+                           function () { app.info("powermanagement Error Acquire"); }
+                           );
+        }
+
         return this;
     };
 

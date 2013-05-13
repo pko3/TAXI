@@ -29,6 +29,13 @@ var app = {
         document.addEventListener('resume', function () { app.info("Resume"); }, false);
         document.addEventListener("offline", function () { app.info("Offline"); }, false);
         document.addEventListener("online", function () { app.info("Online"); }, false);
+        document.addEventListener("unload", function () {
+            app.info("Unload");
+            cordova.require('cordova/plugin/powermanagement').release(
+                        function () { app.info("powermanagement Release"); },
+                        function () { app.info("powermanagement Error Release"); }
+                );
+        }, false);
         document.addEventListener("menubutton", function () { e.preventDefault(); app.settings(); }, false);
         document.addEventListener("backbutton", function (e) {
             e.preventDefault();
@@ -65,15 +72,6 @@ var app = {
             this.route("settings");
     },
     route: function (p) {
-
-        //cordova.require('cordova/plugin/powermanagement').release(
-        //        function() { alert( 'hooray' ); },
-        //        function() { alert( 'oh no!' ); }
-        //        );
-        //cordova.require('cordova/plugin/powermanagement').acquire(
-        //               function () { alert('hooray'); },
-        //               function () { alert('oh no!'); }
-        //               );
 
         if (!Service.isComplet() && p != "settings")
             p = "settings";
@@ -182,7 +180,8 @@ var app = {
                 .html(d.TransporterNo + " " + d.Title  + " " + d.SPZ);
         });
     },
-    initialize: function() {
+    initialize: function () {
+        this.isDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
         var self = this;
         this.pages = {};
         this.registerEvents();
@@ -193,12 +192,12 @@ var app = {
 };
 
 //$(window).load(function () {
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-        app.isDevice = true;
-        document.addEventListener("deviceready", function () { app.initialize(); }, false);
-    } else {
+    //if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
+    //    app.isDevice = true;
+    //    document.addEventListener("deviceready", function () { app.initialize(); }, false);
+    //} else {
         app.initialize(); //this is the browser
-    }
+    //}
 //});
 
 //if (window.cordova) {
