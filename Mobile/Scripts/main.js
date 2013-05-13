@@ -1,6 +1,7 @@
 var app = {
     currentPage: null,
     currentPageName: null,
+    isDevice : false,
     showAlert: function (message, title) {
         if (navigator.notification) {
             navigator.notification.alert(message, null, title, 'OK');
@@ -15,6 +16,28 @@ var app = {
         var self = this;
         $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
         
+        //deviceready
+        //pause
+        //resume
+        //online
+        //offline
+        //backbutton
+        //menubutton
+        //searchbutton
+
+        document.addEventListener('pause', function () { app.info("Pause"); }, false);
+        document.addEventListener('resume', function () { app.info("Resume"); }, false);
+        document.addEventListener("offline", function () { app.info("Offline"); }, false);
+        document.addEventListener("online", function () { app.info("Online"); }, false);
+        document.addEventListener("menubutton", function () { e.preventDefault(); app.settings(); }, false);
+        document.addEventListener("backbutton", function (e) {
+            e.preventDefault();
+            if (app.currentPageName != "orders")
+                app.home();
+            else
+                navigator.app.exitApp();
+        }, false);
+
         // Check of browser supports touch events...
         //if (document.documentElement.hasOwnProperty && document.documentElement.hasOwnProperty('ontouchstart')) {
         //    // ... if yes: register touch event listener to change the "selected" state of the item
@@ -42,6 +65,16 @@ var app = {
             this.route("settings");
     },
     route: function (p) {
+
+        //cordova.require('cordova/plugin/powermanagement').release(
+        //        function() { alert( 'hooray' ); },
+        //        function() { alert( 'oh no!' ); }
+        //        );
+        //cordova.require('cordova/plugin/powermanagement').acquire(
+        //               function () { alert('hooray'); },
+        //               function () { alert('oh no!'); }
+        //               );
+
         if (!Service.isComplet() && p != "settings")
             p = "settings";
         //$('[data-route]').removeClass("selected");
@@ -158,7 +191,22 @@ var app = {
         });
     }
 };
-//document.addEventListener("deviceready", onDeviceReady, false);
-//$(window).load(function(){
-    app.initialize();
+
+//$(window).load(function () {
+    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
+        app.isDevice = true;
+        document.addEventListener("deviceready", function () { app.initialize(); }, false);
+    } else {
+        app.initialize(); //this is the browser
+    }
 //});
+
+//if (window.cordova) {
+//    document.addEventListener("deviceready", function () { app.initialize(); }, true);
+//}
+//else {
+//    $(window).load(function () { app.initialize(); });
+//}
+
+//document.addEventListener("deviceready", onDeviceReady, false);
+//$(window).load(function(){ app.initialize();});

@@ -21,6 +21,7 @@
                }
            },
            hubLoad: function () {
+
                if (!this.isInitialized) {
                    this.isInitialized = true;
                    try {
