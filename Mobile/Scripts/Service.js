@@ -16,6 +16,7 @@
     },
     initialize: function (callback) {
         //Cross domain !!!
+        app.log("Service.initialize");
         $.support.cors = true;
         $.ajaxSetup({
             cache: false,
@@ -33,6 +34,7 @@
         //callback();
     },
     login: function (callback) {
+        app.log("Service.login");
         this.getSettings();
         if (this._settings.url && this._settings.name && this._settings.password)
             this.callService("login", { UserName: this._settings.name, Password: this._settings.password, RememberMe: true, TransporterId: this._settings.transporterId }, function (d) {
@@ -86,8 +88,10 @@
         this.callService("item/" + entity + "_" + id, null, callback, callback);
     },
     getSettings: function () {
-        if (!Service._settings || !Service._settings.url)
+        if (!Service._settings || !Service._settings.url) {
+            app.log("Service.getSettings");
             Service._settings = JSON.parse(window.localStorage.getItem("settings")) || {};
+        }
         return Service._settings;
     },
     saveSettings: function (data) {
@@ -96,6 +100,7 @@
         window.localStorage.setItem("settings", JSON.stringify(Service._settings));
     },
     callService: function (method, data, successDelegate, errorDelegate) {
+        app.log("Service.callService: " + method);
         Service.connectionError = null;
         if (!this._settings.url) {
             Service.connectionError = "Chýba adresa servisu";
@@ -106,13 +111,16 @@
             $.post(this._settings.url + "/app/" + method, data)
                 .done(function (d) {
                     if (d) {
+                        app.info(method + ": OK");
+                        app.log(method + ": OK");
                         if (d.Message) {
-                            app.info(d.Message, "Service");
+                            app.info(d.Message);
                         }
                         if (d.RefreshDataId) {
                             app.refreshData(d.RefreshDataId);
                         }
                         if (d.ErrorMessage) {
+                            app.log("Service.callService - ErrorMessage: " + d.ErrorMessage);
                             Service.connectionError = d.ErrorMessage + " :" + this.url;
                             if (errorDelegate)
                                 errorDelegate(d);
@@ -126,6 +134,7 @@
                        successDelegate();
                  })
                 .fail(function () {
+                    app.log("Service.callService - Connection error: " + this.url);
                     app.waiting(false);
                     Service.connectionError = "Connection error :" + this.url;
                     if (errorDelegate)

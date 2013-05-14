@@ -12,7 +12,20 @@ var app = {
     info: function(t){
         $("#taxiInfo").html(t);
     },
+    waiting: function (show) {
+        if (show == false)
+            $(".waitingDiv").empty().hide();
+        else
+            $(".waitingDiv").show();
+    },
+    log: function (t) {
+        if ($(".waitingDiv").is(":visible"))
+            $(".waitingDiv").append($("<p>" + t + "</p>"));
+        else
+            app.info(t);
+    },
     registerEvents: function () {
+        app.log("app.registerEvents");
         var self = this;
         $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
         
@@ -41,8 +54,12 @@ var app = {
             e.preventDefault();
             if (app.currentPageName != "orders")
                 app.home();
-            else
-                navigator.app.exitApp();
+            else {
+                if (confirm("UkonËiù aplik·ciu?")) {
+                    app.log("app.exitApp");
+                    navigator.app.exitApp();
+                }
+            }
         }, false);
 
         // Check of browser supports touch events...
@@ -64,7 +81,7 @@ var app = {
         //    });
         //}
     },
-    home: function(){
+    home: function () {
         this.route("orders");
     },
     settings: function () {
@@ -72,7 +89,7 @@ var app = {
             this.route("settings");
     },
     route: function (p) {
-
+        app.log("app.route: " + p);
         if (!Service.isComplet() && p != "settings")
             p = "settings";
         //$('[data-route]').removeClass("selected");
@@ -145,12 +162,6 @@ var app = {
             $('.stage-right, .stage-left').remove();
         });
     },
-    waiting : function(show){
-        if(show == false)
-            $(".waitingDiv").hide();
-        else
-            $(".waitingDiv").show();
-    },
     scrollTop: function () {
             window.scrollTo(0, 0);
         document.body.scrollTop = 0;
@@ -169,6 +180,7 @@ var app = {
     },
     refreshTransporter: function ()
     {
+        app.log("app.refreshTransporter");
         var settings = Service.getSettings();
         Service.getDetail("Transporter", settings.transporterId, function (d) {
             Service.transporter = d;
@@ -181,7 +193,9 @@ var app = {
         });
     },
     initialize: function () {
+        app.log("app.initialize");
         this.isDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
+        app.log("app.isDevice: " + this.isDevice);
         var self = this;
         this.pages = {};
         this.registerEvents();

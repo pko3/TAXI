@@ -4,23 +4,34 @@ var OrdersView = function() {
         this.el = $('<div/>');
     };
 
-    this.render = function() {
+    this.render = function () {
         this.el.html(OrdersView.template());
 
         if (app.isDevice) {
             $(window).unload(function () {
-                cordova.require('cordova/plugin/powermanagement').release(
-                        function () { app.info("powermanagement Release"); },
-                        function () { app.info("powermanagement Error Release"); }
-                );
+                app.log("powermanagement.release");
+                try {
+                    cordova.require('cordova/plugin/powermanagement').release(
+                            function () { app.info("powermanagement OK"); },
+                            function () { app.info("powermanagement Error"); }
+                    );
+                }
+                catch (err) {
+                    app.info("powermanagement Error: " + err)
+                }
             });
-
-            cordova.require('cordova/plugin/powermanagement').acquire(
-                           function () { app.info("powermanagement Acquire"); },
-                           function () { app.info("powermanagement Error Acquire"); }
-                           );
+            
+            try {
+                app.log("powermanagement.acquire");
+                cordova.require('cordova/plugin/powermanagement').acquire(
+                               function () { app.info("powermanagement OK"); },
+                               function () { app.info("powermanagement Error"); }
+                               );
+            }
+            catch (err) {
+                app.info("powermanagement Error: " + err)
+            }
         }
-
         return this;
     };
 
