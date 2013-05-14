@@ -6,7 +6,7 @@
         version     = "1.2.4">
  
     <name>TAXI</name>
- 
+  
     <description>
         TAXI application
     </description>
@@ -15,11 +15,13 @@
         Peter Kotry
     </author>
 
-    <plugin name="PowerManagement" value="org.apache.cordova.plugin.PowerManagement"/>
+  <preference name="load-url-timeout" value="60000" />
+  <preference name="phonegap-version" value="2.5.0" />
+
+  <plugin name="PowerManagement" value="org.apache.cordova.plugin.PowerManagement"/>
 
     <access origin="*" />
-    <preference name="load-url-timeout" value="60000" />
-  
+    
     <feature name="http://api.phonegap.com/1.0/geolocation"/>
     <feature name="http://api.phonegap.com/1.0/network"/>
     <feature name="http://api.phonegap.com/1.0/notification"/>
