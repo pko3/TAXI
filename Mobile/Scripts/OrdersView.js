@@ -7,31 +7,31 @@ var OrdersView = function() {
     this.render = function () {
         this.el.html(OrdersView.template());
 
-        if (app.isDevice) {
-            $(window).unload(function () {
-                app.log("powermanagement.release");
-                try {
-                    cordova.require('cordova/plugin/powermanagement').release(
-                            function () { app.info("powermanagement OK"); },
-                            function () { app.info("powermanagement Error"); }
-                    );
-                }
-                catch (err) {
-                    app.info("powermanagement Error: " + err)
-                }
-            });
+        //if (app.isDevice) {
+        //    $(window).unload(function () {
+        //        app.log("powermanagement.release");
+        //        try {
+        //            cordova.require('cordova/plugin/powermanagement').release(
+        //                    function () { app.info("powermanagement OK"); },
+        //                    function () { app.info("powermanagement Error"); }
+        //            );
+        //        }
+        //        catch (err) {
+        //            app.info("powermanagement Error: " + err)
+        //        }
+        //    });
             
-            try {
-                app.log("powermanagement.acquire");
-                cordova.require('cordova/plugin/powermanagement').acquire(
-                               function () { app.info("powermanagement OK"); },
-                               function () { app.info("powermanagement Error"); }
-                               );
-            }
-            catch (err) {
-                app.info("powermanagement Error: " + err)
-            }
-        }
+        //    try {
+        //        app.log("powermanagement.acquire");
+        //        cordova.require('cordova/plugin/powermanagement').acquire(
+        //                       function () { app.info("powermanagement OK"); },
+        //                       function () { app.info("powermanagement Error"); }
+        //                       );
+        //    }
+        //    catch (err) {
+        //        app.info("powermanagement Error: " + err)
+        //    }
+        //}
         return this;
     };
 
