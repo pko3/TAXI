@@ -16,7 +16,7 @@
     </author>
 
   <!--<preference name="load-url-timeout" value="10000" />-->
-  <preference name="phonegap-version" value="2.3.0" />
+  <preference name="phonegap-version" value="2.5.0" />
 
   <!--<plugin name="PowerManagement" value="org.apache.cordova.plugin.PowerManagement"/>-->
 
