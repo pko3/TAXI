@@ -90,7 +90,12 @@
     getSettings: function () {
         if (!Service._settings || !Service._settings.url) {
             app.log("Service.getSettings");
-            Service._settings = JSON.parse(window.localStorage.getItem("settings")) || {};
+            var s = window.localStorage.getItem("settings");
+            app.log("Service.getSettings : " + s);
+            if(s)
+                Service._settings = JSON.parse(s);
+            else
+                Service._settings = {};
         }
         return Service._settings;
     },

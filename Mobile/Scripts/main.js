@@ -37,30 +37,34 @@ var app = {
         //backbutton
         //menubutton
         //searchbutton
-
-        document.addEventListener('pause', function () { app.info("Pause"); }, false);
-        document.addEventListener('resume', function () { app.info("Resume"); }, false);
-        document.addEventListener("offline", function () { app.info("Offline"); }, false);
-        document.addEventListener("online", function () { app.info("Online"); }, false);
-        document.addEventListener("unload", function () {
-            app.info("Unload");
-            cordova.require('cordova/plugin/powermanagement').release(
-                        function () { app.info("powermanagement Release"); },
-                        function () { app.info("powermanagement Error Release"); }
-                );
-        }, false);
-        document.addEventListener("menubutton", function () { e.preventDefault(); app.settings(); }, false);
-        document.addEventListener("backbutton", function (e) {
-            e.preventDefault();
-            if (app.currentPageName != "orders")
-                app.home();
-            else {
-                if (confirm("UkonËiù aplik·ciu?")) {
-                    app.log("app.exitApp");
-                    navigator.app.exitApp();
+        try{
+            document.addEventListener('pause', function () { app.info("Pause"); }, false);
+            document.addEventListener('resume', function () { app.info("Resume"); }, false);
+            document.addEventListener("offline", function () { app.info("Offline"); }, false);
+            document.addEventListener("online", function () { app.info("Online"); }, false);
+            document.addEventListener("unload", function () {
+                app.info("Unload");
+                cordova.require('cordova/plugin/powermanagement').release(
+                            function () { app.info("powermanagement Release"); },
+                            function () { app.info("powermanagement Error Release"); }
+                    );
+            }, false);
+            document.addEventListener("menubutton", function () { e.preventDefault(); app.settings(); }, false);
+            document.addEventListener("backbutton", function (e) {
+                if (app.currentPageName != "orders") {
+                    e.preventDefault();
+                    app.home();
                 }
-            }
-        }, false);
+                //else {
+                //    if (confirm("UkonËiù aplik·ciu?")) {
+                //        app.log("app.exitApp");
+                //        navigator.app.exitApp();
+                //    }
+                //}
+            }, false);
+        } catch (err) {
+            app.log(err);
+        }
 
         // Check of browser supports touch events...
         //if (document.documentElement.hasOwnProperty && document.documentElement.hasOwnProperty('ontouchstart')) {
@@ -194,7 +198,6 @@ var app = {
     },
     initialize: function () {
         app.log("app.initialize");
-        this.isDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
         app.log("app.isDevice: " + this.isDevice);
         var self = this;
         this.pages = {};
@@ -210,9 +213,18 @@ var app = {
     //    app.isDevice = true;
     //    document.addEventListener("deviceready", function () { app.initialize(); }, false);
     //} else {
-        app.initialize(); //this is the browser
+        //app.initialize(); 
     //}
 //});
+
+        $(document).ready(function () {
+            app.isDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
+            if (app.isDevice) {
+                document.addEventListener("deviceready", function () { app.initialize(); }, false);
+            } else {
+                app.initialize();
+            }
+        });
 
 //if (window.cordova) {
 //    document.addEventListener("deviceready", function () { app.initialize(); }, true);

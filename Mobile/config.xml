@@ -2,8 +2,8 @@
 <widget xmlns       = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "sk.dflexnr.taxi"
-        versionCode = "14"
-        version     = "1.2.4">
+        versionCode = "15"
+        version     = "1.2.5">
  
     <name>TAXI</name>
   
@@ -15,8 +15,8 @@
         Peter Kotry
     </author>
 
-  <preference name="load-url-timeout" value="60000" />
-  <preference name="phonegap-version" value="2.5.0" />
+  <preference name="load-url-timeout" value="10000" />
+  <preference name="phonegap-version" value="2.3.0" />
 
   <plugin name="PowerManagement" value="org.apache.cordova.plugin.PowerManagement"/>
 
