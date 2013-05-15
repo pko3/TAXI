@@ -71,10 +71,15 @@ var Map = {
         }
     },
     setMap: function (position) {
-        if (!google || !google.maps) {
-            this.require("http://maps.google.com/maps/api/js?sensor=true", function () { Map.setMap2(position); });
+        try{
+            if (!google || !google.maps) {
+                this.require("http://maps.google.com/maps/api/js?sensor=false&callback=initialize", function () { Map.setMap2(position); });
+            }
+            else this.setMap2(position);
         }
-        else this.setMap2(position);
+        catch (err) {
+            this.require("http://maps.google.com/maps/api/js?sensor=false&callback=initialize", function () { Map.setMap2(position); });
+        }
     },
     setMap2: function (position) {
         if (google && google.maps) {

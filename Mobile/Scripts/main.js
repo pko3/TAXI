@@ -184,17 +184,19 @@ var app = {
     },
     refreshTransporter: function ()
     {
-        app.log("app.refreshTransporter");
         var settings = Service.getSettings();
-        Service.getDetail("Transporter", settings.transporterId, function (d) {
-            Service.transporter = d;
-            $("#taxiHeader")
-                .removeClass()
-                .addClass(d.Status);
-            $("#taxiText")
-                .empty()
-                .html(d.TransporterNo + " " + d.Title  + " " + d.SPZ);
-        });
+        if (settings.transporterId) {
+            app.log("app.refreshTransporter");
+            Service.getDetail("Transporter", settings.transporterId, function (d) {
+                Service.transporter = d;
+                $("#taxiHeader")
+                    .removeClass()
+                    .addClass(d.Status);
+                $("#taxiText")
+                    .empty()
+                    .html(d.TransporterNo + " " + d.Title + " " + d.SPZ);
+            });
+        }
     },
     initialize: function () {
         app.log("app.initialize");

@@ -36,6 +36,7 @@
     login: function (callback) {
         app.log("Service.login");
         this.getSettings();
+        Service.isAuthenticated = false;
         if (this._settings.url && this._settings.name && this._settings.password)
             this.callService("login", { UserName: this._settings.name, Password: this._settings.password, RememberMe: true, TransporterId: this._settings.transporterId }, function (d) {
                 Service.isAuthenticated = true;
@@ -43,11 +44,11 @@
                 s.userId = d.userId;
                 s.sessionId = d.sessionId;
                 Service.saveSettings(s);
+
                 Notification.initialize();
                 PositionService.startWatch();
-
                 Service.callService("TaxiSetHistory", { GUID_Transporter: s.transporterId, GUID_sysUser_Driver: s.userId, HistoryAction: "Driver login", IsTransporter: true },
-                    function () { if (callback) callback(); });
+                    function () { if (callback) callback(); }, function () { if (callback) callback(); });
             }, function (d) {
                 PositionService.stopWatch();
                 if (d.ErrorMessage)
