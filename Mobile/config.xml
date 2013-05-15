@@ -15,14 +15,11 @@
         Peter Kotry
     </author>
 
-  <!--<preference name="load-url-timeout" value="10000" />-->
+  <preference name="load-url-timeout" value="10000" />
   <preference name="phonegap-version" value="2.5.0" />
-
-  <!--<plugin name="PowerManagement" value="org.apache.cordova.plugin.PowerManagement"/>-->
 
     <access origin="*" />
     
     <feature name="http://api.phonegap.com/1.0/geolocation"/>
     <feature name="http://api.phonegap.com/1.0/network"/>
-    <!--<feature name="http://api.phonegap.com/1.0/notification"/>-->
 </widget>
