@@ -208,6 +208,16 @@ var app = {
     }
 };
 
+
+function onLoad() {
+    app.isDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
+    if (app.isDevice) {
+        document.addEventListener("deviceready", function () { app.initialize(); }, false);
+    } else {
+        app.initialize();
+    }
+}
+
 //$(window).load(function () {
     //if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
     //    app.isDevice = true;
@@ -217,14 +227,14 @@ var app = {
     //}
 //});
 
-        $(document).ready(function () {
-            app.isDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
-            if (app.isDevice) {
-                document.addEventListener("deviceready", function () { app.initialize(); }, false);
-            } else {
-                app.initialize();
-            }
-        });
+        //$(document).ready(function () {
+        //    app.isDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
+        //    if (app.isDevice) {
+        //        document.addEventListener("deviceready", function () { app.initialize(); }, false);
+        //    } else {
+        //        app.initialize();
+        //    }
+        //});
 
 //if (window.cordova) {
 //    document.addEventListener("deviceready", function () { app.initialize(); }, true);
