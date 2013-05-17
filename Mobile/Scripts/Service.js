@@ -62,6 +62,11 @@
         else
             app.settings();
     },
+    autoOrder: function () {
+        if (confirm("Prijať objednávku?")) {
+            this.callService("MobileAutoOrder", { GUID_Transporter: this._settings.transporterId, Latitude: PositionService.lat, Longitude: PositionService.lng });
+        }
+    },
     getOrders: function (callback) {
         this.callService("data/transporterorders", { IdTransporter: this._settings.transporterId }, callback);
     },
@@ -127,11 +132,11 @@
                         }
                         if (d.ErrorMessage) {
                             app.log("Service.callService - ErrorMessage: " + d.ErrorMessage);
-                            Service.connectionError = d.ErrorMessage + " :" + this.url;
+                            Service.connectionError = d.ErrorMessage + " " + this.url;
                             if (errorDelegate)
                                 errorDelegate(d);
                             else
-                                app.showAlert(d.ErrorMessage + " :" + this.url, "Error");
+                                app.showAlert(d.ErrorMessage + " " + this.url, "Error");
                         }
                         else if(successDelegate)
                             successDelegate(d);
@@ -140,13 +145,13 @@
                        successDelegate();
                  })
                 .fail(function () {
-                    app.log("Service.callService - Connection error: " + this.url);
+                    app.log("Service.callService - Connection error " + this.url);
                     app.waiting(false);
-                    Service.connectionError = "Connection error :" + this.url;
+                    Service.connectionError = "Connection error " + this.url;
                     if (errorDelegate)
-                        errorDelegate({ ErrorMessage: "Connection error :" + this.url });
+                        errorDelegate({ ErrorMessage: "Connection error " + this.url });
                     else
-                        app.showAlert("Connection error :" + this.url, "Error");
+                        app.showAlert("Connection error " + this.url, "Error");
                 });
         }
     }

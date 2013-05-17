@@ -30,7 +30,6 @@ var Map = {
     mess: null,
     messError: null,
     initialize: function (el) {
-
         var header = $('<div class="header"><button data-route="orders" class="icon ico_back">&nbsp;</button></div>').appendTo(el);
         var sc = $('<div class="scroll"/>').appendTo(header);
         Map.mapDiv = $('<div id="mapDiv"/>').appendTo(sc);
@@ -71,18 +70,8 @@ var Map = {
         }
     },
     setMap: function (position) {
-        try{
-            if (!google || !google.maps) {
-                this.require("http://maps.google.com/maps/api/js?sensor=false&callback=initialize", function () { Map.setMap2(position); });
-            }
-            else this.setMap2(position);
-        }
-        catch (err) {
-            this.require("http://maps.google.com/maps/api/js?sensor=false&callback=initialize", function () { Map.setMap2(position); });
-        }
-    },
-    setMap2: function (position) {
-        if (google && google.maps) {
+        if(window.google && window.google.maps)
+        {
             Map.point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
             if (!Map.marker) {
                 Map.mapDiv.css("display", "block");
@@ -100,35 +89,23 @@ var Map = {
             Map.marker.setPosition(Map.point);
             Map.map.setCenter(Map.point);
         }
-        else Map.message("Mapy sú nedostupné");
+        else{
+            Map.message("Mapy sÃº nedostupnÃ©");
+        }
     },
     showPosition: function () {
-        // if (Map.map) {
-        Map.message("H¾adám pozíciu ...");
+        if (window.google && window.google.maps)
+            Map.showPosition2();
+        else
+            $('body').append($('script').attr("src", "http://maps.google.com/maps/api/js?sensor=false&callback=Map.showPosition2"));
+    },
+    showPosition2: function () {
+        Map.message("HÄ¾adÃ¡m pozÃ­ciu ...");
         try {
             navigator.geolocation.getCurrentPosition(Map.success, Map.error); //, { frequency: 2000 }
         }
         catch (err) {
             Map.message("Error: " + err.message, true);
         }
-        //}
-    },
-    require: function (file, callback) {
-        var script = document.getElementsByTagName('script')[0], self = this;
-        this.newjs = document.createElement('script');
-
-        // IE
-        this.newjs.onreadystatechange = function () {
-            if (self.newjs.readyState === 'loaded' || self.newjs.readyState === 'complete') {
-                self.newjs.onreadystatechange = null;
-                callback();
-            }
-        };
-        // others
-        this.newjs.onload = function () {
-            callback();
-        };
-        this.newjs.src = file;
-        script.parentNode.insertBefore(this.newjs, script);
     }
 };

@@ -57,7 +57,7 @@
                }
            },
            connect: function(){
-               $.connection.hub.start({ jsonp: true }) //{jsonp: true}
+               $.connection.hub.start() //{jsonp: true}{ transport: ['webSockets', 'serverSentEvents', 'longPolling'] }
                            .done(function () {
                                self.isInitialized = true;
                            })

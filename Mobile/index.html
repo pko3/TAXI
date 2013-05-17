@@ -1,10 +1,13 @@
-<html>
+Ôªø<html>
 <head>
-<!--<script src="css/source-sans-pro.js"></script>-->
-<link href="css/styles.css" rel="stylesheet">
+    <title>TAXI</title>
+    <meta charset="utf-8"/>
+    <link href="css/styles.css" rel="stylesheet">
 </head>
 <body onload="onLoad()">
+
 <div class='waitingDiv'>&nbsp;</div>   
+
 <script id="orders-tpl" type="text/x-handlebars-template">
 <div id="taxiHeader" > 
     <div id="taxiText">TAXI</div>
@@ -18,42 +21,40 @@
     <button data-route="settings" class="icon ico_settings">&nbsp;</button>
 </div>
 <div class="scroll"><div class='buttonlist orders-list'></div></div>
-   
 </script>
+
 <script id="orders-li-tpl" type="text/x-handlebars-template">
-    {{#.}}
-    <div id="{{this.GUID}}" class="{{this.Status}}" data_GUID_Offer="{{this.GUID_Offer}}" data_StatusOffer="{{this.StatusOffer}}" data_Id="{{this.GUID}}" data_Status="{{this.Status}}"><div class="icon down">&nbsp;</div><div class="content"><strong>{{this.Date}} {{this.StartAddress}},{{this.StartCity}}</strong><br/>{{this.EndAddress}},{{this.EndCity}} {{this.Persons}} {{this.SpecialConditions}}</div><div class="icon up">&nbsp;</div></div>
-    {{/.}}
+{{#.}}
+<div id="{{this.GUID}}" class="{{this.Status}}" data_GUID_Offer="{{this.GUID_Offer}}" data_StatusOffer="{{this.StatusOffer}}" data_Id="{{this.GUID}}" data_Status="{{this.Status}}"><div class="icon down">&nbsp;</div><div class="content"><strong>{{this.Date}} {{this.StartAddress}},{{this.StartCity}}</strong><br/>{{this.EndAddress}},{{this.EndCity}} {{this.Persons}} {{this.SpecialConditions}}</div><div class="icon up">&nbsp;</div></div>
+{{/.}}
 </script>
 
 <script id="states-tpl" type="text/x-handlebars-template">
 <div class='header'><button data-route="orders" class="icon ico_back">&nbsp;</button><button id="statesSave" class="icon ico_submit">&nbsp;</button></div>
-<div class="scroll">
-<form id="statesForm"></form>
-</div>
+<div class="scroll"><form id="statesForm"></form></div>
 </script>
+
 <script id="statesForm-template" type="text/x-handlebars-template">
-        <select id="HistoryAction" name="HistoryAction"> 	
-            <option value="Prest·vka">Prest·vka</option>
-            <option value="Porucha">Porucha</option>
-            <option value="Koniec zmeny">Koniec zmeny</option>
-        </select>
-    <input  name="HistoryActionDescription" value="{{this.HistoryActionDescription}}" type="text" placeholder="Pozn·mka" />
-    <input  name="Payment" type="number" value="{{this.Payment}}" placeholder="Cena" />
-    {{#if this.ErrorMessage}}<div class="error">{{this.ErrorMessage}}</div>{{/if}}
+<select id="HistoryAction" name="HistoryAction"> 	
+    <option value="Prest√°vka">Prest√°vka</option>
+    <option value="Porucha">Porucha</option>
+    <option value="Koniec zmeny">Koniec zmeny</option>
+</select>
+<input  name="HistoryActionDescription" value="{{this.HistoryActionDescription}}" type="text" placeholder="Pozn√°mka" />
+<input  name="Payment" type="number" value="{{this.Payment}}" placeholder="Cena" />
+{{#if this.ErrorMessage}}<div class="error">{{this.ErrorMessage}}</div>{{/if}}
 </script>
+
 <script id="message-tpl" type="text/x-handlebars-template">
 <div class='header'><button data-route="orders" class="icon ico_back">&nbsp;</button><button class="icon ico_submit">&nbsp;</button></div>
-<div class='scroll'>
-    <textarea></textarea>
-</div>
+<div class='scroll'><textarea></textarea></div>
 </script>
 
 <script id="settings-tpl" type="text/x-handlebars-template">
 <div class='header'><button data-route="orders" class="icon ico_back">&nbsp;</button><button id="settingsSave" class="icon ico_submit">&nbsp;</button></div>
-<div id="settingsForm" class='scroll'>
-</div>
+<div id="settingsForm" class='scroll'></div>
 </script>
+
 <script id="settingsForm-tpl" type="text/x-handlebars-template">
 <form id="settingsForm-form">
     <select name="transporterId" id="transporterId">
@@ -64,7 +65,7 @@
     </select>
     <input type="text" placeholder="Meno" name="name" id="name" value="{{this.name}}"/>
     <input type="password" placeholder="Heslo" name="password" id="password" value="{{this.password}}"/>
-    <input type="url" placeholder="Adresa sluûby" name="url" id="url" value="{{this.url}}"/>   
+    <input type="url" placeholder="Adresa slu≈æby" name="url" id="url" value="{{this.url}}"/>   
     {{#if this.ErrorMessage}}<div class="error">{{this.ErrorMessage}}</div>{{/if}}
 </form>
 </script>

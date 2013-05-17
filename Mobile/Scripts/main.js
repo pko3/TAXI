@@ -1,7 +1,8 @@
-var app = {
+Ôªøvar app = {
     currentPage: null,
     currentPageName: null,
-    isDevice : false,
+    isDevice: false,
+    pages: {},
     showAlert: function (message, title) {
         if (navigator.notification) {
             navigator.notification.alert(message, null, title, 'OK');
@@ -28,7 +29,11 @@ var app = {
         app.log("app.registerEvents");
         var self = this;
         $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
+
+        $('body').on('click', '#newOrder', function (event) { Service.autoOrder(); });
         
+        
+
         //deviceready
         //pause
         //resume
@@ -56,7 +61,7 @@ var app = {
                     app.home();
                 }
                 //else {
-                //    if (confirm("UkonËiù aplik·ciu?")) {
+                //    if (confirm("Ukonƒçi≈•¬ù aplik√°ciu?")) {
                 //        app.log("app.exitApp");
                 //        navigator.app.exitApp();
                 //    }
@@ -210,7 +215,6 @@ var app = {
     }
 };
 
-
 function onLoad() {
     app.isDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
     if (app.isDevice) {
@@ -219,31 +223,3 @@ function onLoad() {
         app.initialize();
     }
 }
-
-//$(window).load(function () {
-    //if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
-    //    app.isDevice = true;
-    //    document.addEventListener("deviceready", function () { app.initialize(); }, false);
-    //} else {
-        //app.initialize(); 
-    //}
-//});
-
-        //$(document).ready(function () {
-        //    app.isDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/);
-        //    if (app.isDevice) {
-        //        document.addEventListener("deviceready", function () { app.initialize(); }, false);
-        //    } else {
-        //        app.initialize();
-        //    }
-        //});
-
-//if (window.cordova) {
-//    document.addEventListener("deviceready", function () { app.initialize(); }, true);
-//}
-//else {
-//    $(window).load(function () { app.initialize(); });
-//}
-
-//document.addEventListener("deviceready", onDeviceReady, false);
-//$(window).load(function(){ app.initialize();});
