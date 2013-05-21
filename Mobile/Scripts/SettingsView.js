@@ -14,11 +14,13 @@ var SettingsView = function (messages) {
         this.el.html(SettingsView.template());
         $("#settingsForm").hide();
         app.waiting();
-        $("#settingsSave").click(function () { self.save(); }).hide();
+        $("#settingsSave").click(function () { if(!$(this).hasClass("transparent")) self.save(); });
+        $("#appExit").click(function () { app.end(); })
+        
         this.loadForm();
     };
     this.save = function () {
-        $("#settingsSave").hide();
+        $("#settingsSave").addClass("transparent");
         $("#settingsForm").hide();
         app.waiting();
 
@@ -56,7 +58,7 @@ var SettingsView = function (messages) {
             });
 
             $("#settingsForm").show();
-            $("#settingsSave").show();
+            $("#settingsSave").removeClass("transparent");
     };
 
     this.initialize();

@@ -25,6 +25,16 @@
         else
             app.info(t);
     },
+    end: function () {
+        if (navigator.app) {
+            if (confirm("Ukončiť aplikáciu?")) {
+                app.log("app.exitApp");
+                navigator.app.exitApp();
+            }
+        }
+        else
+            app.showAlert("Táto funkcia nieje podporovaná");
+    },
     registerEvents: function () {
         app.log("app.registerEvents");
         var self = this;
@@ -199,7 +209,7 @@
                     .addClass(d.Status);
                 $("#taxiText")
                     .empty()
-                    .html(d.TransporterNo + " " + d.Title + " " + d.SPZ);
+                    .html(settings.name + " " + d.SPZ);
             });
         }
     },

@@ -158,7 +158,9 @@ button {
 	margin-left: 45px;
 	margin-right: 45px;
 }
-
+.transparent {
+    opacity: 0.0;
+}
 .buttonlist div > div.down
 {
 	width: 45px;
@@ -342,6 +344,7 @@ button.ico_order {background-position:0px -91px; }
 button.ico_message {background-position:-51px -91px; }
 button.ico_settings {background-position:-201px -91px; }
 button.ico_submit {background-position:-301px -91px; }
+button.ico_end {background-position:-151px -91px; }
 
 #mapMessage
 {
