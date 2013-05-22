@@ -64,6 +64,8 @@ var OrdersView = function() {
             Status: btn.attr("data_StatusOffer"),
             GUID_TransporterOrder: btn.attr("data_Id"),
             Status_TransporterOrder: btn.attr("data_Status"),
+            Latitude: PositionService.lat,
+            Longitude: PositionService.lng
         };
 
         btn.removeClass().addClass("refWaiting");
