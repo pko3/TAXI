@@ -102,7 +102,7 @@ var Map = {
     showPosition2: function () {
         Map.message("Hľadám pozíciu ...");
         try {
-            navigator.geolocation.getCurrentPosition(Map.success, Map.error); //, { frequency: 2000 }
+            navigator.geolocation.getCurrentPosition(Map.success, Map.error, { enableHighAccuracy: true, maximumAge: 0 }); //, { frequency: 2000 }
         }
         catch (err) {
             Map.message("Error: " + err.message, true);

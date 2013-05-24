@@ -67,9 +67,19 @@ var OrdersView = function() {
             Latitude: PositionService.lat,
             Longitude: PositionService.lng
         };
-
         btn.removeClass().addClass("refWaiting");
-        Service.callService("offer", data); //, function () { self.loadData(); }, function () { self.loadData(); }
+
+        navigator.geolocation.getCurrentPosition(function (position) {
+            PositionService.lat = position.coords.latitude;
+            PositionService.lng = position.coords.longitude;
+            data.Latitude = PositionService.lat,
+            data.Longitude = PositionService.lng
+            Service.callService("offer", data);
+        }, function () {
+            Service.callService("offer", data);
+        }, { enableHighAccuracy: true, maximumAge: 0 });
+
+        //, function () { self.loadData(); }, function () { self.loadData(); }
     };
     this.onShow = function () {
         $("#taxiHeader").click(function () { app.refreshData(["orders", "transporters"]); });

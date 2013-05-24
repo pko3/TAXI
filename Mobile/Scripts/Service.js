@@ -45,10 +45,15 @@
                 s.sessionId = d.sessionId;
                 Service.saveSettings(s);
 
-                Notification.initialize();
-                PositionService.startWatch();
-                Service.callService("TaxiSetHistory", { GUID_Transporter: s.transporterId, GUID_sysUser_Driver: s.userId, HistoryAction: "Driver login", IsTransporter: true },
-                    function () { if (callback) callback(); }, function () { if (callback) callback(); });
+                if (Service.isComplet()) 
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        PositionService.lat = position.coords.latitude;
+                        PositionService.lng = position.coords.longitude;
+                        Service.loginHistory(callback)
+                    }, function () { Service.loginHistory(callback) }, { enableHighAccuracy: true, maximumAge: 0 });
+                else
+                    if (callback) callback();
+
             }, function (d) {
                 PositionService.stopWatch();
                 if (d.ErrorMessage)
@@ -58,9 +63,26 @@
                 Service.isAuthenticated = false;
                 if (callback)
                     callback();
-            });
+            }) ;
         else
             app.settings();
+    },
+    loginHistory: function (callback) {
+        var s = Service.getSettings();
+        Service.callService("TaxiSetHistory", {
+            GUID_Transporter: s.transporterId,
+            GUID_sysUser_Driver: s.userId,
+            HistoryAction: "Driver login",
+            IsTransporter: true,
+            Latitude: PositionService.lat,
+            Longitude: PositionService.lng
+        },
+        function () {
+            Notification.initialize();
+            PositionService.startWatch();
+            if (callback) callback();
+        },
+        function () { if (callback) callback(); });
     },
     autoOrder: function () {
         if (confirm("Prijať objednávku?")) {

@@ -1,18 +1,10 @@
 ﻿Notification =
        {
            isInitialized: false,
-           //newjs: undefined,
            initialize: function () {
                if (!this.isInitialized) {
                    try {
-                       
-                       //if (this.newjs) {
-                           Notification.hubLoad();
-                       //}
-                       //else {
-                       //    var s = Service.getSettings();
-                       //    this.require(s.url + "/signalr/hubs", function () { Notification.hubLoad(); });
-                       //}
+                       Notification.hubLoad();
                    }
                    catch (err) {
                        this.isInitialized = false;
@@ -21,7 +13,6 @@
                }
            },
            hubLoad: function () {
-
                if (!this.isInitialized) {
                    this.isInitialized = true;
                    try {
