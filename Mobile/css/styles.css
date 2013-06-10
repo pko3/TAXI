@@ -93,10 +93,7 @@ body {
     overflow: hidden;
 	color: #fff;
 }
-label
-{
-	padding:4px 4px;
-}
+
 textarea
 {
 	resize: none;
@@ -113,6 +110,18 @@ input
 	font-size:20px;
 	height:40px;
 	padding:4px 4px;
+}
+    input[type="checkbox"] {
+        width:40px;
+        border:none;
+        vertical-align: middle;
+    }
+label
+{
+    font-size:20px;
+	padding:4px 4px;
+    text-indent: -22px;
+    line-height:40px;
 }
 select
 {

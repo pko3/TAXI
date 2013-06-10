@@ -27,8 +27,9 @@ var SettingsView = function (messages) {
         var self = this, d = $("#settingsForm-form").serializeArray(), data = {};
         //serializeObject
         $.each(d, function (i, v) { data[v.name] = v.value; });
-
+        
         Service.saveSettings(data);
+
         Service.login(function () {
             if (Service.isComplet()) 
                app.home();

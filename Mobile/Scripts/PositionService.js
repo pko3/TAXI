@@ -1,14 +1,9 @@
 ﻿var PositionService = {
     lat:0,
     lng: 0,
-    watchID: null,
-    poolID: null,
+    poolID: undefined,
     startWatch: function () {
         try {
-            //{ maximumAge: 3000, timeout: 5000, enableHighAccuracy: true };
-            //{ frequency: 3000 };
-            //this.watchID = navigator.geolocation.watchPosition(this.success, this.error, { frequency: 5000 });
-            //PositionService.pool();
             if (this.poolID)
                 clearInterval(this.poolID);
             this.poolID = setInterval(function () {
@@ -16,7 +11,6 @@
             }, 60000);
         }
         catch (err) {
-            this.watchID = null;
             Map.message(err.message, true);
         }
     },
@@ -46,8 +40,8 @@
         app.info(err.message);
     },
     stopWatch: function () {
-        navigator.geolocation.clearWatch(this.watchID);
-        //clearInterval(this.poolID);
-        this.watchID = null;
+        if (this.poolID)
+            clearInterval(this.poolID);
+        this.poolID = undefined;
     }
 }

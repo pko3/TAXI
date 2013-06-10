@@ -67,6 +67,7 @@
     <input type="text" placeholder="Meno" name="name" id="name" value="{{this.name}}"/>
     <input type="password" placeholder="Heslo" name="password" id="password" value="{{this.password}}"/>
     <input type="url" placeholder="Adresa služby" name="url" id="url" value="{{this.url}}"/>   
+    <label for="enableHighAccuracy">Používať GPS</label><input type="checkbox" name="enableHighAccuracy" id="enableHighAccuracy" value="true" {{#if this.enableHighAccuracy}} checked="checked" {{/if}}/>
     {{#if this.ErrorMessage}}<div class="error">{{this.ErrorMessage}}</div>{{/if}}
 </form>
 </script>

@@ -1,9 +1,19 @@
 ﻿var Service = {
     online: false,
     transporter: null,
+    isSendloginHistory: false,
     isAuthenticated: false,
     isComplet: function () {
-        return this.isAuthenticated && this._settings && this._settings.transporterId;
+        return this.isAuthenticated
+            && this._settings
+            && this._settings.transporterId;
+    },
+    isChanged: function (data) {
+        var s = this.getSettings();
+        return this.isAuthenticated != data.isAuthenticated
+        || this._settings.transporterId != data.TransporterId
+        || this._settings.name != data.name
+        || this._settings.url != data.url;
     },
     connectionError: undefined,
     _settings: {
@@ -12,7 +22,8 @@
         userId: undefined,
         transporterId: undefined,
         url: undefined,
-        sessionId: undefined
+        sessionId: undefined,
+        enableHighAccuracy: undefined
     },
     initialize: function (callback) {
         //Cross domain !!!
@@ -45,14 +56,14 @@
                 s.sessionId = d.sessionId;
                 Service.saveSettings(s);
 
-                if (Service.isComplet()) 
+                if (Service.isComplet() && !Service.isSendloginHistory)
                     navigator.geolocation.getCurrentPosition(function (position) {
                         PositionService.lat = position.coords.latitude;
                         PositionService.lng = position.coords.longitude;
-                        Service.loginHistory(callback)
-                    }, function () { Service.loginHistory(callback) }, { enableHighAccuracy: true, maximumAge: 0 });
-                else
-                    if (callback) callback();
+                        Service.loginHistory()
+                    }, function () { Service.loginHistory() });
+
+                if (callback) callback();
 
             }, function (d) {
                 PositionService.stopWatch();
@@ -63,7 +74,7 @@
                 Service.isAuthenticated = false;
                 if (callback)
                     callback();
-            }) ;
+            });
         else
             app.settings();
     },
@@ -78,6 +89,7 @@
             Longitude: PositionService.lng
         },
         function () {
+            Service.isSendloginHistory = true;
             Notification.initialize();
             PositionService.startWatch();
             if (callback) callback();
@@ -128,6 +140,10 @@
         return Service._settings;
     },
     saveSettings: function (data) {
+
+        if (Service.isChanged(data))
+            Service.isSendloginHistory = false;
+
         if(data)
             Service._settings = data;
         window.localStorage.setItem("settings", JSON.stringify(Service._settings));
