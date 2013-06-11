@@ -160,7 +160,6 @@
             $.post(this._settings.url + "/app/" + method, data)
                 .done(function (d) {
                     if (d) {
-                        app.info(method + ": OK");
                         app.log(method + ": OK");
                         if (d.Message) {
                             app.info(d.Message);
@@ -174,7 +173,7 @@
                             if (errorDelegate)
                                 errorDelegate(d);
                             else
-                                app.showAlert(d.ErrorMessage + " " + this.url, "Error");
+                                app.showAlert(d.ErrorMessage + " " + this.url, "Chyba");
                         }
                         else if(successDelegate)
                             successDelegate(d);
@@ -185,11 +184,11 @@
                 .fail(function () {
                     app.log("Service.callService - Connection error " + this.url);
                     app.waiting(false);
-                    Service.connectionError = "Connection error " + this.url;
+                    Service.connectionError = "Spojenie sa nepodarilo " + this.url;
                     if (errorDelegate)
-                        errorDelegate({ ErrorMessage: "Connection error " + this.url });
+                        errorDelegate({ ErrorMessage: "Spojenie sa nepodarilo " + this.url });
                     else
-                        app.showAlert("Connection error " + this.url, "Error");
+                        app.showAlert("Spojenie sa nepodarilo " + this.url, "Chyba");
                 });
         }
     }

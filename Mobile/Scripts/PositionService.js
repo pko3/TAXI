@@ -3,45 +3,56 @@
     lng: 0,
     poolID: undefined,
     startWatch: function () {
-        try {
-            if (this.poolID)
-                clearInterval(this.poolID);
-            this.poolID = setInterval(function () {
-                PositionService.pool();
-            }, 60000);
-        }
-        catch (err) {
-            Map.message(err.message, true);
-        }
-    },
-    pool: function () {
-        if (Service.isComplet()) {
-            app.info("Position...");
-            navigator.geolocation.getCurrentPosition(this.success, this.error, { enableHighAccuracy: true, maximumAge: 0 });
-        }
-    },
-    success: function (position) {
-        if (PositionService.lat != position.coords.latitude && PositionService.lng != position.coords.longitude) {
-            app.info("Position send...");
-            PositionService.lat = position.coords.latitude;
-            PositionService.lng = position.coords.longitude;
-            var s = Service.getSettings();
-            Service.callService("MobilePool", {
-                Id: s.transporterId,
-                Lat: PositionService.lat,
-                Lng: PositionService.lng,
-            },
-            function () { app.info(""); },
-            function (d) { app.info(d.ErrorMessage); });
-        }
-        else app.info("Position not changed");
-    },
-    error: function (err) {
-        app.info(err.message);
+        if (this.poolID)
+            clearTimeout(this.poolID);
+        this.poolID = setTimeout(PositionService.pool, 2000);
     },
     stopWatch: function () {
         if (this.poolID)
-            clearInterval(this.poolID);
+            clearTimeout(this.poolID);
         this.poolID = undefined;
+    },
+    pool: function () {
+        try {
+            if (Service.isComplet())
+                navigator.geolocation.getCurrentPosition(
+                    PositionService.success,
+                    PositionService.error,
+                    {
+                        enableHighAccuracy: Service.getSettings().enableHighAccuracy ? true : false,
+                        maximumAge: 1000
+                    });
+            else PositionService.startWatch();
+        }
+        catch (err) {
+            PositionService.startWatch();
+            app.info(err.message);
+        }
+    },
+    success: function (position) {
+        try {
+            if (PositionService.lat != position.coords.latitude && PositionService.lng != position.coords.longitude) {
+                app.info("Posielam pozíciu...");
+                PositionService.lat = position.coords.latitude;
+                PositionService.lng = position.coords.longitude;
+                var s = Service.getSettings();
+                Service.callService("MobilePool", {
+                    Id: s.transporterId,
+                    Lat: PositionService.lat,
+                    Lng: PositionService.lng,
+                },
+                function () { PositionService.startWatch(); app.info(""); },
+                function (d) { PositionService.startWatch(); app.info(d.ErrorMessage); });
+            }
+            else PositionService.startWatch();
+        }
+        catch (err) {
+            PositionService.startWatch();
+            app.info(err.message);
+        }
+    },
+    error: function (err) {
+        PositionService.startWatch();
+        app.info(err.message);
     }
 }

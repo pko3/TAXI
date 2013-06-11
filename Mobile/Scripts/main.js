@@ -22,8 +22,8 @@
     log: function (t) {
         if ($(".waitingDiv").is(":visible"))
             $(".waitingDiv").append($("<p>" + t + "</p>"));
-        else
-            app.info(t);
+        //else
+        //    app.info(t);
     },
     end: function () {
         if (navigator.app) {
@@ -219,6 +219,14 @@
         var self = this;
         this.pages = {};
         this.registerEvents();
+
+        try{
+            $('body').append($('script').attr("src", "http://maps.google.com/maps/api/js?sensor=false&callback=Map.apiOK"));
+        }
+        catch (err) {
+            app.info(err.message);
+        }
+
         Service.initialize(function () {
             self.home();
         });

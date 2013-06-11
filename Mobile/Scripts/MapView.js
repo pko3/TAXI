@@ -29,6 +29,7 @@ var Map = {
     mapDiv: null,
     mess: null,
     messError: null,
+    apiIsOk: false,
     initialize: function (el) {
         var header = $('<div class="header"><button data-route="orders" class="icon ico_back">&nbsp;</button></div>').appendTo(el);
         var sc = $('<div class="scroll"/>').appendTo(header);
@@ -40,16 +41,19 @@ var Map = {
             Map.message(Map.mess, Map.messError);
         }
     },
+    apiOK: function () {
+        Map.apiIsOk = true;
+    },
     success: function (position) {
         Map.date = new Date().toTimeString();
-        Map.message("Success " + Map.date);
+        Map.message("Pozícia " + Map.date);
         var d = 'Latitude: ' + position.coords.latitude + '<br />' +
-       'Longitude: ' + position.coords.longitude + '<br />' +
+       'Longitude: ' + position.coords.longitude + '<br />';// +
        //'Altitude: ' + position.coords.altitude + '<br />' +
        //'Accuracy: ' + position.coords.accuracy + '<br />' +
        //'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '<br />' +
        //'Heading: ' + position.coords.heading + '<br />' +
-       'Speed: ' + Math.ceil(position.coords.speed * 3.6) + ' km/h<br />';// +
+       //'Speed: ' + Math.ceil(position.coords.speed * 3.6) + ' km/h<br />';// +
         //'Timestamp: ' + new Date(position.timestamp) + '<br />';
         Map.mapOut.html(d);
         Map.setMap(position);
@@ -71,8 +75,7 @@ var Map = {
     },
     setMap: function (position) {
         try {
-            if(window.google && window.google.maps)
-            {
+            if (Map.apiIsOk) {
                 Map.point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 if (!Map.marker) {
                     Map.mapDiv.css("display", "block");
@@ -80,17 +83,13 @@ var Map = {
                     Map.map.setCenter(Map.point);
                     Map.marker = new google.maps.Marker({
                         clickable: false,
-                        map: Map.map,
-                        title: "You are here"
+                        map: Map.map
                     });
                 }
-                //if (position.coords.speed > 0)
-                //    app.marker.setOptions({path:google.maps.SymbolPath.BACKWARD_CLOSED_ARROW});
-
-                Map.marker.setPosition(Map.point);
                 Map.map.setCenter(Map.point);
+                Map.marker.setPosition(Map.point);
             }
-            else{
+            else {
                 Map.message("Mapy sú nedostupné", true);
             }
         }
@@ -99,20 +98,9 @@ var Map = {
         }
     },
     showPosition: function () {
-        try {
-        if (window.google && window.google.maps)
-            Map.showPosition2();
-        else
-            $('body').append($('script').attr("src", "http://maps.google.com/maps/api/js?sensor=false&callback=Map.showPosition2"));
-        }
-        catch (err) {
-            Map.message(err.message, true);
-        }
-    },
-    showPosition2: function () {
         Map.message("Hľadám pozíciu ...");
         try {
-            navigator.geolocation.getCurrentPosition(Map.success, Map.error, { enableHighAccuracy: true, maximumAge: 0 }); //, { frequency: 2000 }
+            navigator.geolocation.getCurrentPosition(Map.success, Map.error, { enableHighAccuracy: Service.getSettings().enableHighAccuracy ? true : false }); //, { frequency: 2000 }
         }
         catch (err) {
             Map.message(err.message, true);

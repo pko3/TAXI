@@ -8,7 +8,7 @@
                    }
                    catch (err) {
                        this.isInitialized = false;
-                       app.showAlert(err, "Notification");
+                       app.showAlert(err, "Notifikácia");
                    }
                }
            },
@@ -22,28 +22,28 @@
                        h.client.notifi = function (data) {
                            if (data) {
                                if (data.Message) {
-                                   app.showAlert(data.Message, "Notification");
+                                   app.showAlert(data.Message, "Notifikácia");
                                }
                                if (data.RefreshDataId) {
                                    app.refreshData(data.RefreshDataId);
                                }
                            }
                        };
-                       $.connection.hub.stateChanged(function (change) {
-                           if (change.newState === $.signalR.connectionState.reconnecting) {
-                               app.info("Notification is reconnecting!");
-                           }
-                           else if (change.newState === $.signalR.connectionState.connected) {
-                               app.info("Notification is connected!");
-                           }
-                           else
-                               app.info("Notification is " + change.newState);
-                       });
+                       //$.connection.hub.stateChanged(function (change) {
+                       //    if (change.newState === $.signalR.connectionState.reconnecting) {
+                       //        app.info("Notification is reconnecting!");
+                       //    }
+                       //    else if (change.newState === $.signalR.connectionState.connected) {
+                       //        app.info("Notification is connected!");
+                       //    }
+                       //    else
+                       //        app.info("Notification is " + change.newState);
+                       //});
                        this.connect();
                    }
                    catch (err) {
                        this.isInitialized = false;
-                       app.showAlert(err, "Notification");
+                       app.showAlert(err, "Notifikácia");
                    }
                }
            },
@@ -54,7 +54,7 @@
                            })
                            .fail(function (err) {
                                self.isInitialized = false;
-                               app.showAlert(err, "Notification");
+                               app.showAlert(err, "Notifikácia");
                            });
            },
            reconnect: function () {
