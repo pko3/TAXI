@@ -23,7 +23,7 @@
         transporterId: undefined,
         url: undefined,
         sessionId: undefined,
-        enableHighAccuracy: undefined
+        enableHighAccuracy: true
     },
     initialize: function (callback) {
         //Cross domain !!!

@@ -70,34 +70,44 @@ var Map = {
         }
     },
     setMap: function (position) {
-        if(window.google && window.google.maps)
-        {
-            Map.point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            if (!Map.marker) {
-                Map.mapDiv.css("display", "block");
-                Map.map = new google.maps.Map(Map.mapDiv[0], { zoom: 15, disableDefaultUI: true, mapTypeId: google.maps.MapTypeId.ROADMAP });
-                Map.map.setCenter(Map.point);
-                Map.marker = new google.maps.Marker({
-                    clickable: false,
-                    map: Map.map,
-                    title: "You are here"
-                });
-            }
-            //if (position.coords.speed > 0)
-            //    app.marker.setOptions({path:google.maps.SymbolPath.BACKWARD_CLOSED_ARROW});
+        try {
+            if(window.google && window.google.maps)
+            {
+                Map.point = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                if (!Map.marker) {
+                    Map.mapDiv.css("display", "block");
+                    Map.map = new google.maps.Map(Map.mapDiv[0], { zoom: 15, disableDefaultUI: true, mapTypeId: google.maps.MapTypeId.ROADMAP });
+                    Map.map.setCenter(Map.point);
+                    Map.marker = new google.maps.Marker({
+                        clickable: false,
+                        map: Map.map,
+                        title: "You are here"
+                    });
+                }
+                //if (position.coords.speed > 0)
+                //    app.marker.setOptions({path:google.maps.SymbolPath.BACKWARD_CLOSED_ARROW});
 
-            Map.marker.setPosition(Map.point);
-            Map.map.setCenter(Map.point);
+                Map.marker.setPosition(Map.point);
+                Map.map.setCenter(Map.point);
+            }
+            else{
+                Map.message("Mapy sú nedostupné", true);
+            }
         }
-        else{
-            Map.message("Mapy sú nedostupné");
+        catch (err) {
+            Map.message(err.message, true);
         }
     },
     showPosition: function () {
+        try {
         if (window.google && window.google.maps)
             Map.showPosition2();
         else
             $('body').append($('script').attr("src", "http://maps.google.com/maps/api/js?sensor=false&callback=Map.showPosition2"));
+        }
+        catch (err) {
+            Map.message(err.message, true);
+        }
     },
     showPosition2: function () {
         Map.message("Hľadám pozíciu ...");
@@ -105,7 +115,7 @@ var Map = {
             navigator.geolocation.getCurrentPosition(Map.success, Map.error, { enableHighAccuracy: true, maximumAge: 0 }); //, { frequency: 2000 }
         }
         catch (err) {
-            Map.message("Error: " + err.message, true);
+            Map.message(err.message, true);
         }
     }
 };
