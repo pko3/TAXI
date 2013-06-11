@@ -86,6 +86,7 @@ var Map = {
                         map: Map.map
                     });
                 }
+                google.maps.event.trigger(Map.map, "resize");
                 Map.map.setCenter(Map.point);
                 Map.marker.setPosition(Map.point);
             }
