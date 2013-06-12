@@ -1,5 +1,7 @@
 ﻿var Service = {
     online: false,
+    ordersVer: undefined,
+    transporterVer: undefined,
     transporter: null,
     isSendloginHistory: false,
     isAuthenticated: false,
