@@ -1,65 +1,93 @@
 ﻿var PositionService = {
     lat:0,
     lng: 0,
+    _lat: 0,
+    _lng: 0,
     poolID: undefined,
+    watchID: undefined,
     startWatch: function () {
+        if (this.watchID)
+            navigator.geolocation.clearWatch(watchID);
+
+        this.watchID = navigator.geolocation.watchPosition(function (position) {
+            app.info("Presnosť pozície: " + position.coords.accuracy + "m");
+            PositionService.lat = position.coords.latitude;
+            PositionService.lng = position.coords.longitude;
+        }, function (err) {
+            app.info(err.message);
+        },
+        {
+            enableHighAccuracy: true,
+            maximumAge: 3000,
+            timeout:27000
+        });
+
+        PositionService.startPool();
+    },
+    startPool: function () {
         if (this.poolID)
             clearTimeout(this.poolID);
-        this.poolID = setTimeout(PositionService.pool, 2000);
+        this.poolID = setTimeout(PositionService.pool, 6000);
     },
     stopWatch: function () {
         if (this.poolID)
             clearTimeout(this.poolID);
+        if (this.watchID)
+            navigator.geolocation.clearWatch(watchID);
         this.poolID = undefined;
     },
     pool: function () {
         this.poolID = undefined;
-        if (Service.isComplet())
-            try {
-                navigator.geolocation.getCurrentPosition(
-                    PositionService.success,
-                    PositionService.error,
-                    {
-                        enableHighAccuracy: Service.getSettings().enableHighAccuracy ? true : false,
-                        maximumAge: 1000
-                    });
-            }
-                catch (err) {
-                PositionService.callService(0, 0);
-                app.info(err.message);
-            }
-        else PositionService.startWatch();
-    },
-    success: function (position) {
-        var posChanged = PositionService.lat != position.coords.latitude && PositionService.lng != position.coords.longitude;
-        if (posChanged) {
-            PositionService.lat = position.coords.latitude;
-            PositionService.lng = position.coords.longitude;
+        if (Service.isComplet()) {
+            PositionService.callService();
+            //try {
+            //    navigator.geolocation.getCurrentPosition(
+            //        function (position) {
+            //                PositionService.lat = position.coords.latitude;
+            //                PositionService.lng = position.coords.longitude;
+            //                PositionService.callService();
+            //        },
+            //        function (err) {
+            //            PositionService.callService();
+            //            app.info(err.message);
+            //        },
+            //        {
+            //            enableHighAccuracy: Service.getSettings().enableHighAccuracy ? true : false,
+            //            maximumAge: 1000
+            //        });
+            //}
+            //catch (err) {
+            //    PositionService.callService();
+            //    app.info(err.message);
+            //}
         }
-        PositionService.callService(posChanged ? PositionService.lat : 0, posChanged ? PositionService.lng : 0);
+        else PositionService.startPool();
     },
-    error: function (err) {
-        PositionService.callService(0, 0);
-        app.info(err.message);
-    },
-    callService: function (lat, lng) {
+    callService: function () {
         try {
             app.info("Posielam ...");
             var s = Service.getSettings();
+
+            var posChanged = PositionService._lat != PositionService.lat && PositionService._lng != PositionService.lng;
+            if (posChanged) {
+                PositionService._lat = PositionService.lat;
+                PositionService._lng = PositionService.lng;
+            }
+            
             Service.callService("MobilePool", {
                 Id: s.transporterId,
-                Lat: lat,
-                Lng: lng,
+                Lat: posChanged ? PositionService.lat : 0,
+                Lng: posChanged ? PositionService.lng : 0,
             },
-            function (d) { PositionService.startWatch(); app.info(""); PositionService.refreshData(d); },
-            function (d) { PositionService.startWatch(); app.info(d.ErrorMessage); PositionService.refreshData(d); });
+            function (d) { PositionService.startPool(); app.info(""); PositionService.refreshVersionData(d); },
+            function (d) { PositionService.startPool(); app.info(d.ErrorMessage); PositionService.refreshVersionData(d); });
         }
         catch (err) {
-            PositionService.startWatch();
+            PositionService.startPool();
             app.info(err.message);
         }
     },
-    refreshData: function (d) {
+    refreshVersionData: function (d) {
         if (d.oVer && d.oVer != Service.ordersVer) {
             Service.ordersVer = d.oVer;
             app.refreshData(["orders"]);

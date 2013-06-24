@@ -50,7 +50,7 @@ var OrdersView = function() {
             $(".down").click(function () { self.changeOffer($(this).parent(), "Down"); });
             $('.orders-list').show();
         });
-        app.refreshTransporter();
+        //app.refreshTransporter();
     };
     this.changeOffer = function (btn, action) {
 

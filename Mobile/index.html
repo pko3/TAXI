@@ -67,18 +67,18 @@
     <input type="text" placeholder="Meno" name="name" id="name" value="{{this.name}}"/>
     <input type="password" placeholder="Heslo" name="password" id="password" value="{{this.password}}"/>
     <input type="url" placeholder="Adresa služby" name="url" id="url" value="{{this.url}}"/>   
-    <label for="enableHighAccuracy">Používať GPS</label><input type="checkbox" name="enableHighAccuracy" id="enableHighAccuracy" value="true" {{#if this.enableHighAccuracy}} checked="checked" {{/if}}/>
     {{#if this.ErrorMessage}}<div class="error">{{this.ErrorMessage}}</div>{{/if}}
 </form>
 </script>
+<!--<label for="enableHighAccuracy">Používať GPS</label><input type="checkbox" name="enableHighAccuracy" id="enableHighAccuracy" value="true" {{#if this.enableHighAccuracy}} checked="checked" {{/if}}/>-->
     
 <script src="phonegap.js"></script>
 <script src="lib/json2.js"></script>    
 <script src="lib/jquery-1.8.2.min.js"></script>
-<script src="lib/jquery.signalR-1.0.1.min.js"></script>
+<!--<script src="lib/jquery.signalR-1.0.1.min.js"></script>-->
 <script src="lib/handlebars.js"></script>
 <script src="lib/iscroll.js"></script>
-<script src="lib/signalr-hubs.js"></script>
+<!--<script src="lib/signalr-hubs.js"></script>-->
 <script src="Scripts/PositionService.js"></script>
 <script src="Scripts/Service.js"></script>
 <script src="Scripts/OrdersView.js"></script>
@@ -86,7 +86,7 @@
 <script src="Scripts/StatesView.js"></script>
 <script src="Scripts/MapView.js"></script>
 <script src="Scripts/SettingsView.js"></script>
-<script src="Scripts/Notification.js"></script>
+<!--<script src="Scripts/Notification.js"></script>-->
 <script src="Scripts/main.js"></script>
     
 </body>

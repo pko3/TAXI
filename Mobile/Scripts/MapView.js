@@ -48,7 +48,8 @@ var Map = {
         Map.date = new Date().toTimeString();
         Map.message("Pozícia " + Map.date);
         var d = 'Latitude: ' + position.coords.latitude + '<br />' +
-       'Longitude: ' + position.coords.longitude + '<br />';// +
+       'Longitude: ' + position.coords.longitude + '<br />' +
+        "Presnosť pozície: " + position.coords.accuracy + "m";
        //'Altitude: ' + position.coords.altitude + '<br />' +
        //'Accuracy: ' + position.coords.accuracy + '<br />' +
        //'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '<br />' +
@@ -101,7 +102,7 @@ var Map = {
     showPosition: function () {
         Map.message("Hľadám pozíciu ...");
         try {
-            navigator.geolocation.getCurrentPosition(Map.success, Map.error, { enableHighAccuracy: Service.getSettings().enableHighAccuracy ? true : false }); //, { frequency: 2000 }
+            navigator.geolocation.getCurrentPosition(Map.success, Map.error, { enableHighAccuracy: true }); //, { frequency: 2000 }
         }
         catch (err) {
             Map.message(err.message, true);

@@ -92,7 +92,7 @@
         },
         function () {
             Service.isSendloginHistory = true;
-            Notification.initialize();
+            //Notification.initialize();
             PositionService.startWatch();
             if (callback) callback();
         },
@@ -167,6 +167,10 @@
                             app.info(d.Message);
                         }
                         if (d.RefreshDataId) {
+                            if (d.oVer)
+                                Service.ordersVer = d.oVer;
+                            if (d.tVer)
+                                Service.transporterVer = d.tVer;
                             app.refreshData(d.RefreshDataId);
                         }
                         if (d.ErrorMessage) {
