@@ -58,7 +58,7 @@
                 s.sessionId = d.sessionId;
                 Service.saveSettings(s);
 
-                if (Service.isComplet() && !Service.isSendloginHistory)
+                if (Service.isComplet())
                     navigator.geolocation.getCurrentPosition(function (position) {
                         PositionService.lat = position.coords.latitude;
                         PositionService.lng = position.coords.longitude;
@@ -68,7 +68,7 @@
                 if (callback) callback();
 
             }, function (d) {
-                PositionService.stopWatch();
+                //PositionService.stopWatch();
                 if (d.ErrorMessage)
                     Service.connectionError = d.ErrorMessage;
                 else
@@ -81,22 +81,25 @@
             app.settings();
     },
     loginHistory: function (callback) {
-        var s = Service.getSettings();
-        Service.callService("TaxiSetHistory", {
-            GUID_Transporter: s.transporterId,
-            GUID_sysUser_Driver: s.userId,
-            HistoryAction: "Driver login",
-            IsTransporter: true,
-            Latitude: PositionService.lat,
-            Longitude: PositionService.lng
-        },
-        function () {
-            Service.isSendloginHistory = true;
-            //Notification.initialize();
-            PositionService.startWatch();
-            if (callback) callback();
-        },
-        function () { if (callback) callback(); });
+        PositionService.startWatch();
+
+        if (!Service.isSendloginHistory) {
+            var s = Service.getSettings();
+            Service.callService("TaxiSetHistory", {
+                GUID_Transporter: s.transporterId,
+                GUID_sysUser_Driver: s.userId,
+                HistoryAction: "Driver login",
+                IsTransporter: true,
+                Latitude: PositionService.lat,
+                Longitude: PositionService.lng
+            },
+            function () {
+                Service.isSendloginHistory = true;
+                //Notification.initialize();
+                if (callback) callback();
+            },
+            function () { if (callback) callback(); });
+        }
     },
     autoOrder: function () {
         if (confirm("Prijať objednávku?")) {

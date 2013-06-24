@@ -7,7 +7,7 @@
     watchID: undefined,
     startWatch: function () {
         if (this.watchID)
-            navigator.geolocation.clearWatch(watchID);
+            navigator.geolocation.clearWatch(this.watchID);
 
         this.watchID = navigator.geolocation.watchPosition(function (position) {
             app.info("Presnosť pozície: " + position.coords.accuracy + "m");
@@ -33,12 +33,11 @@
         if (this.poolID)
             clearTimeout(this.poolID);
         if (this.watchID)
-            navigator.geolocation.clearWatch(watchID);
+            navigator.geolocation.clearWatch(this.watchID);
         this.poolID = undefined;
     },
     pool: function () {
         this.poolID = undefined;
-        if (Service.isComplet()) {
             PositionService.callService();
             //try {
             //    navigator.geolocation.getCurrentPosition(
@@ -60,32 +59,34 @@
             //    PositionService.callService();
             //    app.info(err.message);
             //}
-        }
-        else PositionService.startPool();
     },
     callService: function () {
-        try {
-            app.info("Posielam ...");
-            var s = Service.getSettings();
+        if (Service.isComplet()) {
+            try {
+                //app.info("Posielam ...");
+                var s = Service.getSettings();
 
-            var posChanged = PositionService._lat != PositionService.lat && PositionService._lng != PositionService.lng;
-            if (posChanged) {
-                PositionService._lat = PositionService.lat;
-                PositionService._lng = PositionService.lng;
+                var posChanged = PositionService._lat != PositionService.lat && PositionService._lng != PositionService.lng;
+                if (posChanged) {
+                    PositionService._lat = PositionService.lat;
+                    PositionService._lng = PositionService.lng;
+                }
+
+                Service.callService("MobilePool", {
+                    Id: s.transporterId,
+                    Lat: posChanged ? PositionService.lat : 0,
+                    Lng: posChanged ? PositionService.lng : 0,
+                },
+                function (d) { PositionService.startPool(); PositionService.refreshVersionData(d); },
+                function (d) { PositionService.startPool(); if (d.ErrorMessage) app.info(d.ErrorMessage); PositionService.refreshVersionData(d); });
             }
-            
-            Service.callService("MobilePool", {
-                Id: s.transporterId,
-                Lat: posChanged ? PositionService.lat : 0,
-                Lng: posChanged ? PositionService.lng : 0,
-            },
-            function (d) { PositionService.startPool(); app.info(""); PositionService.refreshVersionData(d); },
-            function (d) { PositionService.startPool(); app.info(d.ErrorMessage); PositionService.refreshVersionData(d); });
+            catch (err) {
+                PositionService.startPool();
+                app.info(err.message);
+            }
         }
-        catch (err) {
+        else
             PositionService.startPool();
-            app.info(err.message);
-        }
     },
     refreshVersionData: function (d) {
         if (d.oVer && d.oVer != Service.ordersVer) {
