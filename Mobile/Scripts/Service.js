@@ -57,8 +57,8 @@
                 s.userId = d.userId;
                 s.sessionId = d.sessionId;
                 Service.saveSettings(s);
-
                 if (Service.isComplet())
+                    PositionService.startWatch();
                     navigator.geolocation.getCurrentPosition(function (position) {
                         PositionService.lat = position.coords.latitude;
                         PositionService.lng = position.coords.longitude;
@@ -81,8 +81,6 @@
             app.settings();
     },
     loginHistory: function (callback) {
-        PositionService.startWatch();
-
         if (!Service.isSendloginHistory) {
             var s = Service.getSettings();
             Service.callService("TaxiSetHistory", {
