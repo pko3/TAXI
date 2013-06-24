@@ -6,23 +6,26 @@
     poolID: undefined,
     watchID: undefined,
     startWatch: function () {
-        if (this.watchID)
-            navigator.geolocation.clearWatch(this.watchID);
-
-        this.watchID = navigator.geolocation.watchPosition(function (position) {
-            app.info("Presnosť pozície: " + position.coords.accuracy + "m");
-            PositionService.lat = position.coords.latitude;
-            PositionService.lng = position.coords.longitude;
-        }, function (err) {
-            app.info(err.message);
-        },
-        {
-            enableHighAccuracy: true,
-            maximumAge: 3000,
-            timeout:27000
-        });
-
         PositionService.startPool();
+
+        setTimeout(function () {
+            if (this.watchID)
+                navigator.geolocation.clearWatch(this.watchID);
+
+            this.watchID = navigator.geolocation.watchPosition(function (position) {
+                app.info("Presnosť pozície: " + position.coords.accuracy + "m");
+                PositionService.lat = position.coords.latitude;
+                PositionService.lng = position.coords.longitude;
+            }, function (err) {
+                app.info(err.message);
+            },
+            {
+                enableHighAccuracy: true,
+                maximumAge: 3000,
+                timeout: 27000
+            });
+        }
+        , 1000);
     },
     startPool: function () {
         if (this.poolID)
