@@ -57,14 +57,15 @@
                 s.userId = d.userId;
                 s.sessionId = d.sessionId;
                 Service.saveSettings(s);
-                if (Service.isComplet())
+                if (Service.isComplet()) {
                     PositionService.startWatch();
-                    navigator.geolocation.getCurrentPosition(function (position) {
-                        PositionService.lat = position.coords.latitude;
-                        PositionService.lng = position.coords.longitude;
-                        Service.loginHistory()
-                    }, function () { Service.loginHistory() });
-
+                    Service.loginHistory();
+                    //navigator.geolocation.getCurrentPosition(function (position) {
+                    //    PositionService.lat = position.coords.latitude;
+                    //    PositionService.lng = position.coords.longitude;
+                    //    Service.loginHistory()
+                    //}, function () { Service.loginHistory() });
+                }
                 if (callback) callback();
 
             }, function (d) {
