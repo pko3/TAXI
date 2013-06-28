@@ -15,7 +15,7 @@ var SettingsView = function (messages) {
         $("#settingsForm").hide();
         app.waiting();
         $("#settingsSave").click(function () { if(!$(this).hasClass("transparent")) self.save(); });
-        $("#appExit").click(function () { app.end(); })
+        $("#appExit").click(function () { if (app.end()) self.loadForm(); })
         
         this.loadForm();
     };
@@ -51,12 +51,17 @@ var SettingsView = function (messages) {
             app.waiting(false);
             $("#settingsForm").html(SettingsView.templateForm(data));
 
-            $("input").bind('focus', function (event) {
-                app.scrollTop();
-            });
-            $("select").bind('focus', function (event) {
-                app.scrollTop();
-            });
+            //$("input").bind('focus', function (event) {
+            //    app.scrollTop();
+            //});
+            //$("select").bind('focus', function (event) {
+            //    app.scrollTop();
+        //});
+
+            if(Service.isComplet())
+                $("#settingsOrders").removeClass("transparent");
+            else
+                $("#settingsOrders").addClass("transparent");
 
             $("#settingsForm").show();
             $("#settingsSave").removeClass("transparent");

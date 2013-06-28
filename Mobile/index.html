@@ -6,7 +6,7 @@
     <link href="css/styles.css" rel="stylesheet">
 </head>
 <body onload="onLoad()">
-
+<audio id="audioNew" src="audio/sound1.mp3"></audio>    
 <div class='waitingDiv'>&nbsp;</div>   
 
 <script id="orders-tpl" type="text/x-handlebars-template">
@@ -32,7 +32,7 @@
 
 <script id="states-tpl" type="text/x-handlebars-template">
 <div class='header'><button data-route="orders" class="icon ico_back">&nbsp;</button><button id="statesSave" class="icon ico_submit">&nbsp;</button></div>
-<div class="scroll"><form id="statesForm"></form></div>
+<div class="scrollBottom"><form id="statesForm"></form></div>
 </script>
 
 <script id="statesForm-template" type="text/x-handlebars-template">
@@ -48,12 +48,12 @@
 
 <script id="message-tpl" type="text/x-handlebars-template">
 <div class='header'><button data-route="orders" class="icon ico_back">&nbsp;</button><button class="icon ico_submit">&nbsp;</button></div>
-<div class='scroll'><textarea></textarea></div>
+<div class='scrollBottom'><textarea></textarea></div>
 </script>
 
 <script id="settings-tpl" type="text/x-handlebars-template">
-<div class='header'><button data-route="orders" class="icon ico_back">&nbsp;</button><button id="settingsSave" class="icon ico_submit transparent">&nbsp;</button><button id="appExit" class="icon ico_end">&nbsp;</button></div>
-<div id="settingsForm" class='scroll'></div>
+<div class='header'><button data-route="orders" id="settingsOrders" class="icon ico_back">&nbsp;</button><button id="settingsSave" class="icon ico_submit transparent">&nbsp;</button><button id="appExit" class="icon ico_end">&nbsp;</button></div>
+<div id="settingsForm" class='scrollBottom'></div>
 </script>
 
 <script id="settingsForm-tpl" type="text/x-handlebars-template">
@@ -71,7 +71,7 @@
 </form>
 </script>
 <!--<label for="enableHighAccuracy">Používať GPS</label><input type="checkbox" name="enableHighAccuracy" id="enableHighAccuracy" value="true" {{#if this.enableHighAccuracy}} checked="checked" {{/if}}/>-->
-    
+
 <script src="phonegap.js"></script>
 <script src="lib/json2.js"></script>    
 <script src="lib/jquery-1.8.2.min.js"></script>

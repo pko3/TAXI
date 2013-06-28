@@ -100,6 +100,26 @@
             function () { if (callback) callback(); });
         }
     },
+    logout: function (callback) {
+        if (Service.isAuthenticated) {
+            PositionService.stopWatch();
+            Service.isAuthenticated = false;
+            var s = Service.getSettings();
+            Service.callService("TaxiSetHistory", {
+                GUID_Transporter: s.transporterId,
+                GUID_sysUser_Driver: null,
+                HistoryAction: "Driver logout",
+                IsTransporter: true,
+                Latitude: PositionService.lat,
+                Longitude: PositionService.lng
+            },
+                function () {
+                    Service.isSendloginHistory = false;
+                    if (callback) callback();
+                },
+                function () { if (callback) callback(); });
+        }
+    },
     autoOrder: function () {
         if (confirm("Prijať objednávku?")) {
             this.callService("MobileAutoOrder", { GUID_Transporter: this._settings.transporterId, Latitude: PositionService.lat, Longitude: PositionService.lng });

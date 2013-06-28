@@ -2,6 +2,8 @@
     currentPage: null,
     currentPageName: null,
     isDevice: false,
+    mediaNew : null,
+    mediaAlert : null,
     pages: {},
     showAlert: function (message, title) {
         if (navigator.notification) {
@@ -9,6 +11,10 @@
         } else {
             alert(title ? (title + ": " + message) : message);
         }
+    },
+    playNew: function(){
+        if(app.mediaNew)
+            app.mediaNew.play();
     },
     info: function(t){
         $("#taxiInfo").html(t);
@@ -26,23 +32,34 @@
         //    app.info(t);
     },
     end: function () {
-        if (navigator.app) {
-            if (confirm("Ukončiť aplikáciu?")) {
-                app.log("app.exitApp");
-                navigator.app.exitApp();
+            if (navigator.app) {
+                if (confirm("Ukončiť aplikáciu?")) {
+
+                    Service.logout(function () {
+                        app.showAlert("Boli ste odhlásení z vozidla");
+                        app.log("app.exitApp");
+                        navigator.app.exitApp();
+                    });
+                    return true;
+                }
             }
-        }
-        else
-            app.showAlert("Táto funkcia nieje podporovaná");
+            else {
+                if (confirm("Odhlásiť sa z vozidla?")) {
+                    Service.logout(function () { app.showAlert("Boli ste odhlásení z vozidla"); });
+                    return true;
+                }
+                
+                //app.showAlert("Táto funkcia nieje podporovaná");
+            }
+            return false;
     },
     registerEvents: function () {
-        app.log("app.registerEvents");
-        var self = this;
-        $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
+                app.log("app.registerEvents");
+                var self = this;
 
+        
+        $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
         $('body').on('click', '#newOrder', function (event) { Service.autoOrder(); });
-        
-        
 
         //deviceready
         //pause
@@ -52,7 +69,7 @@
         //backbutton
         //menubutton
         //searchbutton
-        try{
+        try {
             document.addEventListener('pause', function () { app.info("Pause"); }, false);
             document.addEventListener('resume', function () { app.info("Resume"); }, false);
             document.addEventListener("offline", function () { app.info("Offline"); }, false);
@@ -77,9 +94,21 @@
                 //    }
                 //}
             }, false);
+
         } catch (err) {
             app.log(err);
         }
+
+        self.mediaNew = $("#audioNew")[0];
+        //    function () {
+        //        if (app.mediaNew) {
+        //            app.mediaNew.stop();
+        //            app.mediaNew.release();
+        //        }
+        //    },
+        //    function (error) {
+        //        app.log(error.message);
+        //    });
 
         // Check of browser supports touch events...
         //if (document.documentElement.hasOwnProperty && document.documentElement.hasOwnProperty('ontouchstart')) {

@@ -32,10 +32,10 @@ var Map = {
     apiIsOk: false,
     initialize: function (el) {
         var header = $('<div class="header"><button data-route="orders" class="icon ico_back">&nbsp;</button></div>').appendTo(el);
-        var sc = $('<div class="scroll"/>').appendTo(header);
+        var sc = $('<div class="scrollBottom"/>').appendTo(header);
         Map.mapDiv = $('<div id="mapDiv"/>').appendTo(sc);
         Map.mapMessage = $('<div id="mapMessage">Waiting ...</div>').appendTo(sc);
-        Map.mapOut = $('<div id="mapOut"/>').appendTo(sc);
+        Map.mapOut = $('<div id="mapOut"/>').appendTo(header);
 
         if (Map.mess) {
             Map.message(Map.mess, Map.messError);

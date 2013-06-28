@@ -94,6 +94,7 @@
     refreshVersionData: function (d) {
         if (d.oVer && d.oVer != Service.ordersVer) {
             Service.ordersVer = d.oVer;
+            app.playNew();
             app.refreshData(["orders"]);
         }
         if (d.tVer && d.tVer != Service.transporterVer) {
