@@ -33,12 +33,14 @@
     },
     end: function () {
             if (navigator.app) {
-                if (confirm("Ukončiť aplikáciu?")) {
+                if (confirm("Odhlásiť sa z vozidla?")) {
 
                     Service.logout(function () {
-                        app.showAlert("Boli ste odhlásení z vozidla");
-                        app.log("app.exitApp");
-                        navigator.app.exitApp();
+                        //app.showAlert("Boli ste odhlásení z vozidla");
+                        if (confirm("Ukončiť aplikáciu?")) {
+                            app.log("app.exitApp");
+                            navigator.app.exitApp();
+                        }
                     });
                     return true;
                 }
