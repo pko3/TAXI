@@ -119,6 +119,8 @@
                 },
                 function () { if (callback) callback(); });
         }
+        else
+            if (callback) callback();
     },
     autoOrder: function () {
         if (confirm("Prijať objednávku?")) {

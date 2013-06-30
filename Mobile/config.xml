@@ -2,8 +2,8 @@
 <widget xmlns       = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "sk.dflexnr.taxi"
-        versionCode = "37"
-        version     = "1.3.7">
+        versionCode = "38"
+        version     = "1.3.8">
  
     <name>TAXI</name>
   
@@ -16,7 +16,7 @@
     </author>
 
   <preference name="load-url-timeout" value="10000" />
-  <preference name="phonegap-version" value="2.7.0" />
+  <preference name="phonegap-version" value="2.9.0" />
 
     <access origin="*" />
     
