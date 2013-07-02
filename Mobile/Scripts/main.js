@@ -6,6 +6,7 @@
     mediaAlert : null,
     pages: {},
     showAlert: function (message, title) {
+        //TODO: ALERT, CONFIRM!!!
         if (navigator.notification) {
             navigator.notification.alert(message, null, title, 'OK');
         } else {
@@ -251,12 +252,12 @@
         this.pages = {};
         this.registerEvents();
 
-        try{
-            $('body').append($('script').attr("src", "http://maps.google.com/maps/api/js?sensor=false&callback=Map.apiOK"));
-        }
-        catch (err) {
-            app.info(err.message);
-        }
+        //try {
+        //    $('body').append($('script').attr("src", "http://maps.google.com/maps/api/js?sensor=false&callback=Map.apiOK"));
+        //}
+        //catch (err) {
+        //    app.info(err.message);
+        //}
 
         Service.initialize(function () {
             self.home();
@@ -271,4 +272,5 @@ function onLoad() {
     } else {
         app.initialize();
     }
+    
 }

@@ -28,8 +28,8 @@
         enableHighAccuracy: true
     },
     initialize: function (callback) {
-        //Cross domain !!!
         app.log("Service.initialize");
+        //Cross domain !!!
         $.support.cors = true;
         $.ajaxSetup({
             cache: false,
@@ -38,7 +38,7 @@
                 switch (jqXHR.status) {
                     case 403: Service.connectionError = "Chybné prihlásenie"; break;
                     case 404: Service.connectionError = "Služba sa nenašla: " + this.url; break;
-                    default: Service.connectionError = "Služba sa nenašla: " + this.url; break;
+                    default: Service.connectionError = "Chyba: " + textStatus; break;
                 }
             }
         });
@@ -212,13 +212,13 @@
                        successDelegate();
                  })
                 .fail(function () {
-                    app.log("Service.callService - Connection error " + this.url);
+                    app.log("Service.callService - " + Service.connectionError + ": " + this.url);
                     app.waiting(false);
-                    Service.connectionError = "Spojenie sa nepodarilo " + this.url;
+                    //Service.connectionError = "Spojenie sa nepodarilo " + this.url;
                     if (errorDelegate)
-                        errorDelegate({ ErrorMessage: "Spojenie sa nepodarilo " + this.url });
+                        errorDelegate({ ErrorMessage: Service.connectionError });
                     else
-                        app.showAlert("Spojenie sa nepodarilo " + this.url, "Chyba");
+                        app.showAlert(Service.connectionError + ": " + this.url, "Chyba");
                 });
         }
     }
