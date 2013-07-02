@@ -176,7 +176,7 @@ button
 	overflow: hidden;
 	margin: 0px;
 	width: 100%;
-	height: 65px;
+	height: 70px;
 	border: none;
 	background-color: #666;
 	color: white;
@@ -189,7 +189,7 @@ button
 	margin-right: 60px;
 	margin-left: 60px;
 	padding: 5px;
-	height: 65px;
+	height: 70px;
 }
 
 .transparent
@@ -203,10 +203,10 @@ button
 	top: 0px;
 	left: 0px;
 	width: 60px;
-	height: 65px;
+	height: 70px;
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAABMCAYAAADHl1ErAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMwSURBVHhe7dk/aBNRAAbw5BoSi4NQcBBBEMWCThUURQdBcHFScHAQVFxUcJA6BjI7iJsIpXRR0EncHDSCYqU4iJglCopSLIpoCkkuTRr9Xu6jaO4uJJdrerl8Pyj379271+/e5b1LEiIiIiIiIiIiIiJ+klwOTKPROJ1MJo9z08+HsbGx21wfXQjrYhP+dIDDxUqlsp2njC6F1QOF1QOF1QOF1QOF1YM4hxX6PMyEZVnWDOZaHetGZi9R5Bs3u2buA+ovYfkTdbzHfO0F6vnCw8Olm561HnDJt6urq9eXlpY2synRt1FhtfmF4K7lcjmLzYqmer1+IgJhrUFT5rHYweaFKpQ7USwWn2Px2NnaePhMO4TA5m3b3sNd0VMoFNJ4HB60bnFEoKcthh1aqKOk+ezIZrMzGMUucJcv/D+BRkmcl8J5W7FqHrluHrvP+JvCOb+dzYgxoaGnzbZucQe4+33Pw1ZWVvbjWnOoq8FqPaHMXZ4SXWjnTae5/sIIzUBVk6Yup1Y3HGsi3IMsHl1o68BCK5VKE6hrgdW64FhkBqWO8DhMs82+wgrN1IG6FlmtS7lc3sai0Ya23nCa7C+s0DCBPs8qXXDzrrJY9KGxlxHKur+Q5/P5FKr67tTo8pDFhsOgvsUwoyKra/eVRQKL5a9GuMZZnH+fm+224PrLXBcDPemY06E8mUlvYNF+qw+uxqVLtVrdxNVA4hqYby8aHx+3uRpIXAOb5LLdMj6/fnA9kLgGdobLdu+4DCx2gfGd8YCz9T9MWZ5yVQzzTQlCecbR0ItnkCMLE9ZbDMYFQX5kMeF3cHeYjSfzjsniow1BnETvecNcPJnj5h2Tp/Rl4K9GtVptXzqd3svNf5kh/wnXW2zb3p3JZKa42YKeZKHchGVZO5GFec3axUOeUKaOUI/imgvcNVzwD+TMXfdQYJE12HfFORQMelYz7EcxrvMwE7YJ7FIqlZrjrlDEMjBkVUFY5xDWLHeFJnaBIaxX+Fw7jLDucVeoYhMYgnqNAeEUBoMjCKzvVyA/QxmYeeTw9wmr5pegaYy8kwjK9KpHrQIiIiIiIiIiIiIiInGTSPwFP50RTvqZ74MAAAAASUVORK5CYII=') /*/img/appbar.undo.point.png*/;
 	*background-image: url(/img/appbar.undo.point.png);
-	background-position: -10px -10px;
+	background-position: center;
 	/* For IE 6 and 7 */
 }
 
@@ -216,20 +216,16 @@ button
 	top: 0px;
 	right: 0px;
 	width: 60px;
-	height: 65px;
+	height: 70px;
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEwAAABMCAYAAADHl1ErAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI6SURBVHhe7dg/SBthGMfxIKUgpSCCk0uHUuji6Ojm0snFzbVTly4d2ilbcXN2cHNxF8dQR3GTgJtTIW2GEgohmH9+37vnIKnvXXImFd57fx843ph77vXeH7k77qmJiIiIiIiIiIiIiIiIVMt4PN4YDoeH9Xp9xb6SPM1m8yWB/WAbE9qJQpuBkI5cWBmFVoB89tOYpik0D3LZYusmCXm40Kx0KYJOv91uv2Y4Y1tNvvD7ZWPc3KU2Go0u7IeU57zRaLywQ+JGGN/STPwI84ZhzcrjRhAfCGSQJOP3u9frvbXyuBHGG7Y/SSweBHnPsGvlcWu1Wq8I5CqNxo+n4icrD487eS6Nd/bnwpjv1HLJc2yl4eHkv7gV8Iv4uYzQmOqjmy8P/+fSvR5ZeVg4/ySszKKh9fv9Hbs35bnrdDrrVh4WTn4qrMxTQ+PQDXdsOstj7PvL8N7Kw8KJe8PKlA1tsgPhw3yjwWCwZ+XhYQ2FgTllQuMmP9WB+Bf7v1ppuFjHUkKjzNuBmODeIauBxSwUGrsLOxAce81Q9MIdHhb0pNBcB4Jdt2nFY+6Ybre7aeXVwvpKhTarA8G+e2wnk1cV65w7ND4WdiBwYNNWGwudGRpaBJfbgeCJ+N2miwNrnie0PHE2All46dD41cXdCGTxZUJTI9AhiHkeBGoETiKMwtBcL81KJUMueaGF2wj83whnKjQuxXAbgc+FnLLQwm0EPjfuWZ8JLMxGoIiIiIiIiIiIiIiIiESlVnsAVoe0Wymm6WkAAAAASUVORK5CYII=') /*/img/appbar.check.png*/;
 	*background-image: url(/img/appbar.check.png);
-	background-position: -10px -10px;
+	background-position: center;
 	/* For IE 6 and 7 */
 }
 
 .buttonlist div.refWaiting > div.up
 {
-	background-image: url('data:image/gif;base64,R0lGODlhEAAQAPQAAP///wAAAPj4+Dg4OISEhAYGBiYmJtbW1qioqBYWFnZ2dmZmZuTk5JiYmMbGxkhISFZWVgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH+GkNyZWF0ZWQgd2l0aCBhamF4bG9hZC5pbmZvACH5BAAKAAAAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAAFUCAgjmRpnqUwFGwhKoRgqq2YFMaRGjWA8AbZiIBbjQQ8AmmFUJEQhQGJhaKOrCksgEla+KIkYvC6SJKQOISoNSYdeIk1ayA8ExTyeR3F749CACH5BAAKAAEALAAAAAAQABAAAAVoICCKR9KMaCoaxeCoqEAkRX3AwMHWxQIIjJSAZWgUEgzBwCBAEQpMwIDwY1FHgwJCtOW2UDWYIDyqNVVkUbYr6CK+o2eUMKgWrqKhj0FrEM8jQQALPFA3MAc8CQSAMA5ZBjgqDQmHIyEAIfkEAAoAAgAsAAAAABAAEAAABWAgII4j85Ao2hRIKgrEUBQJLaSHMe8zgQo6Q8sxS7RIhILhBkgumCTZsXkACBC+0cwF2GoLLoFXREDcDlkAojBICRaFLDCOQtQKjmsQSubtDFU/NXcDBHwkaw1cKQ8MiyEAIfkEAAoAAwAsAAAAABAAEAAABVIgII5kaZ6AIJQCMRTFQKiDQx4GrBfGa4uCnAEhQuRgPwCBtwK+kCNFgjh6QlFYgGO7baJ2CxIioSDpwqNggWCGDVVGphly3BkOpXDrKfNm/4AhACH5BAAKAAQALAAAAAAQABAAAAVgICCOZGmeqEAMRTEQwskYbV0Yx7kYSIzQhtgoBxCKBDQCIOcoLBimRiFhSABYU5gIgW01pLUBYkRItAYAqrlhYiwKjiWAcDMWY8QjsCf4DewiBzQ2N1AmKlgvgCiMjSQhACH5BAAKAAUALAAAAAAQABAAAAVfICCOZGmeqEgUxUAIpkA0AMKyxkEiSZEIsJqhYAg+boUFSTAkiBiNHks3sg1ILAfBiS10gyqCg0UaFBCkwy3RYKiIYMAC+RAxiQgYsJdAjw5DN2gILzEEZgVcKYuMJiEAOwAAAAAAAAAAAA==') /*/img/waiting3.gif*/;
-	*background-image: url(/img/waiting3.gif);
-	background-position: center;
-	background-repeat: no-repeat;
-	/* For IE 6 and 7 */
+    background: none;
 }
 
 .buttonlist div.refWaiting > div.down

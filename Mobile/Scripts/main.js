@@ -102,7 +102,15 @@
             app.log(err);
         }
 
-        self.mediaNew = $("#audioNew")[0];
+        try {
+            if (app.isDevice) 
+                self.mediaNew = new Media(app.getPhoneGapPath() + "audio/sound1.mp3");
+            else
+                self.mediaNew = new Audio("audio/sound1.mp3");
+        }
+        catch (err) {
+            app.log("Media: " + err);
+        }
         //    function () {
         //        if (app.mediaNew) {
         //            app.mediaNew.stop();
@@ -244,6 +252,14 @@
                     .html(settings.name + " " + d.SPZ);
             });
         }
+    },
+    getPhoneGapPath: function () {
+        if (app.isDevice) {
+            var path = window.location.pathname;
+            path = path.substr(path, path.length - 10);
+            return 'file://' + path;
+        }
+        else return "";
     },
     initialize: function () {
         app.log("app.initialize");
