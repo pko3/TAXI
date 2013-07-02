@@ -28,9 +28,7 @@
     },
     log: function (t) {
         if ($(".waitingDiv").is(":visible"))
-            $(".waitingDiv").append($("<p>" + t + "</p>"));
-        //else
-        //    app.info(t);
+            $(".waitingDiv").html(t);
     },
     end: function () {
             if (navigator.app) {
@@ -250,6 +248,9 @@
                 $("#taxiText")
                     .empty()
                     .html(settings.name + " " + d.SPZ);
+
+                
+
             });
         }
     },

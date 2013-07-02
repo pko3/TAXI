@@ -39,8 +39,19 @@
 <select id="HistoryAction" name="HistoryAction"> 	
     <option value="Prestávka">Prestávka</option>
     <option value="Porucha">Porucha</option>
-    <option value="Koniec zmeny">Koniec zmeny</option>
 </select>
+<div class="inlineRadio">
+    <input type="radio" class="radio" name="TimeToFree" value="5" id="TimeToFree5" />
+    <label for="TimeToFree5">5min</label>
+    <input type="radio" class="radio" name="TimeToFree" value="10" id="TimeToFree10" />
+    <label for="TimeToFree10">10min</label>
+    <input type="radio" class="radio" name="TimeToFree" value="15" id="TimeToFree15" />
+    <label for="TimeToFree15">15min</label>
+    <input type="radio" class="radio" name="TimeToFree" value="30" id="TimeToFree30" />
+    <label for="TimeToFree30">30min</label>
+    <input type="radio" class="radio" name="TimeToFree" value="60" id="TimeToFree60" />
+    <label for="TimeToFree30">1hod</label>
+</div>
 <input  name="HistoryActionDescription" value="{{this.HistoryActionDescription}}" type="text" placeholder="Poznámka" />
 <input  name="Payment" type="number" value="{{this.Payment}}" placeholder="Cena" />
 {{#if this.ErrorMessage}}<div class="error">{{this.ErrorMessage}}</div>{{/if}}

@@ -38,7 +38,7 @@
                 switch (jqXHR.status) {
                     case 403: Service.connectionError = "Chybné prihlásenie"; break;
                     case 404: Service.connectionError = "Služba sa nenašla: " + this.url; break;
-                    default: Service.connectionError = "Chyba: " + textStatus; break;
+                    default: Service.connectionError = "Služba sa nenašla: " + this.url; break;
                 }
             }
         });
@@ -124,7 +124,7 @@
     },
     autoOrder: function () {
         if (confirm("Prijať objednávku?")) {
-            this.callService("MobileAutoOrder", { GUID_Transporter: this._settings.transporterId, Latitude: PositionService.lat, Longitude: PositionService.lng });
+            this.callService("MobileAutoOrder", { GUID_Transporter: this._settings.transporterId, OrderSource: "Auto", OrderSourceDescription: "autoOrder", Latitude: PositionService.lat, Longitude: PositionService.lng });
         }
     },
     getOrders: function (callback) {
@@ -147,8 +147,25 @@
             else
             {
                 Service.connectionError = "Zoznam vozidiel je nedostupný";
+                callback(d);
             }
         }, function () { callback([]) });
+    },
+    unBreak : function () {
+        app.waiting();
+        var s = Service.getSettings();
+        Service.callService("TransporterUnBreak",  {
+            GUID_Transporter: s.transporterId,
+            GUID_sysUser_Driver: s.userId,
+            IsTransporter: true,
+            Latitude: PositionService.lat,
+            Longitude: PositionService.lng
+        },
+            function () { app.home(); },
+            function (d) {
+                app.info(d.ErrorMessage);
+                app.waiting(false);
+            });
     },
     getDetail: function (entity, id, callback) {
         this.callService("item/" + entity + "_" + id, null, callback, callback);

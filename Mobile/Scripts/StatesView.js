@@ -37,8 +37,10 @@ var StatesView = function (store) {
         //serializeObject
         $.each(d, function (i, v) { data[v.name] = v.value; });
         data["GUID_Transporter"] = Service.transporter.GUID;
+        data["Latitude"] = PositionService.lat;
+        data["Longitude"] = PositionService.lng;
         data["IsTransporter"] = true;
-        Service.callService("TaxiSetHistory", data,
+        Service.callService("TransporterBreak", data,
             function () { app.home(); },
             function (d) {
                 data.ErrorMessage = d.ErrorMessage;
