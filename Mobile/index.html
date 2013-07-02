@@ -21,12 +21,15 @@
     <button data-route="map" class="icon ico_map">&nbsp;</button>
     <button data-route="settings" class="icon ico_settings">&nbsp;</button>
 </div>
-<div class="scroll"><div class='buttonlist orders-list'></div></div>
+<div class="scroll"><div class='buttonlist orders-list'></div>
+</div>
 </script>
 
 <script id="orders-li-tpl" type="text/x-handlebars-template">
 {{#.}}
-<div id="{{this.GUID}}" class="{{this.Status}}" data_GUID_Offer="{{this.GUID_Offer}}" data_StatusOffer="{{this.StatusOffer}}" data_Id="{{this.GUID}}" data_Status="{{this.Status}}"><div class="icon down">&nbsp;</div><div class="content"><strong>{{this.Date}} {{this.StartAddress}} {{this.StartAddressNo}}, {{this.StartCity}}</strong><br/>{{this.EndAddress}},{{this.EndCity}} {{this.Persons}} {{this.SpecialConditions}}</div><div class="icon up">&nbsp;</div></div>
+<div id="{{this.GUID}}" class="{{this.Status}}" data_GUID_Offer="{{this.GUID_Offer}}" data_StatusOffer="{{this.StatusOffer}}" data_Id="{{this.GUID}}" data_Status="{{this.Status}}"><div class="icon down">&nbsp;</div><div class="content"><strong>{{this.Date}}</strong> {{this.StartAddress}} {{this.StartAddressNo}}, {{this.StartCity}}<br/>{{this.EndAddress}},{{this.EndCity}} {{this.Persons}} {{this.SpecialConditions}}
+    </div>
+    <div class="icon up">&nbsp;</div></div>
 {{/.}}
 </script>
 
@@ -40,18 +43,16 @@
     <option value="Prestávka">Prestávka</option>
     <option value="Porucha">Porucha</option>
 </select>
-<div class="inlineRadio">
-    <input type="radio" class="radio" name="TimeToFree" value="5" id="TimeToFree5" />
-    <label for="TimeToFree5">5min</label>
-    <input type="radio" class="radio" name="TimeToFree" value="10" id="TimeToFree10" />
-    <label for="TimeToFree10">10min</label>
-    <input type="radio" class="radio" name="TimeToFree" value="15" id="TimeToFree15" />
-    <label for="TimeToFree15">15min</label>
-    <input type="radio" class="radio" name="TimeToFree" value="30" id="TimeToFree30" />
-    <label for="TimeToFree30">30min</label>
-    <input type="radio" class="radio" name="TimeToFree" value="60" id="TimeToFree60" />
-    <label for="TimeToFree30">1hod</label>
-</div>
+<select id="TimeToFree" name="TimeToFree"> 	
+        <option value="5">5 min</option>
+        <option value="10">10 min</option>
+        <option value="15">15 min</option>
+        <option value="30">30 min</option>
+        <option value="45">45 min</option>
+        <option value="60">1 hod</option>
+        <option value="120">2 hod</option>
+        <option value="240">4 hod</option>
+</select>
 <input  name="HistoryActionDescription" value="{{this.HistoryActionDescription}}" type="text" placeholder="Poznámka" />
 <input  name="Payment" type="number" value="{{this.Payment}}" placeholder="Cena" />
 {{#if this.ErrorMessage}}<div class="error">{{this.ErrorMessage}}</div>{{/if}}

@@ -46,9 +46,13 @@ var OrdersView = function() {
             else 
                 self.iscroll = new iScroll($('.scroll', self.el)[0], { hScrollbar: false, vScrollbar: false });
             app.waiting(false);
+            
             $(".up").click(function () { self.changeOffer($(this).parent(), "Up"); });
             $(".down").click(function () { self.changeOffer($(this).parent(), "Down"); });
+            //$(".orderTimeToFree").click(function () { $(this).focus(); }).change(function () { alert($(this).val()); });
+            //
             $('.orders-list').show();
+            //$(".content").append('<div class="orderTimeToFree"><select class="orderTimeToFree" name="aa"><option value="5">5 min</option><option value="10">10 min</option><option value="15">15 min</option><option value="30">30 min</option><option value="45">45 min</option><option value="60">1 hod</option><option value="120">2 hod</option><option value="240">4 hod</option></select></div>');
         });
         //app.refreshTransporter();
     };

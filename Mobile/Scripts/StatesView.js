@@ -19,12 +19,13 @@ var StatesView = function (store) {
         app.waiting(false);
         $("#statesForm").html(StatesView.formTemplate(data));
 
-        $("input").bind('focus', function (event) {
-            app.scrollTop();
-        });
-        $("select").bind('focus', function (event) {
-            app.scrollTop();
-        });
+        //$("input").bind('focus', function (event) {
+        //    app.scrollTop();
+        //});
+        //$("select").bind('focus', function (event) {
+        //    app.scrollTop();
+        //});
+        $("#TimeToFree").val(data.TimeToFree);
         $("#HistoryAction").val(data.HistoryAction);
         $("#statesForm").show();
     };
@@ -44,7 +45,7 @@ var StatesView = function (store) {
             function () { app.home(); },
             function (d) {
                 data.ErrorMessage = d.ErrorMessage;
-                f.show(data);
+                self.showForm(data);
                 app.waiting(false);
             });
     };
