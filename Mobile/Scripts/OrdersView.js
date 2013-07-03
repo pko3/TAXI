@@ -37,6 +37,7 @@
 
     this.loadData = function () {
         var self = this;
+        $('#unbreakButton').hide();
         if (!Service.transporter) {
             $('.orders-list').html("");
             app.waiting(false);
@@ -48,20 +49,11 @@
         app.setHeader();
 
         if (Service.transporter.Status == "Break") {
-            if (!this.unbreakButton) {
-                this.unbreakButton = $('<button id="unbreakButton" class="ico_submit">Ukončiť prestávku</button>');
-                this.unbreakButton.click(function () { Service.unBreak(); });
-                $(".scroll").append(this.unbreakButton);
-            }
-            this.unbreakButton.show();
+            $('#unbreakButton').show();
             app.waiting(false);
         }
         else {
-            if (this.unbreakButton) {
-                this.unbreakButton.remove();
-                this.unbreakButton = null;
-            }
-                 Service.getOrders(function (orders) {
+            Service.getOrders(function (orders) {
                 $('.orders-list').html(OrdersView.liTemplate(orders.Items));
                 if (self.iscroll)
                     self.iscroll.refresh();

@@ -19,14 +19,11 @@ var StatesView = function (store) {
         app.waiting(false);
         $("#statesForm").html(StatesView.formTemplate(data));
 
-        //$("input").bind('focus', function (event) {
-        //    app.scrollTop();
-        //});
-        //$("select").bind('focus', function (event) {
-        //    app.scrollTop();
-        //});
-        $("#TimeToFree").val(data.TimeToFree);
-        $("#HistoryAction").val(data.HistoryAction);
+        if (data.TimeToFree)
+            $("#TimeToFree").val(data.TimeToFree);
+        if (data.HistoryAction)
+            $("#HistoryAction").val(data.HistoryAction);
+        $("#HistoryAction").focus();
         $("#statesForm").show();
     };
             

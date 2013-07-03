@@ -61,6 +61,9 @@
         
         $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
         $('body').on('click', '#newOrder', function (event) { Service.autoOrder(); });
+        $('body').on('click', '#unbreakButton', function (event) { Service.unBreak(); });
+
+        $('#unbreakButton').hide();
 
         //deviceready
         //pause
