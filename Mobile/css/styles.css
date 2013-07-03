@@ -354,6 +354,7 @@ h2
 	bottom: 60px;
 	left: 0px;
 	overflow: hidden;
+    text-align:center;
 }
 
 .scrollBottom
@@ -407,11 +408,30 @@ h2
 	-webkit-transform: translate3d(0,0,0);
 }
 
+.center
+{
+    width: 100%;
+	text-align:center;
+}
+
+#unbreakButton {
+    margin-top: 100px;
+    height:65px;
+    padding-right:65px;
+    padding-left:20px;
+    display:inline-block;
+    background-color: #4286f5;
+	color: #fff;
+    background-position:right;
+    background-repeat:no-repeat;
+}
+
 .stage-center
 {
 	top: 0;
 	left: 0;
 }
+
 
 .stage-left
 {

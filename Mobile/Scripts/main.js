@@ -138,8 +138,10 @@
         //    });
         //}
     },
-    home: function () {
-        this.route("orders");
+    home: function (refresh) {
+        app.route("orders");
+        if (refresh)
+            app.currentPage.loadData();
     },
     settings: function () {
         if (this.currentPageName != "settings")
@@ -223,36 +225,44 @@
             window.scrollTo(0, 0);
         document.body.scrollTop = 0;
     },
-    refreshData: function (dataIds) {
+    refreshData: function (dataIds, callback) {
+        var isCallback = false;
         if (dataIds) {
             $.each(dataIds, function () {
                 if(this == "orders"){
-                    if (app.currentPageName == "orders")
+                    if (app.currentPageName == "orders") {
                         app.currentPage.loadData();
+                    }
                 }
-                else if(this == "transporters")
-                    app.refreshTransporter();
+                else if (this == "transporters") {
+                    isCallback = true;
+                    app.refreshTransporter(callback);
+                }
             });
         }
+        if (!isCallback && callback)
+            callback();
     },
-    refreshTransporter: function ()
+    refreshTransporter: function (callback)
     {
         var settings = Service.getSettings();
         if (settings.transporterId) {
             app.log("app.refreshTransporter");
             Service.getDetail("Transporter", settings.transporterId, function (d) {
                 Service.transporter = d;
-                $("#taxiHeader")
-                    .removeClass()
-                    .addClass(d.Status);
-                $("#taxiText")
-                    .empty()
-                    .html(settings.name + " " + d.SPZ);
-
-                
-
+                app.setHeader();
+                if (callback) callback(d);
             });
         }
+    },
+    setHeader: function(){
+        var settings = Service.getSettings();
+        $("#taxiHeader")
+                   .removeClass()
+                   .addClass(Service.transporter.Status);
+        $("#taxiText")
+            .empty()
+            .html(settings.name + " " + Service.transporter.SPZ);
     },
     getPhoneGapPath: function () {
         if (app.isDevice) {

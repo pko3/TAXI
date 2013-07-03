@@ -60,13 +60,15 @@
                 if (Service.isComplet()) {
                     PositionService.startWatch();
                     Service.loginHistory();
+
+                    app.refreshTransporter(callback);
                     //navigator.geolocation.getCurrentPosition(function (position) {
                     //    PositionService.lat = position.coords.latitude;
                     //    PositionService.lng = position.coords.longitude;
                     //    Service.loginHistory()
                     //}, function () { Service.loginHistory() });
                 }
-                if (callback) callback();
+                else if (callback) callback();
 
             }, function (d) {
                 //PositionService.stopWatch();
@@ -124,18 +126,18 @@
     },
     autoOrder: function () {
         if (confirm("Prijať objednávku?")) {
-            this.callService("MobileAutoOrder", { GUID_Transporter: this._settings.transporterId, OrderSource: "Auto", OrderSourceDescription: "autoOrder", Latitude: PositionService.lat, Longitude: PositionService.lng });
+            this.callService("MobileAutoOrder", { GUID_Transporter: this._settings.transporterId, OrderSource: "Auto", OrderSourceDescription: "autoOrder", Latitude: PositionService.lat, Longitude: PositionService.lng }, function () { app.home(true); }, function () { app.home(true); });
         }
     },
     getOrders: function (callback) {
-        this.callService("data/transporterorders", { IdTransporter: this._settings.transporterId }, callback);
+        this.callService("datamobile", { Id:"transporterorders", IdTransporter: this._settings.transporterId }, callback);
     },
     getMessages: function (callback) {
-        this.callService("data/transporterMessages", null, callback);
+        this.callService("datamobile", { Id: "transporterMessages" }, callback);
     },
     getTransporters: function (callback) {
         var self = this;
-        this.callService("data/transporterssimple", null, function (d) {
+        this.callService("datamobile", { Id: "transporterssimple" }, function (d) {
             if (d.Items) {
                 $.each(d.Items, function () {
                     if (this.Id == self._settings.transporterId)
@@ -161,14 +163,16 @@
             Latitude: PositionService.lat,
             Longitude: PositionService.lng
         },
-            function () { app.home(); },
+            function () {
+                app.home(true);
+            },
             function (d) {
                 app.info(d.ErrorMessage);
-                app.waiting(false);
+                app.home(true);
             });
     },
     getDetail: function (entity, id, callback) {
-        this.callService("item/" + entity + "_" + id, null, callback, callback);
+        this.callService("itemmobile", { Id: entity + "_" + id }, callback, callback);
     },
     getSettings: function () {
         if (!Service._settings || !Service._settings.url) {
@@ -200,6 +204,10 @@
                 errorDelegate(d);
         }
         else {
+            if (data) {
+                data.UserTicket = this._settings.sessionId;
+                //data.GUID_sysUser_Driver = this._settings.userId;
+            }
             $.post(this._settings.url + "/app/" + method, data)
                 .done(function (d) {
                     if (d) {
@@ -207,13 +215,7 @@
                         if (d.Message) {
                             app.info(d.Message);
                         }
-                        if (d.RefreshDataId) {
-                            if (d.oVer)
-                                Service.ordersVer = d.oVer;
-                            if (d.tVer)
-                                Service.transporterVer = d.tVer;
-                            app.refreshData(d.RefreshDataId);
-                        }
+
                         if (d.ErrorMessage) {
                             app.log("Service.callService - ErrorMessage: " + d.ErrorMessage);
                             Service.connectionError = d.ErrorMessage + " " + this.url;
@@ -221,6 +223,13 @@
                                 errorDelegate(d);
                             else
                                 app.showAlert(d.ErrorMessage + " " + this.url, "Chyba");
+                        }
+                        else if (d.RefreshDataId) {
+                            if (d.oVer)
+                                Service.ordersVer = d.oVer;
+                            if (d.tVer)
+                                Service.transporterVer = d.tVer;
+                            app.refreshData(d.RefreshDataId, function () { if (successDelegate) successDelegate(d); });
                         }
                         else if(successDelegate)
                             successDelegate(d);
