@@ -54,6 +54,11 @@
         }
         else {
             Service.getOrders(function (orders) {
+
+                $.each(orders.Items, function () {
+                    this.FormatedDate = Service.formatJsonDate(this.Date);
+                });
+
                 $('.orders-list').html(OrdersView.liTemplate(orders.Items));
                 if (self.iscroll)
                     self.iscroll.refresh();
@@ -89,7 +94,7 @@
 
         data.Latitude = PositionService.lat,
         data.Longitude = PositionService.lng
-        Service.callService("offer", data);
+        Service.callService("transporteroffer", data);
     };
     this.onShow = function () {
         $("#taxiHeader").click(function () { app.refreshData(["orders", "transporters"]); });

@@ -26,9 +26,10 @@
 
 <script id="orders-li-tpl" type="text/x-handlebars-template">
 {{#.}}
-<div id="{{this.GUID}}" class="{{this.Status}}" data_GUID_Offer="{{this.GUID_Offer}}" data_StatusOffer="{{this.StatusOffer}}" data_Id="{{this.GUID}}" data_Status="{{this.Status}}"><div class="icon down">&nbsp;</div><div class="content"><strong>{{this.Date}}</strong> {{this.StartAddress}} {{this.StartAddressNo}}, {{this.StartCity}}<br/>{{this.EndAddress}},{{this.EndCity}} {{this.Persons}} {{this.SpecialConditions}}
-    </div>
-    <div class="icon up">&nbsp;</div></div>
+<div id="{{this.GUID}}" class="{{this.Status}}" data_GUID_Offer="{{this.GUID_Offer}}" data_StatusOffer="{{this.StatusOffer}}" data_Id="{{this.GUID}}" data_Status="{{this.Status}}">
+<div class="icon down">&nbsp;</div>
+    <div class="content"><strong>{{this.FormatedDate}}</strong> {{this.StartCity}} {{this.StartAddress}}<br/>{{this.EndCity}} {{this.EndAddress}}<br/>{{this.Persons}} {{this.SpecialConditions}}</div>
+<div class="icon up">&nbsp;</div></div>
 {{/.}}
 </script>
 

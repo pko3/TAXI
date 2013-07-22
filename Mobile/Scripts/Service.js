@@ -247,5 +247,29 @@
                         app.showAlert(Service.connectionError + ": " + this.url, "Chyba");
                 });
         }
+    },
+    parseJsonDate: function (jsonDate) {
+        try{
+            var offset = 0; // new Date().getTimezoneOffset() * 60000;
+            var parts = /\/Date\((-?\d+)([+-]\d{2})?(\d{2})?.*/.exec(jsonDate);
+
+            if (parts[2] == undefined)
+                parts[2] = 0;
+
+            if (parts[3] == undefined)
+                parts[3] = 0;
+
+            return new Date(+parts[1] + offset + parts[2] * 3600000 + parts[3] * 60000);
+        }
+        catch (err) {
+            return undefined;
+        }
+    },
+    formatJsonDate: function (jsonDate) {
+        var d = Service.parseJsonDate(jsonDate);
+        //return d.toLocaleDateString() + " <br/><strong>" + d.toLocaleTimeString().substring(0, 5) + "</strong>"; //
+        if (d)
+            return d.getDate() + ". " + d.getMonth() + ". " + d.getFullYear() + " " + d.toTimeString().substring(0, 5);
+        return "";
     }
 }
