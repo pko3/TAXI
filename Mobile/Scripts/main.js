@@ -15,7 +15,7 @@
     showConfirm: function (message, title, okCallback, cancelCallback) {
         if (navigator.notification) {
             var _callback = function (btn) {
-                if (btn === "OK") {
+                if (btn === 1) {
                     if (okCallback) okCallback();
                 }
                 else {
@@ -52,9 +52,9 @@
     end: function (callback) {
         if (Service.isAuthenticated) {
             if (navigator.app) {
-                app.showConfirm("Odhlásiť sa z vozidla?", null, function () {
+                app.showConfirm("Odhlásiť sa z vozidla?", "Ukončenie aplikácie", function () {
                     Service.logout(function () {
-                        app.showConfirm("Ukončiť aplikáciu?", null, function () {
+                        app.showConfirm("Ukončiť aplikáciu?", "Ukončenie aplikácie", function () {
                             app.log("app.exitApp");
                             navigator.app.exitApp();
                         }, callback);
@@ -62,7 +62,7 @@
                 });
             }
             else {
-                app.showConfirm("Odhlásiť sa z vozidla?", null, function () {
+                app.showConfirm("Odhlásiť sa z vozidla?", "Ukončenie aplikácie", function () {
                     Service.logout(function () {
                         app.showAlert("Boli ste odhlásení z vozidla");
                         callback();
@@ -71,7 +71,7 @@
             }
         }
         else if (navigator.app) {
-            app.showConfirm("Ukončiť aplikáciu?", null, function () {
+            app.showConfirm("Ukončiť aplikáciu?", "Ukončenie aplikácie", function () {
                 app.log("app.exitApp");
                 navigator.app.exitApp();
             }, callback);
