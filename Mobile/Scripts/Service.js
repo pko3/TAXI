@@ -125,9 +125,10 @@
             if (callback) callback();
     },
     autoOrder: function () {
-        if (confirm("Prijať objednávku?")) {
-            this.callService("MobileAutoOrder", { GUID_Transporter: this._settings.transporterId, OrderSource: "Auto", OrderSourceDescription: "autoOrder", Latitude: PositionService.lat, Longitude: PositionService.lng }, function () { app.home(true); }, function () { app.home(true); });
-        }
+        app.showConfirm("Prijať objednávku?", "Objednávka", function () {
+            var s = Service.getSettings();
+            Service.callService("MobileAutoOrder", { GUID_Transporter: s.transporterId, OrderSource: "Auto", OrderSourceDescription: "autoOrder", Latitude: PositionService.lat, Longitude: PositionService.lng }, function () { app.home(true); }, function () { app.home(true); });
+        });
     },
     getOrders: function (callback) {
         this.callService("datamobile", { Id:"transporterorders", IdTransporter: this._settings.transporterId }, callback);

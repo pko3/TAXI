@@ -6,11 +6,30 @@
     mediaAlert : null,
     pages: {},
     showAlert: function (message, title) {
-        //TODO: ALERT, CONFIRM!!!
         if (navigator.notification) {
             navigator.notification.alert(message, null, title, 'OK');
         } else {
             alert(title ? (title + ": " + message) : message);
+        }
+    },
+    showConfirm: function (message, title, okCallback, cancelCallback) {
+        if (navigator.notification) {
+            var _callback = function (btn) {
+                if (btn === "OK") {
+                    if (okCallback) okCallback();
+                }
+                else {
+                    if (cancelCallback) cancelCallback();
+                }
+            }
+            navigator.notification.confirm(message, _callback, title, 'OK,Cancel');
+        } else {
+            if (confirm(title ? (title + ": " + message) : message)) {
+                if (okCallback) okCallback();
+            }
+            else {
+                if (cancelCallback) cancelCallback();
+            }
         }
     },
     playNew: function(){
@@ -30,35 +49,39 @@
         if ($(".waitingDiv").is(":visible"))
             $(".waitingDiv").html(t);
     },
-    end: function () {
+    end: function (callback) {
+        if (Service.isAuthenticated) {
             if (navigator.app) {
-                if (confirm("Odhlásiť sa z vozidla?")) {
-
+                app.showConfirm("Odhlásiť sa z vozidla?", null, function () {
                     Service.logout(function () {
-                        //app.showAlert("Boli ste odhlásení z vozidla");
-                        if (confirm("Ukončiť aplikáciu?")) {
+                        app.showConfirm("Ukončiť aplikáciu?", null, function () {
                             app.log("app.exitApp");
                             navigator.app.exitApp();
-                        }
+                        }, callback);
                     });
-                    return true;
-                }
+                });
             }
             else {
-                if (confirm("Odhlásiť sa z vozidla?")) {
-                    Service.logout(function () { app.showAlert("Boli ste odhlásení z vozidla"); });
-                    return true;
-                }
-                
-                //app.showAlert("Táto funkcia nieje podporovaná");
+                app.showConfirm("Odhlásiť sa z vozidla?", null, function () {
+                    Service.logout(function () {
+                        app.showAlert("Boli ste odhlásení z vozidla");
+                        callback();
+                    });
+                }, callback);
             }
-            return false;
+        }
+        else if (navigator.app) {
+            app.showConfirm("Ukončiť aplikáciu?", null, function () {
+                app.log("app.exitApp");
+                navigator.app.exitApp();
+            }, callback);
+        }
+        else callback();
     },
     registerEvents: function () {
-                app.log("app.registerEvents");
-                var self = this;
+        app.log("app.registerEvents");
+        var self = this;
 
-        
         $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
         $('body').on('click', '#newOrder', function (event) { Service.autoOrder(); });
         $('body').on('click', '#unbreakButton', function (event) { Service.unBreak(); });
@@ -91,12 +114,6 @@
                     e.preventDefault();
                     app.home();
                 }
-                //else {
-                //    if (confirm("Ukončiť aplikáciu?")) {
-                //        app.log("app.exitApp");
-                //        navigator.app.exitApp();
-                //    }
-                //}
             }, false);
 
         } catch (err) {
@@ -104,7 +121,7 @@
         }
 
         try {
-            if (app.isDevice) 
+            if (app.isDevice)
                 self.mediaNew = new Media(app.getPhoneGapPath() + "audio/sound1.mp3");
             else
                 self.mediaNew = new Audio("audio/sound1.mp3");
@@ -112,34 +129,6 @@
         catch (err) {
             app.log("Media: " + err);
         }
-        //    function () {
-        //        if (app.mediaNew) {
-        //            app.mediaNew.stop();
-        //            app.mediaNew.release();
-        //        }
-        //    },
-        //    function (error) {
-        //        app.log(error.message);
-        //    });
-
-        // Check of browser supports touch events...
-        //if (document.documentElement.hasOwnProperty && document.documentElement.hasOwnProperty('ontouchstart')) {
-        //    // ... if yes: register touch event listener to change the "selected" state of the item
-        //    $('.buttonlist').on('touchstart', 'button', function (event) {
-        //        $(event.target).addClass('tappable-active');
-        //    });
-        //    $('body').on('touchend', 'button', function (event) {
-        //        $('.tappable-active').removeClass('tappable-active');
-        //    });
-        //} else {
-        //    // ... if not: register mouse events instead
-        //    $('.buttonlist').on('mousedown', 'button', function (event) {
-        //        $(event.target).addClass('tappable-active');
-        //    });
-        //    $('body').on('mouseup', 'button', function (event) {
-        //        $('.tappable-active').removeClass('tappable-active');
-        //    });
-        //}
     },
     home: function (refresh) {
         app.route("orders");
@@ -154,29 +143,25 @@
         app.log("app.route: " + p);
         if (!Service.isComplet() && p != "settings")
             p = "settings";
-        //$('[data-route]').removeClass("selected");
-            var self = this;
-            var page = this.pages[p];
-            if (!page) {
-                switch (p) {
-                    case "orders": page = new OrdersView().render(); this.homePage = page; break;
-                    case "message": page = new MessageView().render(); break;
-                    case "states": page = new StatesView().render(); break;
-                    case "map": page = new MapView().render(); break;
-                    case "settings": page = new SettingsView().render(); break;
-                    default: this.showAlert("Undefined page:" + p, "ERROR"); return;
-                }
-                this.pages[p] = page;
+        var self = this;
+        var page = this.pages[p];
+        if (!page) {
+            switch (p) {
+                case "orders": page = new OrdersView().render(); this.homePage = page; break;
+                case "message": page = new MessageView().render(); break;
+                case "states": page = new StatesView().render(); break;
+                case "map": page = new MapView().render(); break;
+                case "settings": page = new SettingsView().render(); break;
+                default: this.showAlert("Undefined page:" + p, "ERROR"); return;
             }
-           // $('[data-route="'+p+'"]').addClass("selected");
-            this.currentPageName = p;
-            this.slidePage(page);
+            this.pages[p] = page;
+        }
+        this.currentPageName = p;
+        this.slidePage(page);
     },
     slidePage: function (page) {
-
         var currentPageDest, self = this;
 
-        // If there is no current page (app just started) -> No transition: Position new page in the view port
         if (!this.currentPage) {
             $(page.el).attr('class', 'page stage-center');
             $('body').append(page.el);
@@ -193,34 +178,24 @@
         if (this.currentPage === page)
             return;
 
-        // Cleaning up: remove old pages that were moved out of the viewport
-         //.not('.homePage')
         if (page.index < this.currentPage.index) {
-            // Always apply a Back transition (slide from left) when we go back to the search page
             $(page.el).attr('class', 'page stage-left');
             currentPageDest = "stage-right";
         } else {
-            // Forward transition (slide from right)
             $(page.el).attr('class', 'page stage-right');
             currentPageDest = "stage-left";
         }
 
         $('body').append(page.el);
 
-        // Wait until the new page has been added to the DOM...
         setTimeout(function () {
-            // Slide out the current page: If new page slides from the right -> slide current page to the left, and vice versa
             $(self.currentPage.el).attr('class', 'page transition ' + currentPageDest);
-            // Slide in the new page
             $(page.el).attr('class', 'page stage-center transition');
-
             if (page.onShow)
                 page.onShow();
             else
                 self.waiting(true);
-
             self.currentPage = page;
-            
             $('.stage-right, .stage-left').remove();
         });
     },
@@ -281,13 +256,6 @@
         var self = this;
         this.pages = {};
         this.registerEvents();
-
-        //try {
-        //    $('body').append($('script').attr("src", "http://maps.google.com/maps/api/js?sensor=false&callback=Map.apiOK"));
-        //}
-        //catch (err) {
-        //    app.info(err.message);
-        //}
 
         Service.initialize(function () {
             self.home();

@@ -15,7 +15,7 @@ var SettingsView = function (messages) {
         $("#settingsForm").hide();
         app.waiting();
         $("#settingsSave").click(function () { if(!$(this).hasClass("transparent")) self.save(); });
-        $("#appExit").click(function () { if (app.end()) self.loadForm(); })
+        $("#appExit").click(function () { app.end(function () { self.loadForm(); });  })
         
         this.loadForm();
     };
