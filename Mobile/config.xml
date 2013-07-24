@@ -2,8 +2,8 @@
 <widget xmlns       = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "sk.dflexnr.taxi"
-        versionCode = "413"
-        version     = "1.4.13">
+        versionCode = "414"
+        version     = "1.4.14">
  
     <name>TAXI</name>
   

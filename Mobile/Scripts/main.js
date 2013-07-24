@@ -54,7 +54,7 @@
             if (navigator.app) {
                 app.showConfirm("Odhlásiť sa z vozidla?", "Ukončenie aplikácie", function () {
                     Service.logout(function () {
-                        app.showConfirm("Ukončiť aplikáciu?", "Ukončenie aplikácie", function () {
+                        app.showConfirm("Ukončiť aplikáciu?", "Ukončenie aplikácie", function () {
                             app.log("app.exitApp");
                             navigator.app.exitApp();
                         }, callback);

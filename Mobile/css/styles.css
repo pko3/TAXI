@@ -5,7 +5,7 @@ html
 
 body
 {
-	position: fixed;/*relative;*/
+	position: absolute;/*relative;*/
     z-index: 1;
 	overflow: hidden;
 	margin: 0;
