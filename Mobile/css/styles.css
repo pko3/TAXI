@@ -5,7 +5,8 @@ html
 
 body
 {
-	position: relative;
+	position: fixed;/*relative;*/
+    z-index: 1;
 	overflow: hidden;
 	margin: 0;
 	padding: 0;
