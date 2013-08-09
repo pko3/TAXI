@@ -125,9 +125,10 @@
             if (callback) callback();
     },
     autoOrder: function () {
-        if (confirm("Prijať objednávku?")) {
-            this.callService("MobileAutoOrder", { GUID_Transporter: this._settings.transporterId, OrderSource: "Auto", OrderSourceDescription: "autoOrder", Latitude: PositionService.lat, Longitude: PositionService.lng }, function () { app.home(true); }, function () { app.home(true); });
-        }
+        app.showConfirm("Prijať objednávku?", "Objednávka", function () {
+            var s = Service.getSettings();
+            Service.callService("MobileAutoOrder", { GUID_Transporter: s.transporterId, OrderSource: "Auto", OrderSourceDescription: "autoOrder", Latitude: PositionService.lat, Longitude: PositionService.lng }, function () { app.home(true); }, function () { app.home(true); });
+        });
     },
     getOrders: function (callback) {
         this.callService("datamobile", { Id:"transporterorders", IdTransporter: this._settings.transporterId }, callback);
@@ -247,5 +248,29 @@
                         app.showAlert(Service.connectionError + ": " + this.url, "Chyba");
                 });
         }
+    },
+    parseJsonDate: function (jsonDate) {
+        try{
+            var offset = 0; // new Date().getTimezoneOffset() * 60000;
+            var parts = /\/Date\((-?\d+)([+-]\d{2})?(\d{2})?.*/.exec(jsonDate);
+
+            if (parts[2] == undefined)
+                parts[2] = 0;
+
+            if (parts[3] == undefined)
+                parts[3] = 0;
+
+            return new Date(+parts[1] + offset + parts[2] * 3600000 + parts[3] * 60000);
+        }
+        catch (err) {
+            return undefined;
+        }
+    },
+    formatJsonDate: function (jsonDate) {
+        var d = Service.parseJsonDate(jsonDate);
+        //return d.toLocaleDateString() + " <br/><strong>" + d.toLocaleTimeString().substring(0, 5) + "</strong>"; //
+        if (d)
+            return d.getDate() + ". " + d.getMonth() + ". " + d.getFullYear() + " " + d.toTimeString().substring(0, 5);
+        return "";
     }
 }
