@@ -38,6 +38,8 @@
     this.loadData = function () {
         var self = this;
         $('#unbreakButton').hide();
+        $('#unalarmButton').hide();
+
         if (!Service.transporter) {
             $('.orders-list').html("");
             app.waiting(false);
@@ -48,7 +50,11 @@
         app.waiting();
         app.setHeader();
 
-        if (Service.transporter.Status == "Break") {
+        if (Service.transporter.inAlert) {
+            $('#unalarmButton').show();
+            app.waiting(false);
+        }
+        else  if (Service.transporter.Status == "Break") {
             $('#unbreakButton').show();
             app.waiting(false);
         }
@@ -97,10 +103,17 @@
             Latitude: PositionService.lat,
             Longitude: PositionService.lng
         };
+
+        if(action == "Up" && (data.Status == "New" || data.Status == "Offered"))
+        {
+            Service.orders.Current = Service.findOrder(data.GUID_TransporterOrder);
+            if (Service.orders.Current)
+                app.route("detail");
+            return;
+        }
+
         btn.removeClass().addClass("refWaiting");
 
-        data.Latitude = PositionService.lat,
-        data.Longitude = PositionService.lng
         Service.callService("transporteroffer", data);
     };
     this.onShow = function () {

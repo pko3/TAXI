@@ -85,8 +85,11 @@
         $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
         $('body').on('click', '#newOrder', function (event) { Service.autoOrder(); });
         $('body').on('click', '#unbreakButton', function (event) { Service.unBreak(); });
-
+        $('body').on('click', '#unalarmButton', function (event) { Service.unAlarm(); });
+        $('body').on('click', '#taxiAlarm', function (event) { Service.alarm(); });
+                
         $('#unbreakButton').hide();
+        $('#unalarmButton').hide();
 
         //deviceready
         //pause

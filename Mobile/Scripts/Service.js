@@ -160,6 +160,7 @@
             case "Reserved": order.StatusDescription = "Rezervovaná"; break;
             case "Waiting": order.StatusDescription = "Pristavené"; break;
             case "Cancel": order.StatusDescription = "Zrušená"; break;
+            case "Processing": order.StatusDescription = "Transport"; break;
             default: order.StatusDescription = "Vybavená"; break;
         }
         //order.FormatedDate = Service.formatDate(order.OrderToDate);
@@ -188,7 +189,7 @@
     unBreak : function () {
         app.waiting();
         var s = Service.getSettings();
-        Service.callService("TransporterUnBreak",  {
+        Service.callService("TransporterUnBreak", {
             GUID_Transporter: s.transporterId,
             GUID_sysUser_Driver: s.userId,
             IsTransporter: true,
@@ -202,6 +203,62 @@
                 app.info(d.ErrorMessage);
                 app.home(true);
             });
+    },
+    alarm: function () {
+        app.waiting();
+        var s = Service.getSettings();
+        Service.callService("TransporterAlarm", {
+            GUID_Transporter: s.transporterId,
+            GUID_sysUser_Driver: s.userId,
+            IsTransporter: true,
+            Latitude: PositionService.lat,
+            Longitude: PositionService.lng
+        },
+            function () {
+                app.home(true);
+            },
+            function (d) {
+                app.info(d.ErrorMessage);
+                app.home(true);
+            });
+    },
+    unAlarm: function () {
+        app.waiting();
+        var s = Service.getSettings();
+        Service.callService("TransporterUnAlarm", {
+            GUID_Transporter: s.transporterId,
+            GUID_sysUser_Driver: s.userId,
+            IsTransporter: true,
+            Latitude: PositionService.lat,
+            Longitude: PositionService.lng
+        },
+            function () {
+                app.home(true);
+            },
+            function (d) {
+                app.info(d.ErrorMessage);
+                app.home(true);
+            });
+    },
+    recallOrder: function (callback) {
+        app.waiting();
+        var s = Service.getSettings();
+        if (Service.orders && Service.orders.Current) {
+            Service.callService( Service.orders.Current.RecallNeed ? "OrderUnRecall":"OrderRecall", {
+                GUID_Transporter: s.transporterId,
+                GUID_sysUser_Driver: s.userId,
+                GUID_TransporterOrder: Service.orders.Current.GUID,
+                IsTransporter: true,
+                Latitude: PositionService.lat,
+                Longitude: PositionService.lng
+            },
+            function () {
+                Service.orders.Current.RecallNeed = Service.orders.Current.RecallNeed ? false : true;
+                if (callback)
+                    callback();
+            }
+            );
+        }
     },
     getDetail: function (entity, id, callback) {
         this.callService("itemmobile", { Id: entity + "_" + id }, callback, callback);
