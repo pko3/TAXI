@@ -3,6 +3,7 @@
     ordersVer: undefined,
     transporterVer: undefined,
     transporter: null,
+    orders: null,
     isSendloginHistory: false,
     isAuthenticated: false,
     isComplet: function () {
@@ -124,6 +125,14 @@
         else
             if (callback) callback();
     },
+    findOrder: function (id) {
+        if (this.orders && this.orders.Items) {
+            var r = $.grep(this.orders.Items, function (o) { return o.GUID == id; });
+            if (r.length > 0)
+                return r[0];
+        }
+        return undefined;
+    },
     autoOrder: function () {
         app.showConfirm("Prijať objednávku?", "Objednávka", function () {
             var s = Service.getSettings();
@@ -131,7 +140,29 @@
         });
     },
     getOrders: function (callback) {
-        this.callService("datamobile", { Id:"transporterorders", IdTransporter: this._settings.transporterId }, callback);
+        var self = this;
+        this.callService("datamobile", { Id: "transporterorders", IdTransporter: this._settings.transporterId }, function (orders) {
+            Service.orders = orders;
+            if (Service.orders && Service.orders.Items)
+                $.each(Service.orders.Items, function () {
+                    self.setOrderDescription(this);
+                });
+            if (callback)
+                callback(orders);
+        });
+    },
+    setOrderDescription: function (order) {
+        if (!order.GUID)
+            order.Status = "";
+        switch (order.Status) {
+            case "New": order.StatusDescription = "Poslaná"; break;
+            case "Offered": order.StatusDescription = "Ponúknutá"; break;
+            case "Reserved": order.StatusDescription = "Rezervovaná"; break;
+            case "Waiting": order.StatusDescription = "Pristavené"; break;
+            case "Cancel": order.StatusDescription = "Zrušená"; break;
+            default: order.StatusDescription = "Vybavená"; break;
+        }
+        //order.FormatedDate = Service.formatDate(order.OrderToDate);
     },
     getMessages: function (callback) {
         this.callService("datamobile", { Id: "transporterMessages" }, callback);

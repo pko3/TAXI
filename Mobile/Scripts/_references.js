@@ -8,5 +8,7 @@
 /// <reference path="PositionService.js" />
 /// <reference path="main.js" />
 /// <reference path="Notification.js" />
+/// <reference path="OrderDetail.js" />
+/// <reference path="DetailMap.js" />
 
 

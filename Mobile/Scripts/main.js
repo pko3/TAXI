@@ -152,6 +152,7 @@
                 case "states": page = new StatesView().render(); break;
                 case "map": page = new MapView().render(); break;
                 case "settings": page = new SettingsView().render(); break;
+                case "detail": page = new OrderDetail().render(); break;
                 default: this.showAlert("Undefined page:" + p, "ERROR"); return;
             }
             this.pages[p] = page;

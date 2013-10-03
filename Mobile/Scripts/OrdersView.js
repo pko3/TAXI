@@ -68,6 +68,7 @@
 
                 $(".up").click(function () { self.changeOffer($(this).parent(), "Up"); });
                 $(".down").click(function () { self.changeOffer($(this).parent(), "Down"); });
+                $(".content").click(function () { self.detail($(this).parent()); });
                 //$(".orderTimeToFree").click(function () { $(this).focus(); }).change(function () { alert($(this).val()); });
                 //
                 $('.orders-list').show();
@@ -75,8 +76,14 @@
             });
         }
     };
+    this.detail = function (btn) {
+        var self = this;
+        //Service.detail(btn.attr("data_localId"));
+        Service.orders.Current = Service.findOrder(btn.attr("data_Id"));
+        if (Service.orders.Current)
+            app.route("detail");
+    };
     this.changeOffer = function (btn, action) {
-
         var settings = Service.getSettings(), self = this;
         var data = {
             Action: action,
