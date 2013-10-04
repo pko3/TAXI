@@ -20,6 +20,7 @@
                 self.setButtons();
             });
         });
+
         this.loadData();
     };
 
@@ -46,9 +47,11 @@
         this.order = Service.orders.Current;
         if (this.order) {
             $("#orderDetailForm").html(OrderDetail.detailTemplate(this.order));
-            if (this.order.StartLatitude)
-                DetailMap.setMap(this.order.StartLatitude, this.order.StartLongitude, PositionService.lat, PositionService.lng);
             this.setButtons();
+            if (this.order.StartLatitude) {
+                $("#orderDetailMap").height($(window).height() - $("#orderDetailForm").outerHeight() - 66);
+                DetailMap.setMap(this.order.StartLatitude, this.order.StartLongitude, PositionService.lat, PositionService.lng);
+            }
         }
     };
 
