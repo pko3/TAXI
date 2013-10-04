@@ -39,11 +39,12 @@
 <script id="orderDetail-tpl" type="text/x-handlebars-template">
 <div class='header'><button id="orderDetailBack" class="icon ico_back">&nbsp;</button><button id="orderCall" class="icon ico_phone">&nbsp;</button><button id="orderDetailSave" class="icon texticon ico_submit">&nbsp;</button></div>
 <form id="orderDetailForm"></form>
-<div id="orderDetailMap" style="position:absolute;width:100%;"></div>
+<div id="orderDetailMap" style="position:absolute;width:100%;height:85%;"></div>
 </script>
 
 <script id="orderDetailForm-tpl" type="text/x-handlebars-template">
     <select id="OrderTimeToRealize" name="TimeToRealize"> 	
+        <option value="">Vyberte čas</option>
         <option value="5">5 min</option>
         <option value="10">10 min</option>
         <option value="15">15 min</option>

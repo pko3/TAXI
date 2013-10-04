@@ -49,7 +49,7 @@
             $("#orderDetailForm").html(OrderDetail.detailTemplate(this.order));
             this.setButtons();
             if (this.order.StartLatitude) {
-                $("#orderDetailMap").height($(window).height() - $("#orderDetailForm").outerHeight() - 66);
+               // $("#orderDetailMap").height($(window).height() - $("#orderDetailForm").outerHeight() - 66);
                 DetailMap.setMap(this.order.StartLatitude, this.order.StartLongitude, PositionService.lat, PositionService.lng);
             }
         }
@@ -60,6 +60,12 @@
 
         var tr = parseInt($("#OrderTimeToRealize").val(), 10);
         var settings = Service.getSettings(), self = this;
+
+        if (isNaN(tr))
+        {
+            app.showAlert("Vyberte čas", "Chyba");
+            return;
+        }
 
         var data = {
             Action: "Up",
