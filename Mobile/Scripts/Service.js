@@ -24,6 +24,7 @@
         password: undefined,
         userId: undefined,
         transporterId: undefined,
+        transporterSPZ: undefined,
         url: undefined,
         sessionId: undefined,
         enableHighAccuracy: true
