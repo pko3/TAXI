@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Mobile", "..\Mobile", "{E94AC4A2-EDEB-4BC9-9D42-90E787C3B8AB}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Mobile", ".", "{6B2E83B8-0174-4EA9-A929-FBC9B1E117E7}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
 		Debug.AspNetCompiler.VirtualPath = "/Mobile"
@@ -26,8 +26,8 @@ Global
 		Debug|Any CPU = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E94AC4A2-EDEB-4BC9-9D42-90E787C3B8AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E94AC4A2-EDEB-4BC9-9D42-90E787C3B8AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B2E83B8-0174-4EA9-A929-FBC9B1E117E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B2E83B8-0174-4EA9-A929-FBC9B1E117E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

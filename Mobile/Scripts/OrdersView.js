@@ -50,7 +50,7 @@
         app.waiting();
         app.setHeader();
 
-        if (Service.transporter.inAlert) {
+        if (Service.transporter.inAlarm) {
             $('#unalarmButton').show();
             app.waiting(false);
         }
