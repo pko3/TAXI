@@ -87,7 +87,8 @@
         $('body').on('click', '#unbreakButton', function (event) { Service.unBreak(); });
         $('body').on('click', '#unalarmButton', function (event) { Service.unAlarm(); });
         $('body').on('click', '#taxiAlarm', function (event) { Service.alarm(); });
-                
+        $('body').on('click', '#btnSubmenu', function (event) { $('#divsubmenu').toggle("slow"); });
+                        
         $('#unbreakButton').hide();
         $('#unalarmButton').hide();
 
@@ -152,6 +153,8 @@
             switch (p) {
                 case "orders": page = new OrdersView().render(); this.homePage = page; break;
                 case "message": page = new MessageView().render(); break;
+                case "history": page = new OrdersHistoryView().render(); break;
+                case "historyme": page = new OrdersHistoryView().render(); break;
                 case "states": page = new StatesView().render(); break;
                 case "map": page = new MapView().render(); break;
                 case "settings": page = new SettingsView().render(); break;
@@ -276,3 +279,12 @@ function onLoad() {
     }
     
 }
+
+function showMenu() {
+    document.getElementById("submenu").style.display = "block";
+}
+function hideMenu() {
+    document.getElementById("submenu").style.display = "none";
+}
+
+

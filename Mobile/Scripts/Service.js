@@ -152,6 +152,7 @@
                 callback(orders);
         });
     },
+
     setOrderDescription: function (order) {
         if (!order.GUID)
             order.Status = "";
@@ -169,6 +170,15 @@
     getMessages: function (callback) {
         this.callService("datamobile", { Id: "transporterMessages" }, callback);
     },
+
+    getHistoryOrders: function (callback) {
+        this.callService("datamobile", { Id: "orders_lastforDriver", IdTransporter: this._settings.transporterId }, callback);
+    },
+
+    getHistoryOrdersMe: function (callback) {
+        this.callService("datamobile", { Id: "orders_lastforDriverMe", IdTransporter: this._settings.transporterId }, callback);
+    },
+
     getTransporters: function (callback) {
         var self = this;
         this.callService("datamobile", { Id: "transporterssimple" }, function (d) {

@@ -33,11 +33,12 @@
         else
             $("#orderCall").removeClass("ico_hangup").addClass("ico_phone").show();
 
-        if (this.order.Status == "Canceled" || this.order.Status == "Waiting" || this.order.Status == "Processing") {
-            $("#orderDetailSave").hide();
-            $("#OrderTimeToRealize").hide();
-        }
-        else if (this.order.Status == "New" || this.order.Status == "Offered")
+        //if (this.order.Status == "Canceled" || this.order.Status == "Waiting" || this.order.Status == "Processing") {
+        //    $("#orderDetailSave").hide();
+        //    $("#OrderTimeToRealize").hide();
+        //}
+        //else
+        if (this.order.Status == "New" || this.order.Status == "Offered")
             $("#orderDetailSave").show().text("Prijať objednávku");
         else
             $("#orderDetailSave").show().text("Zmeniť čas");
