@@ -61,8 +61,12 @@
         else {
             Service.getOrders(function (orders) {
 
+                
+
                 $.each(orders.Items, function () {
                     this.FormatedDate = Service.formatJsonDate(this.Date);
+                    if (this.Status == 'Cancel')
+                        this.StatusCancel = "Y";
                 });
 
                 $('.orders-list').html(OrdersView.liTemplate(orders.Items));
@@ -74,6 +78,7 @@
 
                 $(".up").click(function () { self.changeOffer($(this).parent(), "Up"); });
                 $(".down").click(function () { self.changeOffer($(this).parent(), "Down"); });
+                $(".confirmCancel").click(function () { self.changeOffer($(this).parent(), "confirmCancel"); });
                 $(".content").click(function () { self.detail($(this).parent()); });
                 //$(".orderTimeToFree").click(function () { $(this).focus(); }).change(function () { alert($(this).val()); });
                 //

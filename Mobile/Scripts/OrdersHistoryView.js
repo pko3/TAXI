@@ -16,9 +16,10 @@
         app.waiting();
 
         Service.getHistoryOrders(function (orders) {
-
+            var i = 1;
             $.each(orders.Items, function () {
-                this.FormatedDate = Service.formatJsonDate(this.Date);
+                this.FormatedDate = Service.formatJsonDate(this.OrderToDate);
+                this.iOrder = i++;
             });
 
             $('.ordersHistory-list').html(OrdersHistoryView.liTemplate(orders.Items));
@@ -35,6 +36,7 @@
     
     this.onShow = function () {
         this.loadData();
+        $("#historyBack").click(function () { app.home(); });
     };
     this.initialize();
 }
