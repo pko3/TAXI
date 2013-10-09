@@ -6,9 +6,9 @@
     <link href="css/styles.css" rel="stylesheet">
 </head>
 <body onload="onLoad()">
-
 <div class='waitingDiv'>&nbsp;</div>   
 
+<!-- Orders -->
 <script id="orders-tpl" type="text/x-handlebars-template">
 <div id="taxiHeader">
     <div id="taxiText">TAXI</div>
@@ -45,6 +45,23 @@
 {{/.}}
 </script>
 
+<!-- OrdersHistory -->
+<script id="ordersHistory-tpl" type="text/x-handlebars-template">
+<div class='header'><button class="icon ico_back">&nbsp;</button></div>
+<div class="scroll"><div class='buttonlist ordersHistory-list'></div></div>
+</script>
+
+<script id="ordersHistory-li-tpl" type="text/x-handlebars-template">
+{{#.}}
+<div data_Id="{{this.GUID}}" data_Status="{{this.Status}}">
+<div class="content">
+        <strong>{{this.FormatedDate}}</strong> {{this.StartCity}} {{this.StartAddress}}<br/>{{this.EndCity}} {{this.EndAddress}}<br/>{{this.Persons}} / {{this.SpecialConditions}} / {{this.CustomerPhone}} / {{this.CustomerName}}
+</div>
+</div>
+{{/.}}
+</script>
+
+<!-- OrderDetail -->
 <script id="orderDetail-tpl" type="text/x-handlebars-template">
 <div class='header'><button id="orderDetailBack" class="icon ico_back">&nbsp;</button><button id="orderCall" class="icon ico_phone">&nbsp;</button><button id="orderDetailSave" class="icon texticon ico_submit">&nbsp;</button></div>
 <form id="orderDetailForm"></form>
@@ -97,6 +114,7 @@
      {{/if}}
 </script>
 
+<!-- States -->
 <script id="states-tpl" type="text/x-handlebars-template">
 <div class='header'><button data-route="orders" class="icon ico_back">&nbsp;</button><button id="statesSave" class="icon texticon ico_submit">Prerušenie</button></div>
 <div class="scrollBottom"><form id="statesForm"></form></div>
@@ -123,11 +141,13 @@
 {{#if this.ErrorMessage}}<div class="error">{{this.ErrorMessage}}</div>{{/if}}
 </script>
 
+<!-- Message -->
 <script id="message-tpl" type="text/x-handlebars-template">
 <div class='header'><button data-route="orders" class="icon ico_back">&nbsp;</button><button class="icon ico_submit">&nbsp;</button></div>
 <div class='scrollBottom'><textarea></textarea></div>
 </script>
 
+<!-- Settings -->
 <script id="settings-tpl" type="text/x-handlebars-template">
 <div class='header'><button data-route="orders" id="settingsOrders" class="icon ico_back">&nbsp;</button><button id="settingsSave" class="icon ico_submit transparent">&nbsp;</button><button id="appExit" class="icon ico_end">&nbsp;</button></div>
 <div id="settingsForm" class='scrollBottom'></div>
@@ -149,6 +169,7 @@
 </form>
 </script>
 <!--<label for="enableHighAccuracy">Používať GPS</label><input type="checkbox" name="enableHighAccuracy" id="enableHighAccuracy" value="true" {{#if this.enableHighAccuracy}} checked="checked" {{/if}}/>-->
+
 
 <script src="phonegap.js"></script>
 <script src="lib/json2.js"></script>    
