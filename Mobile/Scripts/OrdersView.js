@@ -1,4 +1,10 @@
-﻿var OrdersView = function() {
+﻿var g_OrdersCheckSum = '';
+var g_OrdersLastRefresh = null;
+var g_OrdersRefreshCount = 0;
+
+
+
+var OrdersView = function () {
     this.index = 1;
     this.initialize = function() {
         this.el = $('<div/>');
@@ -61,13 +67,23 @@
         else {
             Service.getOrders(function (orders) {
 
-                
+                //check sum pre monzinu orders
+                c_OrdersCheckSum = '';
+                //nstavime datum refreshu
+                g_OrdersLastRefresh = new Date();
 
                 $.each(orders.Items, function () {
                     this.FormatedDate = Service.formatJsonDate(this.Date);
                     if (this.Status == 'Cancel')
                         this.StatusCancel = "Y";
+                    c_OrdersCheckSum += this.Status + this.Date;
                 });
+
+                //vyhodnotit checksum 
+                if (g_OrdersCheckSum != c_OrdersCheckSum) //zvukovy signal
+                        app.playNew();
+                g_OrdersCheckSum = c_OrdersCheckSum;
+
 
                 $('.orders-list').html(OrdersView.liTemplate(orders.Items));
                 if (self.iscroll)
@@ -78,7 +94,7 @@
 
                 $(".up").click(function () { self.changeOffer($(this).parent(), "Up"); });
                 $(".down").click(function () { self.changeOffer($(this).parent(), "Down"); });
-                $(".confirmCancel").click(function () { self.changeOffer($(this).parent(), "confirmCancel"); });
+                $(".confirmCancel").click(function () { self.changeOffer($(this).parent(), "Down"); });
                 $(".content").click(function () { self.detail($(this).parent()); });
                 //$(".orderTimeToFree").click(function () { $(this).focus(); }).change(function () { alert($(this).val()); });
                 //

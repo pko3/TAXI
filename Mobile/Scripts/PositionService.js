@@ -1,4 +1,5 @@
-﻿var PositionService = {
+﻿
+var PositionService = {
     lat:0,
     lng: 0,
     _lat: 0,
@@ -92,9 +93,12 @@
             PositionService.startPool();
     },
     refreshVersionData: function (d) {
-        if (d.oVer && d.oVer != Service.ordersVer) {
+        
+        g_OrdersRefreshCount++;
+        if ((d.oVer && d.oVer != Service.ordersVer) || g_OrdersRefreshCount++ > 8) {
+            g_OrdersRefreshCount = 0;
             Service.ordersVer = d.oVer;
-            app.playNew();
+            //app.playNew();
             app.refreshData(["orders"]);
         }
         if (d.tVer && d.tVer != Service.transporterVer) {
