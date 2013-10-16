@@ -104,7 +104,7 @@
         $('body').on('click', '#unbreakButton', function (event) { Service.unBreak(); });
         $('body').on('click', '#unalarmButton', function (event) { Service.unAlarm(); });
         $('body').on('click', '#taxiAlarm', function (event) { Service.alarm(); });
-        $('body').on('click', '#btnSubmenu', function (event) { $('#divsubmenu').toggle("slow"); });
+        $('body').on('click', '#btnSubmenu', function (event) { $('#divsubmenu').toggle(100); });
                         
         $('#unbreakButton').hide();
         $('#unalarmButton').hide();
