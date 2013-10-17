@@ -95,6 +95,10 @@
         }
         else callback();
     },
+    submenu: function()
+    {
+        $('#divsubmenu').toggle(100);
+    },
     registerEvents: function () {
         app.log("app.registerEvents");
         var self = this;
@@ -104,7 +108,10 @@
         $('body').on('click', '#unbreakButton', function (event) { Service.unBreak(); });
         $('body').on('click', '#unalarmButton', function (event) { Service.unAlarm(); });
         $('body').on('click', '#taxiAlarm', function (event) { Service.alarm(); });
-        $('body').on('click', '#btnSubmenu', function (event) { $('#divsubmenu').toggle(100); });
+        $('body').on('click', '#btnSubmenu', function (event) {
+            app.submenu();
+            //sem este raz reg ? 
+        });
                         
         $('#unbreakButton').hide();
         $('#unalarmButton').hide();
