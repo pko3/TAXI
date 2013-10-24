@@ -24,6 +24,22 @@
         this.loadData();
     };
 
+    this.setInitTime = function () {
+
+        if (this.order.Status == "Offered")
+        {
+            $("#OrderTimeToRealize").val(constants.OrderDetail_Defauls_timeToRealize);
+        }
+    };
+
+
+    this.setTime = function () {
+        if (this.order.TimeToRealize) {
+            $("#OrderTimeToRealize").val(this.order.TimeToRealize);
+        }
+    };
+
+
     this.setButtons = function () {
 
         if (this.order.Status != "Waiting")
@@ -33,16 +49,28 @@
         else
             $("#orderCall").removeClass("ico_hangup").addClass("ico_phone").show();
 
+        this.setInitTime();
+
+       this.setTime();
+
         //if (this.order.Status == "Canceled" || this.order.Status == "Waiting" || this.order.Status == "Processing") {
         //    $("#orderDetailSave").hide();
         //    $("#OrderTimeToRealize").hide();
         //}
         //else
+
+        //ak nebola prijata objednavka, tak rozbaleny selector casov
+        //$("#OrderTimeToRealize").click();
+        //if (this.order.Status == "Offered")
+        //{
+        //    $("#OrderTimeToRealize").select();
+        //}
+
         if (this.order.Status == "New" || this.order.Status == "Offered")
             $("#orderDetailSave").show().text("Prijať objednávku");
         else
             $("#orderDetailSave").show().text("Zmeniť čas");
-    }
+    };
 
     this.loadData = function () {
         this.order = Service.orders.Current;
@@ -52,6 +80,12 @@
             if (this.order.StartLatitude) {
                // $("#orderDetailMap").height($(window).height() - $("#orderDetailForm").outerHeight() - 66);
                 DetailMap.setMap(this.order.StartLatitude, this.order.StartLongitude, PositionService.lat, PositionService.lng);
+            }
+
+            //zobrazit rozbaleny cas, ak sa jedna o ponuku
+            if (this.order.Status == "Offer")
+            {
+
             }
         }
     };

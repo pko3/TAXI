@@ -93,7 +93,7 @@ var OrdersView = function () {
                 app.waiting(false);
 
                 $(".up").click(function () { self.changeOffer($(this).parent(), "Up"); });
-                $(".down").click(function () { self.changeOffer($(this).parent(), "Down"); });
+                $(".cancel").click(function () { self.changeOffer($(this).parent(), "Down"); });
                 $(".confirmCancel").click(function () { self.changeOffer($(this).parent(), "Down"); });
                 $(".content").click(function () { self.detail($(this).parent()); });
                 //$(".orderTimeToFree").click(function () { $(this).focus(); }).change(function () { alert($(this).val()); });
