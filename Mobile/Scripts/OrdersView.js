@@ -81,6 +81,7 @@ var OrdersView = function () {
                 //        app.playNew();
                 //g_OrdersCheckSum = c_OrdersCheckSum;
 
+                Service.ordersVer = orders.DataCheckSum;
 
                 $('.orders-list').html(OrdersView.liTemplate(orders.Items));
                 if (self.iscroll)
