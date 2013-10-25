@@ -69,12 +69,12 @@ var OrdersView = function () {
                 ////nstavime datum refreshu
                 //g_OrdersLastRefresh = new Date();
 
-                //$.each(orders.Items, function () {
-                //    this.FormatedDate = Service.formatJsonDate(this.Date);
-                //    if (this.Status == 'Cancel')
-                //        this.StatusCancel = "Y";
-                //    c_OrdersCheckSum += this.Status + this.Date;
-                //});
+                $.each(orders.Items, function () {
+                    this.FormatedDate = Service.formatJsonDate(this.Date);
+                    if (this.Status == 'Cancel')
+                        this.StatusCancel = true;
+                    //c_OrdersCheckSum += this.Status + this.Date;
+                });
 
                 ////vyhodnotit checksum 
                 //if (g_OrdersCheckSum != c_OrdersCheckSum) //zvukovy signal
