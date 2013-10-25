@@ -1,8 +1,5 @@
-﻿var g_OrdersCheckSum = '';
-var g_OrdersLastRefresh = null;
-var g_OrdersRefreshCount = 0;
-
-
+﻿//var g_OrdersCheckSum = '';
+//var g_OrdersLastRefresh = null;
 
 var OrdersView = function () {
     this.index = 1;
@@ -67,22 +64,22 @@ var OrdersView = function () {
         else {
             Service.getOrders(function (orders) {
 
-                //check sum pre monzinu orders
-                c_OrdersCheckSum = '';
-                //nstavime datum refreshu
-                g_OrdersLastRefresh = new Date();
+                ////check sum pre monzinu orders
+                //c_OrdersCheckSum = '';
+                ////nstavime datum refreshu
+                //g_OrdersLastRefresh = new Date();
 
-                $.each(orders.Items, function () {
-                    this.FormatedDate = Service.formatJsonDate(this.Date);
-                    if (this.Status == 'Cancel')
-                        this.StatusCancel = "Y";
-                    c_OrdersCheckSum += this.Status + this.Date;
-                });
+                //$.each(orders.Items, function () {
+                //    this.FormatedDate = Service.formatJsonDate(this.Date);
+                //    if (this.Status == 'Cancel')
+                //        this.StatusCancel = "Y";
+                //    c_OrdersCheckSum += this.Status + this.Date;
+                //});
 
-                //vyhodnotit checksum 
-                if (g_OrdersCheckSum != c_OrdersCheckSum) //zvukovy signal
-                        app.playNew();
-                g_OrdersCheckSum = c_OrdersCheckSum;
+                ////vyhodnotit checksum 
+                //if (g_OrdersCheckSum != c_OrdersCheckSum) //zvukovy signal
+                //        app.playNew();
+                //g_OrdersCheckSum = c_OrdersCheckSum;
 
 
                 $('.orders-list').html(OrdersView.liTemplate(orders.Items));

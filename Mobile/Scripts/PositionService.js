@@ -94,11 +94,9 @@ var PositionService = {
     },
     refreshVersionData: function (d) {
         
-        g_OrdersRefreshCount++;
-        if ((d.oVer && d.oVer != Service.ordersVer) || g_OrdersRefreshCount++ > 8) {
-            g_OrdersRefreshCount = 0;
-            Service.ordersVer = d.oVer;
-            //app.playNew();
+        if ((d.DataCheckSum && d.DataCheckSum != Service.ordersVer)) {
+            Service.ordersVer = d.DataCheckSum;
+            app.playNew();
             app.refreshData(["orders"]);
         }
         if (d.tVer && d.tVer != Service.transporterVer) {
