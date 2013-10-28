@@ -92,7 +92,6 @@
 
     this.save = function () {
 
-
         var tr = parseInt($("#OrderTimeToRealize").val(), 10);
         var settings = Service.getSettings(), self = this;
 
@@ -102,6 +101,8 @@
             return;
         }
 
+        app.waiting();
+        
         var data = {
             Action: "Up",
             IsTransporter: true,
