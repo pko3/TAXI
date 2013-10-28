@@ -113,6 +113,9 @@ var OrdersView = function () {
             app.route("detail");
     };
     this.changeOffer = function (btn, action) {
+
+        btn.removeClass().addClass("refWaiting");
+
         var settings = Service.getSettings(), self = this;
         var data = {
             Action: action,
@@ -126,7 +129,7 @@ var OrdersView = function () {
             Latitude: PositionService.lat,
             Longitude: PositionService.lng
         };
-
+        
         if(action == "Up" && (data.Status == "New" || data.Status == "Offered"))
         {
             Service.orders.Current = Service.findOrder(data.GUID_TransporterOrder);
@@ -134,8 +137,6 @@ var OrdersView = function () {
                 app.route("detail");
             return;
         }
-
-        btn.removeClass().addClass("refWaiting");
 
         Service.callService("transporteroffer", data);
     };
