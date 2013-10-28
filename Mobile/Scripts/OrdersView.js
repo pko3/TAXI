@@ -55,13 +55,20 @@ var OrdersView = function () {
 
         if (Service.transporter.inAlarm) {
             $('#unalarmButton').show();
+            $('#divsubmenu').hide();
+            $('#divmenu').hide();
             app.waiting(false);
         }
         else  if (Service.transporter.Status == "Break") {
             $('#unbreakButton').show();
+            $('#divsubmenu').hide();
+            $('#divmenu').hide();
             app.waiting(false);
         }
         else {
+            $('#divsubmenu').show();
+            $('#divmenu').show();
+
             Service.getOrders(function (orders) {
 
                 ////check sum pre monzinu orders

@@ -166,6 +166,16 @@
         }
         //order.FormatedDate = Service.formatDate(order.OrderToDate);
     },
+    getTransporterStatusText: function () {
+        switch (Service.transporter.Status) {
+            case "Offline": return "Mimo dosahu";
+            case "Free": return "Voľný";
+            case "Bussy": return "Obsadený";
+            case "WithCustomer": return "So zákazníkom";
+            case "Break": return "Prerušenie";
+            default: return Service.transporter.Status;
+        }
+    },
     getMessages: function (callback) {
         this.callService("datamobile", { Id: "transporterMessages" }, callback);
     },
@@ -263,7 +273,9 @@
                 Longitude: PositionService.lng
             },
             function () {
+                app.waiting(false);
                 Service.orders.Current.RecallNeed = Service.orders.Current.RecallNeed ? false : true;
+                
                 if (callback)
                     callback();
             }
@@ -337,9 +349,8 @@
                        successDelegate();
                  })
                 .fail(function () {
-                    app.log("Service.callService - " + Service.connectionError + ": " + this.url);
                     app.waiting(false);
-                    //Service.connectionError = "Spojenie sa nepodarilo " + this.url;
+                    app.log("Service.callService - " + Service.connectionError + ": " + this.url);
                     if (errorDelegate)
                         errorDelegate({ ErrorMessage: Service.connectionError });
                     else

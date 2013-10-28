@@ -105,8 +105,8 @@
         $('body').on('touchmove', function (event) { event.preventDefault(); });
         $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
         $('body').on('click', '#newOrder', function (event) { Service.autoOrder(); });
-        $('body').on('click', '#unbreakButton', function (event) { Service.unBreak(); });
-        $('body').on('click', '#unalarmButton', function (event) { Service.unAlarm(); });
+        $('body').on('click', '#unbreakButton', function (event) { $("#unbreakButton").hide(); Service.unBreak(); });
+        $('body').on('click', '#unalarmButton', function (event) { $("#unalarmButton").hide(); Service.unAlarm(); });
         $('body').on('click', '#taxiAlarm', function (event) { Service.alarm(); });
         $('body').on('click', '#btnSubmenu', function (event) {
             app.submenu();
@@ -268,7 +268,7 @@
                    .addClass(Service.transporter.Status);
         $("#taxiText")
             .empty()
-            .html(settings.name + " " + Service.transporter.SPZ);
+            .html(settings.name + " " + Service.transporter.SPZ + " " + Service.getTransporterStatusText());
     },
     getPhoneGapPath: function () {
         if (app.isDevice) {
