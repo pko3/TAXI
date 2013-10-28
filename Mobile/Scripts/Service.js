@@ -39,8 +39,7 @@
             error: function (jqXHR, textStatus, errorThrown) {
                 switch (jqXHR.status) {
                     case 403: Service.connectionError = "Chybné prihlásenie"; break;
-                    case 404: Service.connectionError = "Služba sa nenašla: " + this.url; break;
-                    default: Service.connectionError = "Služba sa nenašla: " + this.url; break;
+                    default: Service.connectionError = "Služba sa nenašla (" + jqXHR.status + "):" + this.url; break;
                 }
             }
         });
