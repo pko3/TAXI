@@ -194,7 +194,7 @@
         var currentPageDest, self = this;
 
         if (!this.currentPage) {
-            $(page.el).attr('class', 'page stage-center');
+            //$(page.el).attr('class', 'page stage-center');
             $('body').append(page.el);
             this.currentPage = page;
             setTimeout(function () {
@@ -209,19 +209,20 @@
         if (this.currentPage === page)
             return;
 
-        if (page.index < this.currentPage.index) {
-            $(page.el).attr('class', 'page stage-left');
-            currentPageDest = "stage-right";
-        } else {
-            $(page.el).attr('class', 'page stage-right');
-            currentPageDest = "stage-left";
-        }
+        //if (page.index < this.currentPage.index) {
+        //    $(page.el).attr('class', 'page stage-left');
+        //    currentPageDest = "stage-right";
+        //} else {
+        //    $(page.el).attr('class', 'page stage-right');
+        //    currentPageDest = "stage-left";
+        //}
 
         $('body').append(page.el);
 
         setTimeout(function () {
-            $(self.currentPage.el).attr('class', 'page transition ' + currentPageDest);
-            $(page.el).attr('class', 'page stage-center transition');
+            $(self.currentPage.el).hide();//.attr('class', 'page transition ' + currentPageDest);
+            $(page.el).show();
+            //$(page.el).attr('class', 'page stage-center transition');
             if (page.onShow)
                 page.onShow();
             else

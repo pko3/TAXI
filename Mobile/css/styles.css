@@ -5,8 +5,10 @@ html
 
 body
 {
-	position: absolute;/*relative;*/
-    z-index: 1;
+	position: absolute;
+    top: 0;
+    left: 0;
+	z-index: 1;
 	overflow: hidden;
 	margin: 0;
 	padding: 0;
@@ -414,14 +416,14 @@ h2
         margin-top:-10px;
 	}*/
 
-.page
+/*.page
 {
 	position: absolute;
 	top: 0;
 	width: 100%;
 	height: 100%;
 	-webkit-transform: translate3d(0,0,0);
-}
+}*/
 
 .center
 {
@@ -452,7 +454,7 @@ h2
     background-repeat:no-repeat;
 }
 
-.stage-center
+/*.stage-center
 {
 	top: 0;
 	left: 0;
@@ -473,10 +475,10 @@ h2
 
 .transition
 {
-	/*-moz-transition-duration: .375s;
+	-moz-transition-duration: .375s;
 	-o-transition-duration: .375s;
-	-webkit-transition-duration: .375s;*/
-}
+	-webkit-transition-duration: .375s;
+}*/
 
 .icon
 {
