@@ -26,7 +26,7 @@
             if (self.iscroll)
                 self.iscroll.refresh();
             else
-                self.iscroll = new iScroll($('.scroll', self.el)[0], { hScrollbar: false, vScrollbar: false });
+                self.iscroll = new iScroll($('.scrollBottom', self.el)[0], { hScrollbar: false, vScrollbar: false });
             app.waiting(false);
 
             $('.ordersHistory-list').show();

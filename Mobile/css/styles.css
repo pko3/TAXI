@@ -123,11 +123,11 @@ textarea
 input
 {
 	margin-bottom: 2px;
-	padding: 4px 4px;
+	padding: 4px 10px;
 	width: 100%;
-	height: 40px;
+	height: 62px;
 	border: 1px solid #666;
-	font-size: 20px;
+	font-size: 25px;
 }
 
 	input[type="checkbox"]
@@ -154,11 +154,11 @@ label
 select
 {
 	margin-bottom: 2px;
-	padding: 0px;
+	padding: 4px 10px;
 	width: 100%;
-	height: 60px;
+	height: 62px;
 	border: 1px solid #666;
-	font-size: 20px;
+	font-size: 25px;
 }
 
 option
@@ -173,7 +173,7 @@ button
 	border: 1px solid #666;
 	background-color: white;
 	color: #666;
-	font-size: 18px;
+	font-size: 25px;
 }
 
 .inlineRadio div {
@@ -319,6 +319,7 @@ button
 	border: none;
 	border-bottom: 1px solid #666;
 	text-align: left;
+    font-size: 18px;
 }
 
 #states.collapsed > button
@@ -363,9 +364,9 @@ h2
 {
 	-webkit-overflow-scrolling: touch;
 	position: absolute;
-	top: 66px;
+	top: 67px;
 	right: 0px;
-	bottom: 70px;
+	bottom: 69px;
 	left: 0px;
 	overflow: hidden;
     text-align:center;
@@ -375,7 +376,7 @@ h2
 {
 	-webkit-overflow-scrolling: touch;
 	position: absolute;
-	top: 66px;
+	top: 67px;
 	right: 0px;
 	bottom: 0px;
 	left: 0px;
@@ -384,8 +385,7 @@ h2
 
 
 .submenu {
-    border: thin solid #FF9966;
-    -webkit-overflow-scrolling: touch;
+    border: thin solid #fff;
     height: auto;
     position: absolute;
     right: 0px;
@@ -398,8 +398,7 @@ h2
 
 .footer
 {
-	-webkit-overflow-scrolling: touch;
-    height:66px;
+	height:66px;
 	position: absolute;
 	right: 0px;
 	bottom: 0px;
@@ -462,19 +461,21 @@ h2
 
 .stage-left
 {
+	top: 0;
 	left: -100%;
 }
 
 .stage-right
 {
+	top: 0;
 	left: 100%;
 }
 
 .transition
 {
-	-moz-transition-duration: .375s;
+	/*-moz-transition-duration: .375s;
 	-o-transition-duration: .375s;
-	-webkit-transition-duration: .375s;
+	-webkit-transition-duration: .375s;*/
 }
 
 .icon
@@ -487,6 +488,7 @@ h2
     background-position: -10px -10px;
 	background-color: transparent;
 	background-repeat: no-repeat;
+    font-size: 25px;
 }
 
 .textnoicon {
@@ -500,10 +502,11 @@ h2
     background-repeat: no-repeat;
     color: #FFFFFF;
     font-weight: bold;
-    font-size: x-large;
+    font-size: 25px;
 }
 
 .texticon {
+    font-size: 25px;
     padding-right:65px;
     padding-left:20px;
     background-position:right;

@@ -227,12 +227,8 @@
             else
                 self.waiting(true);
             self.currentPage = page;
-            $('.stage-right, .stage-left').remove();
+            //$('.stage-right, .stage-left').remove();
         });
-    },
-    scrollTop: function () {
-            window.scrollTo(0, 0);
-        document.body.scrollTop = 0;
     },
     refreshData: function (dataIds, callback) {
         var isCallback = false;

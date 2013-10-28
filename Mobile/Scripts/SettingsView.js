@@ -51,13 +51,6 @@ var SettingsView = function (messages) {
             app.waiting(false);
             $("#settingsForm").html(SettingsView.templateForm(data));
 
-            //$("input").bind('focus', function (event) {
-            //    app.scrollTop();
-            //});
-            //$("select").bind('focus', function (event) {
-            //    app.scrollTop();
-        //});
-
             if(Service.isComplet())
                 $("#settingsOrders").removeClass("transparent");
             else
