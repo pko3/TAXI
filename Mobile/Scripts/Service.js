@@ -170,7 +170,7 @@
         switch (Service.transporter.Status) {
             case "Offline": return "Mimo dosahu";
             case "Free": return "Voľný";
-            case "Bussy": return "Obsadený";
+            case "Busy": return "Obsadený";
             case "WithCustomer": return "So zákazníkom";
             case "Break": return "Prerušenie";
             default: return Service.transporter.Status;
