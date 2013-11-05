@@ -77,6 +77,9 @@ var OrdersView = function () {
                     this.FormatedDate = Service.formatJsonDate(this.Date);
                     if (this.Status == 'Cancel')
                         this.StatusCancel = true;
+                    if (this.Status == 'Offered')
+                        this.StatusOffer = true;
+
                     //c_OrdersCheckSum += this.Status + this.Date;
                 });
 

@@ -19,15 +19,15 @@
 <!--submenu--> 
 <div id="menu">
 <div class='submenu' id="divsubmenu" style="display:none;z-index:10000;">
-    <button data-route="map" class="icon ico_map">&nbsp;</button>
+    <button data-route="map" class="icon ico_map">&nbsp;</button>&nbsp;
     <button id="btnHistory"  data-route="history" class="textnoicon">História</button>
 </div>
 
 <div class='footer' id="divmenu">
-    <button id="newOrder" class="icon ico_order">&nbsp;</button>
-    <button title="Submenu" id="btnSubmenu"  class="icon ico_submenu">&nbsp;</button>
-    <button title="settings"  data-route="settings" class="icon ico_settings">&nbsp;</button>
-    <button data-route="states" class="icon ico_stop">&nbsp;</button>
+    <button id="newOrder" class="icon ico_order">&nbsp;</button>&nbsp;
+    <button title="Submenu" id="btnSubmenu"  class="icon ico_submenu">&nbsp;</button>&nbsp;
+    <button title="settings"  data-route="settings" class="icon ico_settings">&nbsp;</button>&nbsp;
+    <button data-route="states" class="icon ico_stop">&nbsp;</button>&nbsp;
     <button id="taxiAlarm" class="icon ico_alarm">&nbsp;</button>
 </div>
 </div>
@@ -37,20 +37,37 @@
 <script id="orders-li-tpl" type="text/x-handlebars-template">
 {{#.}}
 <div id="{{this.GUID}}" class="{{this.Status}}" data_GUID_Offer="{{this.GUID_Offer}}" data_StatusOffer="{{this.StatusOffer}}" data_Id="{{this.GUID}}" data_Status="{{this.Status}}">
+
     {{#if this.StatusCancel}}
     {{else}}
-        <!--<div class="icon down">&nbsp;</div>-->
     <div class="icon cancel">&nbsp;</div>
     {{/if}}
+
     <div class="content">
-        <strong>{{this.FormatedDate}}</strong> {{this.StartCity}} {{this.StartAddress}}<br/>
-        {{this.EndCity}} {{this.EndAddress}}<br/>
-        {{this.Persons}} / {{this.SpecialConditions}}  
-        {{#if Globals.Orders_List_ShowCustomerPhone}}
-           / {{this.CustomerPhone}} 
-        {{/if}}
-        / {{this.CustomerName}} - <strong>{{this.StatusDescription}}</strong>
+    {{#if this.StatusOffer}}
+             <strong>{{this.FormatedDate}} {{this.StatusDescription}}</strong> <br/>
+             {{this.StartCity}} {{this.StartAddress}}<br/>
+             {{this.EndCity}} {{this.EndAddress}}<br/>
+            {{this.Persons}} / {{this.SpecialConditions}}  
+            {{#if Globals.Orders_List_ShowCustomerPhone}}
+            / {{this.CustomerPhone}} 
+            {{/if}}
+            / {{this.CustomerName}} <br/>
+    {{else}}
+
+            <strong>{{this.FormatedDate}}</strong> {{this.StartCity}} {{this.StartAddress}}<br/>
+            {{this.EndCity}} {{this.EndAddress}}<br/>
+            {{this.Persons}} / {{this.SpecialConditions}}  
+            {{#if Globals.Orders_List_ShowCustomerPhone}}
+            / {{this.CustomerPhone}} 
+            {{/if}}
+            / {{this.CustomerName}} - <strong>{{this.StatusDescription}}</strong>
+
+     {{/if}}
     </div>
+
+    
+
     {{#if this.StatusCancel}}
             <div class="icon confirmCancel">&nbsp;</div>
     {{else}}
@@ -106,6 +123,14 @@
         <option value="240">4 hod</option>
     </select>
     </td></tr></table>
+    <input type="radio" name="min" value="3">3&nbsp;
+    <input type="radio" name="min" value="5">5&nbsp;
+    <input type="radio" name="min" value="7">7&nbsp;
+    <input type="radio" name="min" value="10">10&nbsp;
+    <input type="radio" name="min" value="15">15&nbsp;
+    <input type="radio" name="min" value="20">20&nbsp;
+    <input type="radio" name="min" value="30">30&nbsp;
+    <br/>
     <div>
         <strong>{{this.FormatedDate}} {{this.StatusDescription}}</strong>
     </div>

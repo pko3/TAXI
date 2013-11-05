@@ -260,9 +260,10 @@ button
 }
 
 /*New || Offered || Reserved || Waiting || Processing || Complete*/
-.buttonlist div.Offered
-{
-	opacity: 0.5;
+.buttonlist div.Offered {
+    opacity: 0.5;
+    font-size: xx-large;
+    height:160px;
 }
 
 .buttonlist div.Reserved

@@ -268,7 +268,7 @@
                    .addClass(Service.transporter.Status);
         $("#taxiText")
             .empty()
-            .html(settings.name + " " + Service.transporter.SPZ + " " + Service.getTransporterStatusText());
+            .html(settings.name + " " + Service.transporter.SPZ + " [" + Service.getTransporterStatusText()+"]");
     },
     getPhoneGapPath: function () {
         if (app.isDevice) {
