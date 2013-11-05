@@ -101,6 +101,10 @@ body
 	font-weight: bold;
 }
 
+.LargeFont {
+    font-size: x-large;
+}
+
 .header h1
 {
 	overflow: hidden;
@@ -139,7 +143,7 @@ input
 	}
     input[type="radio"]
 	{
-		width: 40px;
+		width: 60px;
 		border: none;
 		vertical-align: middle;
 	}
@@ -261,9 +265,9 @@ button
 
 /*New || Offered || Reserved || Waiting || Processing || Complete*/
 .buttonlist div.Offered {
-    opacity: 0.5;
-    font-size: xx-large;
-    height:160px;
+    opacity: 1;
+    font-size: x-large;
+    height: 120px;
 }
 
 .buttonlist div.Reserved

@@ -28,14 +28,21 @@
 
         if (this.order.Status == "Offered")
         {
-            $("#OrderTimeToRealize").val(constants.OrderDetail_Defauls_timeToRealize);
+            //   $("#OrderTimeToRealize").val(constants.OrderDetail_Defauls_timeToRealize);
+            $('input:radio[name="TimeToRealizeMin"]').filter('[value='+constants.OrderDetail_Defauls_timeToRealize+']').attr('checked', true);
+            
         }
     };
 
 
     this.setTime = function () {
         if (this.order.TimeToRealize) {
-            $("#OrderTimeToRealize").val(this.order.TimeToRealize);
+
+            //$("#OrderTimeToRealize").val(this.order.TimeToRealize);
+            var $radios = $('input:radio[name=TimeToRealizeMin]');
+            if ($radios.is(':checked') === false) {
+                $radios.filter('[value='+this.order.TimeToRealize+']').prop('checked', true);
+            }
         }
     };
 
@@ -92,14 +99,15 @@
 
     this.save = function () {
 
-        var tr = parseInt($("#OrderTimeToRealize").val(), 10);
-        var settings = Service.getSettings(), self = this;
-
+        //var tr = parseInt($("#OrderTimeToRealize").val(), 10);
+        var tr = $('input[name=TimeToRealizeMin]:checked', '#orderDetailForm').val()
         if (isNaN(tr))
         {
             app.showAlert("Vyberte čas", "Chyba");
             return;
         }
+
+        var settings = Service.getSettings(), self = this;
 
         app.waiting();
         

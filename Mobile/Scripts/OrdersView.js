@@ -78,7 +78,7 @@ var OrdersView = function () {
                     if (this.Status == 'Cancel')
                         this.StatusCancel = true;
                     if (this.Status == 'Offered')
-                        this.StatusOffer = true;
+                        this.StatusOfferGUI = true;
 
                     //c_OrdersCheckSum += this.Status + this.Date;
                 });
