@@ -21,6 +21,7 @@
 <div class='submenu' id="divsubmenu" style="display:none;z-index:10000;">
     <button data-route="map" class="icon ico_map">&nbsp;</button>&nbsp;
     <button id="btnHistory"  data-route="history" class="textnoicon">História</button>
+    <button id="btnSetting"  data-route="allsettings" class="textnoicon">Nastavenia</button>
 </div>
 
 <div class='footer' id="divmenu">
@@ -86,9 +87,12 @@
     <div style="position:absolute; left:65px; top:2px; right:0px;">
     <select id="selectHistory">
         <option value="2h">Posledné 2 hodiny</option>
-        <option value="24h">Posledný deň</option>
+        <option value="24h">Posledných 24 hodín</option>
+        <option value="My24h">Moje za 24 hod.</option>
+        <option value="MyTodayTab">Moje dnes</option>
+        <option value="MyYestTab">Moje včera</option>
     </select>
-        </div>
+ </div>
 </div>
 <div class="scrollBottom"><div class='buttonlist ordersHistory-list'></div></div>
 </script>
@@ -101,19 +105,39 @@
 {{/.}}
 </script>
 
+<script id="ordersHistoryraw-li-tpl" type="text/x-handlebars-template">
+{{#.}}
+<div>
+    <div class="content"><strong>{{this.GUID}} {{this.freetext}} </strong></div>
+</div>
+{{/.}}
+</script>
+
+<script id="ordersHistorytab-li-tpl" type="text/x-handlebars-template">
+{{#.}}
+<div class="{{this.Status}}">
+    <div class="content"><strong>{{this.Status}} : {{this.Pocet}} </strong></div>
+</div>
+{{/.}}
+        
+</script>
+
+
 <!-- OrderDetail -->
 <script id="orderDetail-tpl" type="text/x-handlebars-template">
 <div class='header'><button id="orderDetailBack" class="icon ico_back">&nbsp;</button><button id="orderCall" class="icon ico_phone">&nbsp;</button><button id="orderDetailSave" class="icon texticon ico_submit">&nbsp;</button></div>
-<div class="scrollBottom">
     <form id="orderDetailForm"></form>
     <div id="orderDetailMap" style="position:absolute;width:100%;height:85%;"></div>
-</div>
 </script>
 
 <script id="orderDetailForm-tpl" type="text/x-handlebars-template">
-<!--    <table><tr><td>
+
+
+
+    <table><tr><td>
     <label for="OrderTimeToRealize">Čas:</label></td>
-    <td style = "width:100%"><select id="OrderTimeToRealize" name="TimeToRealize"> 	
+    <td style = "width:100%"><select id="OrderTimeToRealize" size="1" name="TimeToRealize"> 	
+    <!--<td style = "width:100%"><select id="OrderTimeToRealize" size="10" style="height:auto;" name="TimeToRealize">--> 	
         <option value="">Vyberte čas</option>
         <option value="3">3 min</option>
         <option value="5">5 min</option>
@@ -127,8 +151,8 @@
         <option value="120">2 hod</option>
         <option value="240">4 hod</option>
     </select>
-    </td></tr></table>-->
-    <div class="LargeFont">
+    </td></tr></table>
+<!--    <div class="LargeFont">
     <input type="radio" name="TimeToRealizeMin" value="3">3&nbsp;
     <input type="radio" name="TimeToRealizeMin" value="5">5&nbsp;
     <input type="radio" name="TimeToRealizeMin" value="7">7&nbsp;
@@ -140,17 +164,12 @@
     <input type="radio" name="TimeToRealizeMin" value="60">1&nbsp; 
     <input type="radio" name="TimeToRealizeMin" value="120">2&nbsp; 
     <input type="radio" name="TimeToRealizeMin" value="240">4 hod.&nbsp; 
-    </div>
+    </div>-->
 
     <br/>
     <div>
         <strong>{{this.FormatedDate}} {{this.StatusDescription}}</strong>
     </div>
-<!--    {{#if this.TimeToRealize}}
-    <div>
-        <strong>Čas nastavený</strong> {{this.TimeToRealize}}
-    </div>
-    {{/if}}-->
     <div>
         <strong>Odkiaľ:</strong> {{this.StartCity}} {{this.StartAddress}}
     </div>
@@ -215,10 +234,14 @@
 
 <!-- Settings -->
 <script id="settings-tpl" type="text/x-handlebars-template">
-<div class='header'><button data-route="orders" id="settingsOrders" class="icon ico_back">&nbsp;</button><button id="settingsSave" class="icon ico_submit transparent">&nbsp;</button><button id="appExit" class="icon ico_end">&nbsp;</button></div>
+<div class='header'>
+    <button data-route="orders" id="settingsOrders" class="icon ico_back">&nbsp;</button>
+    <button id="settingsSave" class="icon ico_submit transparent">&nbsp;</button>
+</div>
 <div id="settingsForm" class='scrollBottom'></div>
 </script>
 
+<!-- Settings detail-->
 <script id="settingsForm-tpl" type="text/x-handlebars-template">
 <form id="settingsForm-form">
     <select name="transporterId" id="transporterId">
@@ -233,6 +256,28 @@
     {{#if this.ErrorMessage}}<div class="error">{{this.ErrorMessage}}</div>{{/if}}
 </form>
 </script>
+
+<!-- Settings ALL master -->
+<script id="settingsall-tpl" type="text/x-handlebars-template">
+<div class='header'>
+    <button data-route="orders" id="settingsallOrders" class="icon ico_back">&nbsp;</button>
+    <button id="settingsallSave" class="icon texticon ico_submit">Uložiť</button>
+</div>
+<div id="settingsallForm" class='scrollBottom'></div>
+</script>
+
+ <!-- Settings ALL detail -->
+ <script id="settingsallForm-tpl" type="text/x-handlebars-template">
+<form id="settingsallForm-form">
+            {{#.}}
+                <div class="content"><strong>{{this.Group}}  {{this.Title}} {{this.value}} </strong></div>
+            {{/.}}
+        
+    <!--{{#if this.ErrorMessage}}<div class="error">{{this.ErrorMessage}}</div>{{/if}}-->
+    
+</form>
+</script>
+
 
 <script src="phonegap.js"></script>
 <script src="lib/json2.js"></script>    
@@ -249,6 +294,7 @@
 <script src="Scripts/MapView.js"></script>
 <script src="Scripts/DetailMap.js"></script>
 <script src="Scripts/SettingsView.js"></script>
+<script src="Scripts/SettingsAllView.js"></script>
 <script src="Scripts/Globals.js"></script>
 <script src="Scripts/Errors.js"></script>
 <script src="Scripts/main.js"></script>

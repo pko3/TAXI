@@ -180,13 +180,13 @@
         this.callService("datamobile", { Id: "transporterMessages" }, callback);
     },
 
-    getHistoryOrders: function (callback) {
-        this.callService("datamobile", { Id: "orders_lastforDriver", IdTransporter: this._settings.transporterId }, callback);
+    getHistoryOrders: function (viewName, callback) {
+        this.callService("datamobile", { Id: viewName, IdTransporter: this._settings.transporterId }, callback);
     },
 
-    getHistoryOrdersMe: function (callback) {
-        this.callService("datamobile", { Id: "orders_lastforDriverMe", IdTransporter: this._settings.transporterId }, callback);
-    },
+    //getHistoryOrdersMe: function (callback) {
+    //    this.callService("datamobile", { Id: "orders_lastforDriverMe", IdTransporter: this._settings.transporterId }, callback);
+    //},
 
     getTransporters: function (callback) {
         var self = this;

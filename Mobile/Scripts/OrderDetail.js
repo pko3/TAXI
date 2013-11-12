@@ -1,5 +1,8 @@
 ﻿var OrderDetail = function () {
 
+    //var activeTabIndex = -1;
+    //var tabNames = ["detail", "map"];
+
     this.index = 4;
     this.initialize = function () {
         this.el = $('<div/>');
@@ -13,6 +16,7 @@
     this.onShow = function () {
         var self = this;
         DetailMap.initialize($("#orderDetailMap"));
+        
         $("#orderDetailBack").click(function () { app.home(); });
         $("#orderDetailSave").click(function () { self.save(); });
         $("#orderCall").click(function () {
@@ -21,6 +25,12 @@
             });
         });
 
+
+        //tabs
+        //$(".tab-menu > li").click(function (e) { self.tabClick(e); });
+        //$("#tabDetail").click(function () { self.tabClick($("#tabDetail")); });
+        //$("#tabMap").click(function (e) { self.tabClick($("#tabMap")); });
+
         this.loadData();
     };
 
@@ -28,8 +38,10 @@
 
         if (this.order.Status == "Offered")
         {
-            //   $("#OrderTimeToRealize").val(constants.OrderDetail_Defauls_timeToRealize);
-            $('input:radio[name="TimeToRealizeMin"]').filter('[value='+constants.OrderDetail_Defauls_timeToRealize+']').attr('checked', true);
+            //dropdown - select
+            $("#OrderTimeToRealize").val(constants.OrderDetail_Defauls_timeToRealize);
+            //radio
+            //$('input:radio[name="TimeToRealizeMin"]').filter('[value='+constants.OrderDetail_Defauls_timeToRealize+']').attr('checked', true);
             
         }
     };
@@ -38,11 +50,14 @@
     this.setTime = function () {
         if (this.order.TimeToRealize) {
 
-            //$("#OrderTimeToRealize").val(this.order.TimeToRealize);
-            var $radios = $('input:radio[name=TimeToRealizeMin]');
-            if ($radios.is(':checked') === false) {
-                $radios.filter('[value='+this.order.TimeToRealize+']').prop('checked', true);
-            }
+            //seelct
+            $("#OrderTimeToRealize").val(this.order.TimeToRealize);
+
+            //radio
+            //var $radios = $('input:radio[name=TimeToRealizeMin]');
+            //if ($radios.is(':checked') === false) {
+            //    $radios.filter('[value='+this.order.TimeToRealize+']').prop('checked', true);
+            //}
         }
     };
 
@@ -90,17 +105,41 @@
             }
 
             //zobrazit rozbaleny cas, ak sa jedna o ponuku
-            if (this.order.Status == "Offer")
-            {
-
+            if (this.order.Status == "Offered") {
+                var el = $("#OrderTimeToRealize");
+                if (el != null) {
+                    var length = $('#OrderTimeToRealize > option').length;
+                    el.attr('size', length);
+                    el.removeAttr('height'); 
+                }
             }
+
+            //tabs -> register click 
+
         }
     };
 
+    this.tabClick = function (e) {
+        for (var i = 0; i < tabNames.length; i++) {
+            if (e.target.id == tabNames[i]) {
+                activeTabIndex = i;
+            } else {
+                $("#" + tabNames[i]).removeClass("active");
+                $("#" + tabNames[i] + "-tab").css("display", "none");
+            }
+        }
+        $("#" + tabNames[activeTabIndex] + "-tab").fadeIn();
+        $("#" + tabNames[activeTabIndex]).addClass("active");
+        return false;
+    }
+
     this.save = function () {
 
-        //var tr = parseInt($("#OrderTimeToRealize").val(), 10);
-        var tr = $('input[name=TimeToRealizeMin]:checked', '#orderDetailForm').val()
+        //select
+        var tr = parseInt($("#OrderTimeToRealize").val(), 10);
+
+        //radio
+        //var tr = $('input[name=TimeToRealizeMin]:checked', '#orderDetailForm').val()
         if (isNaN(tr))
         {
             app.showAlert("Vyberte čas", "Chyba");

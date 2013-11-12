@@ -29,6 +29,18 @@
         ErrorStorage.removeError(message);
     },
 
+
+    tabSelector: function (tabName, pageName) {
+        var tabCtrl = document.getElementById(tabName);
+        var pageToActivate = document.getElementById(pageName);
+        for (var i = 0; i < tabCtrl.childNodes.length; i++) {
+            var node = tabCtrl.childNodes[i];
+            if (node.nodeType == 1) { /* Element */
+                node.style.display = (node == pageToActivate) ? 'block' : 'none';
+            }
+        }
+    },
+
     showConfirm: function (message, title, okCallback, cancelCallback) {
         if (navigator.notification) {
             var _callback = function (btn) {
@@ -181,6 +193,7 @@
                 case "historyme": page = new OrdersHistoryView().render(); break;
                 case "states": page = new StatesView().render(); break;
                 case "map": page = new MapView().render(); break;
+                case "allsettings": page = new SettingsAllView().render(); break;
                 case "settings": page = new SettingsView().render(); break;
                 case "detail": page = new OrderDetail().render(); break;
                 default: this.showAlert("Undefined page:" + p, "ERROR"); return;
