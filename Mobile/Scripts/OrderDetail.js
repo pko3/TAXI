@@ -18,7 +18,6 @@
         DetailMap.initialize($("#orderDetailMap"));
         
         $("#orderDetailBack").click(function () { app.home(); });
-        $("#orderDetailSave").click(function () { self.save(); });
         $("#orderCall").click(function () {
             Service.recallOrder(function () {
                 self.setButtons();
@@ -26,43 +25,48 @@
         });
 
 
-        //tabs
-        //$(".tab-menu > li").click(function (e) { self.tabClick(e); });
-        //$("#tabDetail").click(function () { self.tabClick($("#tabDetail")); });
-        //$("#tabMap").click(function (e) { self.tabClick($("#tabMap")); });
+        $("#orderTimeTab").click(function (e) { self.showTime(); });
+        $("#orderDetailTab").click(function () { self.showDetail(); });
+        $("#orderMapTab").click(function (e) { self.showMap(); });
 
         this.loadData();
     };
-
-    this.setInitTime = function () {
-
-        if (this.order.Status == "Offered")
-        {
-            //dropdown - select
-            $("#OrderTimeToRealize").val(constants.OrderDetail_Defauls_timeToRealize);
-            //radio
-            //$('input:radio[name="TimeToRealizeMin"]').filter('[value='+constants.OrderDetail_Defauls_timeToRealize+']').attr('checked', true);
-            
-        }
+   
+    this.showTime = function () {
+        $("#orderDetailTime").show();
+        $("#orderDetailForm").hide();
+        $("#orderDetailMap").hide();
+        $("#orderDetailTab").removeClass("selected");
+        $("#orderMapTab").removeClass("selected");
+        $("#orderTimeTab").addClass("selected");
     };
 
+    this.showDetail = function () {
+        $("#orderDetailTime").hide();
+        $("#orderDetailForm").show();
+        $("#orderDetailMap").hide();
+        $("#orderDetailTab").addClass("selected");
+        $("#orderMapTab").removeClass("selected");
+        $("#orderTimeTab").removeClass("selected");
+    };
 
-    this.setTime = function () {
-        if (this.order.TimeToRealize) {
-
-            //seelct
-            $("#OrderTimeToRealize").val(this.order.TimeToRealize);
-
-            //radio
-            //var $radios = $('input:radio[name=TimeToRealizeMin]');
-            //if ($radios.is(':checked') === false) {
-            //    $radios.filter('[value='+this.order.TimeToRealize+']').prop('checked', true);
-            //}
+    this.showMap = function () {
+        $("#orderDetailTime").hide();
+        $("#orderDetailForm").hide();
+        $("#orderDetailMap").show();
+        $("#orderDetailTab").removeClass("selected");
+        $("#orderMapTab").addClass("selected");
+        $("#orderTimeTab").removeClass("selected");
+        if (this.order && this.order.StartLatitude) {
+            DetailMap.setMap(this.order.StartLatitude, this.order.StartLongitude, PositionService.lat, PositionService.lng);
         }
     };
 
 
     this.setButtons = function () {
+
+        var self = this;
+        $("#orderDetailSave").click(function () { self.save(); });
 
         if (this.order.Status != "Waiting")
             $("#orderCall").hide();
@@ -71,22 +75,12 @@
         else
             $("#orderCall").removeClass("ico_hangup").addClass("ico_phone").show();
 
-        this.setInitTime();
+        if (this.order.Status == "Offered")
+            $("#OrderTimeToRealize").val(constants.OrderDetail_Defauls_timeToRealize);
+        else
+            $("#OrderTimeToRealize").val(this.order.TimeToRealize);
 
-       this.setTime();
-
-        //if (this.order.Status == "Canceled" || this.order.Status == "Waiting" || this.order.Status == "Processing") {
-        //    $("#orderDetailSave").hide();
-        //    $("#OrderTimeToRealize").hide();
-        //}
-        //else
-
-        //ak nebola prijata objednavka, tak rozbaleny selector casov
-        //$("#OrderTimeToRealize").click();
-        //if (this.order.Status == "Offered")
-        //{
-        //    $("#OrderTimeToRealize").select();
-        //}
+        app.radio($("#OrderTimeToRealizeRadio"), $("#OrderTimeToRealize"));
 
         if (this.order.Status == "New" || this.order.Status == "Offered")
             $("#orderDetailSave").show().text("Prijať objednávku");
@@ -99,39 +93,23 @@
         if (this.order) {
             $("#orderDetailForm").html(OrderDetail.detailTemplate(this.order));
             this.setButtons();
-            if (this.order.StartLatitude) {
-               // $("#orderDetailMap").height($(window).height() - $("#orderDetailForm").outerHeight() - 66);
-                DetailMap.setMap(this.order.StartLatitude, this.order.StartLongitude, PositionService.lat, PositionService.lng);
-            }
+            //if (this.order.StartLatitude) {
+            //   // $("#orderDetailMap").height($(window).height() - $("#orderDetailForm").outerHeight() - 66);
+            //    DetailMap.setMap(this.order.StartLatitude, this.order.StartLongitude, PositionService.lat, PositionService.lng);
+            //}
 
             //zobrazit rozbaleny cas, ak sa jedna o ponuku
             if (this.order.Status == "Offered") {
                 var el = $("#OrderTimeToRealize");
                 if (el != null) {
-                    var length = $('#OrderTimeToRealize > option').length;
-                    el.attr('size', length);
-                    el.removeAttr('height'); 
+                    //var length = $('#OrderTimeToRealize > option').length;
+                    //el.attr('size', length);
+                    //el.removeAttr('height'); 
                 }
             }
-
-            //tabs -> register click 
-
         }
+        this.showTime();
     };
-
-    this.tabClick = function (e) {
-        for (var i = 0; i < tabNames.length; i++) {
-            if (e.target.id == tabNames[i]) {
-                activeTabIndex = i;
-            } else {
-                $("#" + tabNames[i]).removeClass("active");
-                $("#" + tabNames[i] + "-tab").css("display", "none");
-            }
-        }
-        $("#" + tabNames[activeTabIndex] + "-tab").fadeIn();
-        $("#" + tabNames[activeTabIndex]).addClass("active");
-        return false;
-    }
 
     this.save = function () {
 

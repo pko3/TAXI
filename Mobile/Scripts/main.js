@@ -301,6 +301,22 @@
         Service.initialize(function () {
             self.home();
         });
+    },
+    radio: function (el, input)
+    {
+        var v = input.val();
+        $.each(el.children('[data_value]'), function () {
+            var $this = $(this);
+            if($this.attr('data_value') === v)
+                $this.addClass("selected");
+            else
+                $this.removeClass("selected");
+            $this.click(function () {
+                $this.siblings().removeClass("selected");
+                $this.addClass("selected");
+                input.val($this.attr("data_value"));
+            });
+        });
     }
 };
 

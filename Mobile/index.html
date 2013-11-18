@@ -125,48 +125,34 @@
 
 <!-- OrderDetail -->
 <script id="orderDetail-tpl" type="text/x-handlebars-template">
-<div class='header'><button id="orderDetailBack" class="icon ico_back">&nbsp;</button><button id="orderCall" class="icon ico_phone">&nbsp;</button><button id="orderDetailSave" class="icon texticon ico_submit">&nbsp;</button></div>
-    <form id="orderDetailForm"></form>
-    <div id="orderDetailMap" style="position:absolute;width:100%;height:85%;"></div>
+<div class='header'><button id="orderDetailBack" class="icon ico_back">&nbsp;</button><button id="orderCall" class="icon ico_phone">&nbsp;</button></div>
+    <div id="orderDetailTabs" class="tabs"><div id="orderTimeTab" class="selected">Čas</div><div id="orderDetailTab">Detail</div><div id="orderMapTab">Mapa</div></div>
+    <div id="orderDetailContent">
+        <div id="orderDetailTime">
+            <button id="orderDetailSave" class="icon texticon ico_submit">&nbsp;</button>
+               <input type="hidden" id="OrderTimeToRealize" name="TimeToRealize"/>
+              <div id="OrderTimeToRealizeRadio" class="radiolist">
+                <div data_value="3">3 min</div>
+                <div data_value="5">5 min</div>
+                <div data_value="7">7 min</div>
+                <div data_value="10">10 min</div>
+                <div data_value="15">15 min</div>
+                <div data_value="20">20 min</div>
+                <div data_value="30">30 min</div>
+                <div data_value="45">45 min</div>
+                <div data_value="60">1 hod</div>
+                <div data_value="90">1,5 hod</div>
+                <div data_value="120">2 hod</div>
+                <div data_value="240">4 hod</div>
+            </div>
+            
+        </div>
+        <form id="orderDetailForm"></form>
+        <div id="orderDetailMap"></div>
+    </div>
 </script>
 
 <script id="orderDetailForm-tpl" type="text/x-handlebars-template">
-
-
-
-    <table><tr><td>
-    <label for="OrderTimeToRealize">Čas:</label></td>
-    <td style = "width:100%"><select id="OrderTimeToRealize" size="1" name="TimeToRealize"> 	
-    <!--<td style = "width:100%"><select id="OrderTimeToRealize" size="10" style="height:auto;" name="TimeToRealize">--> 	
-        <option value="">Vyberte čas</option>
-        <option value="3">3 min</option>
-        <option value="5">5 min</option>
-        <option value="7">7 min</option>
-        <option value="10">10 min</option>
-        <option value="15">15 min</option>
-        <option value="20">20 min</option>
-        <option value="30">30 min</option>
-        <option value="45">45 min</option>
-        <option value="60">1 hod</option>
-        <option value="120">2 hod</option>
-        <option value="240">4 hod</option>
-    </select>
-    </td></tr></table>
-<!--    <div class="LargeFont">
-    <input type="radio" name="TimeToRealizeMin" value="3">3&nbsp;
-    <input type="radio" name="TimeToRealizeMin" value="5">5&nbsp;
-    <input type="radio" name="TimeToRealizeMin" value="7">7&nbsp;
-    <input type="radio" name="TimeToRealizeMin" value="10">10&nbsp;
-    <input type="radio" name="TimeToRealizeMin" value="15">15&nbsp;
-    <input type="radio" name="TimeToRealizeMin" value="20">20&nbsp;
-    <input type="radio" name="TimeToRealizeMin" value="30">30&nbsp; 
-    <input type="radio" name="TimeToRealizeMin" value="45">45 min.&nbsp; 
-    <input type="radio" name="TimeToRealizeMin" value="60">1&nbsp; 
-    <input type="radio" name="TimeToRealizeMin" value="120">2&nbsp; 
-    <input type="radio" name="TimeToRealizeMin" value="240">4 hod.&nbsp; 
-    </div>-->
-
-    <br/>
     <div>
         <strong>{{this.FormatedDate}} {{this.StatusDescription}}</strong>
     </div>
