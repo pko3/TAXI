@@ -1,9 +1,11 @@
 ﻿var Service = {
     online: false,
     ordersVer: undefined,
+    messagesVer: undefined,
     transporterVer: undefined,
     transporter: null,
     orders: null,
+    messages : null,
     isSendloginHistory: false,
     isAuthenticated: false,
     isComplet: function () {
@@ -43,6 +45,9 @@
                 }
             }
         });
+        
+        //disable vyber auta pre permanent driver: 
+        $("#transporterId").prop("disabled", true); 
 
         this.login(callback);
         //callback();
@@ -55,8 +60,33 @@
             this.callService("login", { UserName: this._settings.name, Password: this._settings.password, RememberMe: true, TransporterId: this._settings.transporterId }, function (d) {
                 Service.isAuthenticated = true;
                 var s = Service.getSettings();
-                s.userId = d.userId;
+                s.userId = d.userId; 
                 s.sessionId = d.sessionId;
+                s.bool_DriverPermanent = false;
+
+                //permamnet driver ! 
+                if (d.ItemsDictKeys!=null)
+                {
+                    var pos = d.ItemsDictKeys.indexOf("bool_DriverPermanent");
+                    if(pos>-1)
+                    {
+                        var ispermanent = d.ItemsDictValues[pos];
+                        if (ispermanent == true)
+                        {
+                            pos = d.ItemsDictKeys.indexOf("GUID_Transporter");
+                            if (pos > -1)
+                            {
+                                var guid_transp = d.ItemsDictValues[pos];
+                                if (guid_transp) {
+                                    s.transporterId = guid_transp;
+                                    s.bool_DriverPermanent = true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
                 Service.saveSettings(s);
                 if (Service.isComplet()) {
                     PositionService.startWatch();
@@ -69,7 +99,13 @@
                     //    Service.loginHistory()
                     //}, function () { Service.loginHistory() });
                 }
-                else if (callback) callback();
+                else {
+                    if (Service.isAuthenticated && s.transporterId==null)
+                    {
+                        $("#transporterId").prop("disabled", false);
+                    }
+                    if (callback) callback();
+                }
 
             }, function (d) {
                 //PositionService.stopWatch();
@@ -152,6 +188,16 @@
         });
     },
 
+    getMessages: function (callback) {
+        var self = this;
+        this.callService("datamobile", { Id: "transportermessages", IdUser: this._settings.userId }, function (messages) {
+            Service.messages = messages;
+            if (callback)
+                callback(messages);
+        });
+    },
+
+
     setOrderDescription: function (order) {
         if (!order.GUID)
             order.Status = "";
@@ -176,9 +222,7 @@
             default: return Service.transporter.Status;
         }
     },
-    getMessages: function (callback) {
-        this.callService("datamobile", { Id: "transporterMessages" }, callback);
-    },
+
 
     getHistoryOrders: function (viewName, callback) {
         this.callService("datamobile", { Id: viewName, IdTransporter: this._settings.transporterId }, callback);
@@ -235,6 +279,41 @@
             Longitude: PositionService.lng
         },
             function () {
+                app.home(true);
+            },
+            function (d) {
+                app.info(d.ErrorMessage);
+                app.home(true);
+            });
+    },
+    recallme: function () {
+        app.waiting();
+        var s = Service.getSettings();
+        var cls = "ico_hangup";
+        var clsrem = "ico_phone";
+        var met = "TransporterRecall";
+        if (GLOB_RecallMe) {
+            met = "TransporterUnRecall";
+            cls = "ico_phone";
+            clsrem = "ico_hangup";
+        }
+        app.log("recall calling: " + met);
+
+        Service.callService(met, {
+            GUID_Transporter: s.transporterId,
+            GUID_sysUser_Driver: s.userId,
+            IsTransporter: true,
+            Latitude: PositionService.lat,
+            Longitude: PositionService.lng
+        },
+            function () {
+                GLOB_RecallMe = !GLOB_RecallMe;
+
+                //zmena buttonu 
+                $("#btnRecallMe")
+                        .removeClass(clsrem)
+                        .addClass(cls);
+
                 app.home(true);
             },
             function (d) {

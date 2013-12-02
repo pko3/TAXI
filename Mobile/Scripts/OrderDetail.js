@@ -39,6 +39,11 @@
         $("#orderDetailTab").removeClass("selected");
         $("#orderMapTab").removeClass("selected");
         $("#orderTimeTab").addClass("selected");
+
+        if (self.iscroll)
+            self.iscroll.refresh();
+        else
+            self.iscroll = new iScroll($('.scrollBottom', self.el)[0], { hScrollbar: false, vScrollbar: false });
     };
 
     this.showDetail = function () {
@@ -48,6 +53,11 @@
         $("#orderDetailTab").addClass("selected");
         $("#orderMapTab").removeClass("selected");
         $("#orderTimeTab").removeClass("selected");
+
+        if (self.iscroll)
+            self.iscroll.refresh();
+        else
+            self.iscroll = new iScroll($('.scrollBottom', self.el)[0], { hScrollbar: false, vScrollbar: false });
     };
 
     this.showMap = function () {

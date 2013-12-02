@@ -5,9 +5,42 @@ var MessageView = function (messages) {
         this.el = $('<div/>');
     };
 
-    this.render = function() {
-        this.el.html(MessageView.template(messages));
+    this.render = function () {
+        this.el.html(MessageView.template(Service.messages));
         return this;
+    };
+
+    this.onShow = function () {
+        $("#taxiHeader").click(function () { app.refreshData(["messages"]); });
+        this.loadData();
+    };
+
+
+    this.loadData = function () {
+        var self = this;
+        app.log("loading messages...")
+        app.waiting();
+        app.setHeader();
+
+            $('#menu').show();
+            Service.getMessages(function (messages) {
+
+
+
+                $.each(messages.Items, function () {
+                    this.FormatedDate = Service.formatJsonDate(this.Created);
+                });
+
+                Service.messagesVer = messages.DataCheckSum;
+
+
+                app.waiting(false);
+
+
+            });
+
+            this.render();
+        
     };
 
     this.initialize();

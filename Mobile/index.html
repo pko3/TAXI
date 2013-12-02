@@ -19,20 +19,25 @@
 <!--submenu--> 
 <div id="menu">
 <div class='submenu' id="divsubmenu" style="display:none;z-index:10000;">
-    <button data-route="map" class="icon ico_map">&nbsp;</button>&nbsp;
+    <button data-route="map" class="icon ico_map">&nbsp;</button>
     <button id="btnHistory"  data-route="history" class="textnoicon">História</button>
     <button id="btnSetting"  data-route="allsettings" class="textnoicon">Nastavenia</button>
+    <button id ="btnRecallMe" title="Recall me" class="icon ico_phone">&nbsp;</button>
+    <button data-route="states" class="icon ico_stop">&nbsp;</button>
 </div>
 
 <div class='footer' id="divmenu">
     <button id="newOrder" class="icon ico_order">&nbsp;</button>&nbsp;
     <button title="Submenu" id="btnSubmenu"  class="icon ico_submenu">&nbsp;</button>&nbsp;
     <button title="settings"  data-route="settings" class="icon ico_settings">&nbsp;</button>&nbsp;
-    <button data-route="states" class="icon ico_stop">&nbsp;</button>&nbsp;
+    <button id ="btnMessage" title="messages"  data-route="messages" class="icon ico_message">&nbsp;</button>&nbsp;
     <button id="taxiAlarm" class="icon ico_alarm">&nbsp;</button>
 </div>
 </div>
-<div class="scroll"><div class='buttonlist orders-list'></div><button id="unbreakButton" class="ico_submit">Ukončiť prestávku</button><button id="unalarmButton" class="ico_submit">Ukončiť alarm</button></div>
+<div class="scroll"><div class='buttonlist orders-list'></div>
+  <button id="unbreakButton" class="ico_submit">Ukončiť prestávku</button>
+  <button id="unalarmButton" class="ico_submit">Ukončiť alarm</button>
+</div>
 </script>
 
 <script id="orders-li-tpl" type="text/x-handlebars-template">
@@ -100,7 +105,7 @@
 <script id="ordersHistory-li-tpl" type="text/x-handlebars-template">
 {{#.}}
 <div data_Id="{{this.GUID}}" data_Status="{{this.Status}}" class="{{this.Status}}">
-    <div class="content"><strong>[{{this.iOrder}}] {{this.FormatedDate}}</strong> {{this.Status}} {{this.StartCity}} {{this.StartAddress}}<br/>{{this.EndCity}} {{this.EndAddress}}</div>
+    <div class="content"><strong>[{{this.iOrder}}] {{this.FormatedDate}}</strong> {{this.StatusDescription}} odkiaľ: {{this.StartCity}} {{this.StartAddress}}, kam: {{this.EndCity}} {{this.EndAddress}}, zdroj: {{this.OrderSource}}</div>
 </div>
 {{/.}}
 </script>
@@ -116,7 +121,7 @@
 <script id="ordersHistorytab-li-tpl" type="text/x-handlebars-template">
 {{#.}}
 <div class="{{this.Status}}">
-    <div class="content"><strong>{{this.Status}} : {{this.Pocet}} </strong></div>
+    <div class="content"><strong>{{this.StatusDescription}} : {{this.Pocet}} </strong></div>
 </div>
 {{/.}}
         
@@ -125,9 +130,21 @@
 
 <!-- OrderDetail -->
 <script id="orderDetail-tpl" type="text/x-handlebars-template">
-<div class='header'><button id="orderDetailBack" class="icon ico_back">&nbsp;</button><button id="orderCall" class="icon ico_phone">&nbsp;</button></div>
-    <div id="orderDetailTabs" class="tabs"><div id="orderTimeTab" class="selected">Čas</div><div id="orderDetailTab">Detail</div><div id="orderMapTab">Mapa</div></div>
-    <div id="orderDetailContent">
+    <div class='header'>
+        <!--<button id="orderDetailBack" class="icon ico_back">&nbsp;</button>-->
+        <!--<button id="orderCall" class="icon ico_phone">&nbsp;</button>-->
+    
+        <div id="orderDetailTabs" class="tabs">
+            <button id="orderDetailBack" class="icon ico_back">&nbsp;</button>
+            <button id="orderCall" class="icon ico_phone">&nbsp;</button>
+            <div id="orderTimeTab" class="selected">Čas</div>
+            <div id="orderDetailTab">Detail</div>
+            <div id="orderMapTab">Mapa</div>
+        </div>
+    
+    </div>    
+
+    <div id="orderDetailContent" class="scrollBottom">
         <div id="orderDetailTime">
             <button id="orderDetailSave" class="icon texticon ico_submit">&nbsp;</button>
                <input type="hidden" id="OrderTimeToRealize" name="TimeToRealize"/>
@@ -214,8 +231,16 @@
 
 <!-- Message -->
 <script id="message-tpl" type="text/x-handlebars-template">
-<div class='header'><button data-route="orders" class="icon ico_back">&nbsp;</button><button class="icon ico_submit">&nbsp;</button></div>
-<div class='scrollBottom'><textarea></textarea></div>
+<div class='header'>
+    <button data-route="orders" class="icon ico_back">&nbsp;</button>
+</div>
+    <div>
+    {{#.}}
+        <div>
+            <div class="content"><strong>Správa: {{this.MessageText}} {{this.FormatedDate}}</strong></div>
+        </div>
+    {{/.}}
+   </div>
 </script>
 
 <!-- Settings -->
@@ -231,15 +256,16 @@
 <!-- Settings detail-->
 <script id="settingsForm-tpl" type="text/x-handlebars-template">
 <form id="settingsForm-form">
+
+    <input type="url" placeholder="Adresa služby" name="url" id="url" value="{{this.url}}"/>  
+    <input type="text" placeholder="Meno" name="name" id="name" value="{{this.name}}"/>
+    <input type="password" placeholder="Heslo" name="password" id="password" value="{{this.password}}"/>
     <select name="transporterId" id="transporterId">
         <option value="" style="color:#f00;">Vyberte vozidlo</option>
         {{#each this.transportes}}
-         <option value="{{Id}}" {{#if selected}}selected="selected"{{/if}}>{{SPZ}}</option>
+         <option value="{{Id}}" {{#if selected}} selected="selected"{{/if}}>{{SPZ}}</option>
         {{/each}}
-    </select>
-    <input type="text" placeholder="Meno" name="name" id="name" value="{{this.name}}"/>
-    <input type="password" placeholder="Heslo" name="password" id="password" value="{{this.password}}"/>
-    <input type="url" placeholder="Adresa služby" name="url" id="url" value="{{this.url}}"/>   
+    </select>     
     {{#if this.ErrorMessage}}<div class="error">{{this.ErrorMessage}}</div>{{/if}}
 </form>
 </script>
@@ -250,7 +276,7 @@
     <button data-route="orders" id="settingsallOrders" class="icon ico_back">&nbsp;</button>
     <button id="settingsallSave" class="icon texticon ico_submit">Uložiť</button>
 </div>
-<div id="settingsallForm" class='scrollBottom'></div>
+     <div id="settingsallForm" class="scrollBottom"></div>
 </script>
 
  <!-- Settings ALL detail -->

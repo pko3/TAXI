@@ -5,7 +5,7 @@ var SettingsAllView = function (messages) {
         this.el = $('<div/>');
     };
 
-    this.render = function() {
+    this.render = function () {
         return this;
     };
 
@@ -27,17 +27,32 @@ var SettingsAllView = function (messages) {
 
     this.loadForm = function () {
         var self = this;
+        var s = Service.getSettings();
         var data = new Array;
         data[0] = { Group: "Main", Title: "RefreshSec", value: "7" };
-        //data[1] = { Group: "Main", Title: "RefreshSec", value: "30" };
-        //data[2] = { Group: "Main", Title: "RefreshSec", value: "30" };
+        data[1] = { Group: "Local", Title: "inRecall", value:  GLOB_RecallMe.toString() };
+        data[2] = { Group: "Local", Title: "GUID_Transporter", value: s.transporterId };
+        data[3] = { Group: "Local", Title: "GUID_sysUser", value: s.userId };
+
+
+
+
         self.showForm(data);
     };
 
 
     this.showForm = function (data) {
-            if(data)  data.ErrorMessage = Service.connectionError;
-            $("#settingsallForm").html(SettingsAllView.templateForm(data));
+        if (data) data.ErrorMessage = Service.connectionError;
+
+
+
+        $("#settingsallForm").html(SettingsAllView.templateForm(data));
+
+        if (self.iscroll)
+            self.iscroll.refresh();
+        else
+            self.iscroll = new iScroll($('.scrollBottom', self.el)[0], { hScrollbar: false, vScrollbar: false });
+
             $("#settingsallForm").show();
            // $("#settingsallSave").removeClass("transparent");
             app.waiting(false);

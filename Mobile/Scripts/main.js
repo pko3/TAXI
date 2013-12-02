@@ -65,6 +65,16 @@
         if(app.mediaNew)
             app.mediaNew.play();
     },
+
+    playSound: function (soundFile) {
+        window.setTimeout(function () {
+            if (soundFile) {
+                var toplay = new Audio(soundFile);
+                toplay.play();
+            }
+        }, 1);
+    },
+
     info: function(t){
         $("#taxiInfo").html(t);
     },
@@ -120,10 +130,8 @@
         $('body').on('click', '#unbreakButton', function (event) { $("#unbreakButton").hide(); Service.unBreak(); });
         $('body').on('click', '#unalarmButton', function (event) { $("#unalarmButton").hide(); Service.unAlarm(); });
         $('body').on('click', '#taxiAlarm', function (event) { Service.alarm(); });
-        $('body').on('click', '#btnSubmenu', function (event) {
-            app.submenu();
-            //sem este raz reg ? 
-        });
+        $('body').on('click', '#btnRecallMe', function (event) { Service.recallme(); });
+        $('body').on('click', '#btnSubmenu', function (event) { app.submenu(); });
                         
         $('#unbreakButton').hide();
         $('#unalarmButton').hide();
@@ -162,9 +170,9 @@
 
         try {
             if (app.isDevice)
-                self.mediaNew = new Media(app.getPhoneGapPath() + "audio/sound1.mp3");
+                self.mediaNew = new Media(app.getPhoneGapPath() + "audio/sound_order.mp3");
             else
-                self.mediaNew = new Audio("audio/sound1.mp3");
+                self.mediaNew = new Audio("audio/sound_order.mp3");
         }
         catch (err) {
             app.log("Media: " + err);
@@ -188,7 +196,7 @@
         if (!page) {
             switch (p) {
                 case "orders": page = new OrdersView().render(); this.homePage = page; break;
-                case "message": page = new MessageView().render(); break;
+                case "messages": page = new MessageView().render(); break;
                 case "history": page = new OrdersHistoryView().render(); break;
                 case "historyme": page = new OrdersHistoryView().render(); break;
                 case "states": page = new StatesView().render(); break;

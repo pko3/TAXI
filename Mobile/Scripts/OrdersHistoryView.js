@@ -72,6 +72,7 @@
         var i = 1;
         $.each(orders.Items, function () {
             this.FormatedDate = Service.formatJsonDate(this.OrderToDate);
+            this.Status = Service.setOrderDescription(this);
             this.iOrder = i++;
         });
 
@@ -88,6 +89,13 @@
 
     this.renderTab = function (data) {
         var i = 1;
+
+        $.each(data.Items, function () {
+            this.FormatedDate = Service.formatJsonDate(this.OrderToDate);
+            this.Status = Service.setOrderDescription(this);
+            this.iOrder = i++;
+        });
+
         if (self.iscroll)
             self.iscroll.refresh();
         else
