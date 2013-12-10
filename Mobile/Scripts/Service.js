@@ -49,6 +49,9 @@
         //disable vyber auta pre permanent driver: 
         $("#transporterId").prop("disabled", true); 
 
+        //initialize lists
+        listInitialize();
+
         this.login(callback);
         //callback();
     },
@@ -171,7 +174,15 @@
     },
     autoOrder: function () {
         app.showConfirm("Prijať objednávku?", "Objednávka", function () {
+
+
+
+
             var s = Service.getSettings();
+
+            //notify
+            NotificationLocal.Notify("autoOrder", s, null, null);
+
             Service.callService("MobileAutoOrder", { GUID_Transporter: s.transporterId, OrderSource: "Auto", OrderSourceDescription: "autoOrder", Latitude: PositionService.lat, Longitude: PositionService.lng }, function () { app.home(true); }, function () { app.home(true); });
         });
     },
@@ -292,7 +303,7 @@
         var cls = "ico_hangup";
         var clsrem = "ico_phone";
         var met = "TransporterRecall";
-        if (GLOB_RecallMe) {
+        if (Globals.GLOB_RecallMe) {
             met = "TransporterUnRecall";
             cls = "ico_phone";
             clsrem = "ico_hangup";
@@ -307,7 +318,7 @@
             Longitude: PositionService.lng
         },
             function () {
-                GLOB_RecallMe = !GLOB_RecallMe;
+                Globals.GLOB_RecallMe = !Globals.GLOB_RecallMe;
 
                 //zmena buttonu 
                 $("#btnRecallMe")
@@ -455,10 +466,17 @@
         }
     },
     formatJsonDate: function (jsonDate) {
+
+      //  var date = new Date(parseInt(jsonDate.substr(6)));
+       // var formattedDate = date.format("dd-MM-yyyy");
+
         var d = Service.parseJsonDate(jsonDate);
+       // var t = jQuery.parseJSON(1386340220807);
+      //  var tt = new Date(1386340220807);
+
         //return d.toLocaleDateString() + " <br/><strong>" + d.toLocaleTimeString().substring(0, 5) + "</strong>"; //
         if (d)
-            return d.getDate() + ". " + d.getMonth() + ". " + d.getFullYear() + " " + d.toTimeString().substring(0, 5);
+            return d.getDate() + ". " + (d.getMonth()+1) + ". " + d.getFullYear() + " " + d.toTimeString().substring(0, 5);
         return "";
     }
 }

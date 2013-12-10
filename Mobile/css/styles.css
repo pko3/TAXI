@@ -82,6 +82,8 @@ body
 	color: #fff;
 }
 
+
+
 .waitingDiv {
     padding: 10px;
     width: 100%;
@@ -312,6 +314,20 @@ button
 	color: white;
 }
 
+.buttonlist div.StandFree
+{
+	background-color: green;
+	color: white;
+    height:67px;
+}
+
+.buttonlist div.StandNotFree
+{
+	background-color: #ff6a00;
+	color: white;
+    height:67px;
+}
+
 .buttonlist > button
 {
 	margin: 0px;
@@ -502,6 +518,19 @@ h2
     background-position: -10px -10px;
     background-color: transparent;
     background-repeat: no-repeat;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.textHeaderTitle {
+    border-style: none;
+    display: inline-block;
+    margin: 3px;
+    width: auto;
+    height: 60px;
+    background-color: transparent; /*background-position: -10px -10px;
+    background-repeat: no-repeat;*/
     color: #FFFFFF;
     font-weight: bold;
     font-size: 25px;

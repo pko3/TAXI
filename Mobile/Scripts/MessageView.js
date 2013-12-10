@@ -24,18 +24,12 @@ var MessageView = function (messages) {
 
             $('#menu').show();
             Service.getMessages(function (messages) {
-
-
-
                 $.each(messages.Items, function () {
                     this.FormatedDate = Service.formatJsonDate(this.Created);
                 });
-
                 Service.messagesVer = messages.DataCheckSum;
-
-
+                Service.messages = messages;
                 app.waiting(false);
-
 
             });
 
@@ -44,7 +38,6 @@ var MessageView = function (messages) {
     };
 
     this.initialize();
-
 }
 
 MessageView.template = Handlebars.compile($("#message-tpl").html());

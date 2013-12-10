@@ -29,13 +29,13 @@ var SettingsAllView = function (messages) {
         var self = this;
         var s = Service.getSettings();
         var data = new Array;
+
         data[0] = { Group: "Main", Title: "RefreshSec", value: "7" };
-        data[1] = { Group: "Local", Title: "inRecall", value:  GLOB_RecallMe.toString() };
+        data[1] = { Group: "Local", Title: "inRecall", value: Globals.GLOB_RecallMe.toString() };
         data[2] = { Group: "Local", Title: "GUID_Transporter", value: s.transporterId };
         data[3] = { Group: "Local", Title: "GUID_sysUser", value: s.userId };
-
-
-
+        data[4] = { Group: "Stand", Title: "GLOB_GUID_Stand", value: Globals.GLOB_GUID_Stand };
+        data[5] = { Group: "Stand", Title: "GLOB_StandPosition", value: Globals.GLOB_StandPosition };
 
         self.showForm(data);
     };

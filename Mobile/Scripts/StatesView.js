@@ -39,7 +39,15 @@ var StatesView = function (store) {
         data["Longitude"] = PositionService.lng;
         data["IsTransporter"] = true;
         Service.callService("TransporterBreak", data,
-            function () { app.home(); },
+            function () {
+
+
+                //notify
+                NotificationLocal.Notify("stateschange", data, null, null);
+
+
+                app.home();
+            },
             function (d) {
                 data.ErrorMessage = d.ErrorMessage;
                 self.showForm(data);

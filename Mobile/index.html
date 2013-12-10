@@ -24,6 +24,7 @@
     <button id="btnSetting"  data-route="allsettings" class="textnoicon">Nastavenia</button>
     <button id ="btnRecallMe" title="Recall me" class="icon ico_phone">&nbsp;</button>
     <button data-route="states" class="icon ico_stop">&nbsp;</button>
+    <button id="btnStand"  data-route="stand" class="textnoicon">Stanovištia</button>
 </div>
 
 <div class='footer' id="divmenu">
@@ -86,10 +87,37 @@
 {{/.}}
 </script>
 
+<!-- Stand -->
+<script id="stand-tpl" type="text/x-handlebars-template">
+<div class='header' id="standHeader">
+    <button id="standBack" class="icon ico_back">&nbsp;</button>
+    <button id="standTitle" class="textHeaderTitle" disabled="disabled">Stanovištia</button>
+</div>
+<div class="scrollBottom"><div class='buttonlist stand-list'></div></div>
+</script>
+
+ <script id="stand-li-tpl" type="text/x-handlebars-template">
+{{#.}}
+<div  class="{{this.Status}}" data_Id="{{this.GUID}}">
+    <div class="content"><strong> {{this.Title}}  </strong><br />
+        Maximum: {{this.MaxPlaces}} / Voľné: {{this.FreePlaces}} /  Pozícia: {{this.StandPosition}}
+    </div>
+    {{#if this.CanStand}}
+        <div  class="icon up forstandup" data_Id="{{this.GUID}}">&nbsp;</div>
+    {{/if}}
+    {{#if this.CanLeave}}
+        <div class="icon cancel forstanddown">&nbsp;</div>
+    {{/if}}
+
+</div>
+{{/.}}
+</script>
+
 <!-- OrdersHistory -->
 <script id="ordersHistory-tpl" type="text/x-handlebars-template">
 <div class='header'><button id="historyBack" class="icon ico_back">&nbsp;</button>
-    <div style="position:absolute; left:65px; top:2px; right:0px;">
+    <button id="historyTitle" class="textHeaderTitle" disabled="disabled">História</button>
+    <div style="position:absolute; left:200px; top:2px; right:0px;">
     <select id="selectHistory">
         <option value="2h">Posledné 2 hodiny</option>
         <option value="24h">Posledných 24 hodín</option>
@@ -204,7 +232,11 @@
 
 <!-- States -->
 <script id="states-tpl" type="text/x-handlebars-template">
-<div class='header'><button data-route="orders" class="icon ico_back">&nbsp;</button><button id="statesSave" class="icon texticon ico_submit">Prerušenie</button></div>
+<div class='header'><button data-route="orders" class="icon ico_back">&nbsp;</button>
+    <button id="statesTitle" class="textHeaderTitle" disabled="disabled">Prerušenia</button>
+    <button id="statesSave" class="icon texticon ico_submit">Prerušiť</button>
+
+</div>
 <div class="scrollBottom"><form id="statesForm"></form></div>
 </script>
 
@@ -233,6 +265,7 @@
 <script id="message-tpl" type="text/x-handlebars-template">
 <div class='header'>
     <button data-route="orders" class="icon ico_back">&nbsp;</button>
+    <button id="messTitle" class="textHeaderTitle" disabled="disabled">Správy</button>
 </div>
     <div>
     {{#.}}
@@ -247,6 +280,7 @@
 <script id="settings-tpl" type="text/x-handlebars-template">
 <div class='header'>
     <button data-route="orders" id="settingsOrders" class="icon ico_back">&nbsp;</button>
+    <button id="settTitle" class="textHeaderTitle" disabled="disabled">Login/adresa</button>
     <button id="settingsSave" class="icon ico_submit transparent">&nbsp;</button>
     <button id="appExit" class="icon ico_end">&nbsp;</button>
 </div>
@@ -274,6 +308,7 @@
 <script id="settingsall-tpl" type="text/x-handlebars-template">
 <div class='header'>
     <button data-route="orders" id="settingsallOrders" class="icon ico_back">&nbsp;</button>
+    <button id="settAll" class="textHeaderTitle" disabled="disabled">Nastavenia</button>
     <button id="settingsallSave" class="icon texticon ico_submit">Uložiť</button>
 </div>
      <div id="settingsallForm" class="scrollBottom"></div>
@@ -301,6 +336,7 @@
 <script src="Scripts/Service.js"></script>
 <script src="Scripts/OrdersView.js"></script>
 <script src="Scripts/OrdersHistoryView.js"></script>
+<script src="Scripts/StandView.js"></script>
 <script src="Scripts/OrderDetail.js"></script>
 <script src="Scripts/MessageView.js"></script>
 <script src="Scripts/StatesView.js"></script>
@@ -310,7 +346,9 @@
 <script src="Scripts/SettingsAllView.js"></script>
 <script src="Scripts/Globals.js"></script>
 <script src="Scripts/Errors.js"></script>
+<script src="Scripts/Lists.js"></script>
 <script src="Scripts/main.js"></script>
+<script src="Scripts/NotificationLocal.js"></script>
 <script src="http://maps.google.com/maps/api/js?sensor=false&callback=Map.apiOK"></script>
    
 </body>

@@ -119,6 +119,8 @@ var OrdersView = function () {
 
         btn.removeClass().addClass("refWaiting");
 
+        
+
         var settings = Service.getSettings(), self = this;
         var data = {
             Action: action,
@@ -132,6 +134,10 @@ var OrdersView = function () {
             Latitude: PositionService.lat,
             Longitude: PositionService.lng
         };
+
+        //notify
+        NotificationLocal.Notify("changeOffer", data, null, null);
+
         
         if(action == "Up" && (data.Status == "New" || data.Status == "Offered"))
         {

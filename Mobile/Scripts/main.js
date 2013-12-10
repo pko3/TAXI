@@ -198,6 +198,7 @@
                 case "orders": page = new OrdersView().render(); this.homePage = page; break;
                 case "messages": page = new MessageView().render(); break;
                 case "history": page = new OrdersHistoryView().render(); break;
+                case "stand": page = new StandView().render(); break;
                 case "historyme": page = new OrdersHistoryView().render(); break;
                 case "states": page = new StatesView().render(); break;
                 case "map": page = new MapView().render(); break;
