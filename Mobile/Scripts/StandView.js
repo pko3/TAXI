@@ -121,8 +121,6 @@
         var self = this;
         app.log("Join stand:" + standGUID);
 
-        console.log("joinStand asyn start");
-
         var s = Service.getSettings();
         Service.callService("TransporterJoinStand", {
             GUID_Transporter: s.transporterId,
@@ -131,11 +129,9 @@
             Latitude: PositionService.lat,
             Longitude: PositionService.lng
         });
-
         Globals.GLOB_GUID_Stand = standGUID;
         Globals.GLOB_StandPosition = 100;
-        
-        console.log("joinStand asyn end");
+
     }
 
 }

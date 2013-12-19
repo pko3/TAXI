@@ -86,7 +86,7 @@
             $("#orderCall").removeClass("ico_hangup").addClass("ico_phone").show();
 
         if (this.order.Status == "Offered")
-            $("#OrderTimeToRealize").val(constants.OrderDetail_Defauls_timeToRealize);
+            $("#OrderTimeToRealize").val(Globals.constants.OrderDetail_Defauls_timeToRealize);
         else
             $("#OrderTimeToRealize").val(this.order.TimeToRealize);
 
