@@ -18,6 +18,7 @@
 /// <reference path="SettingsAllView.js" />
 /// <reference path="Translator.js" />
 /// <reference path="NotificationLocal.js" />
+/// <reference path="AutoOrderView.js" />
 
 
 

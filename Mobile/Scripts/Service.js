@@ -186,6 +186,16 @@
             Service.callService("MobileAutoOrder", { GUID_Transporter: s.transporterId, OrderSource: "Auto", OrderSourceDescription: "autoOrder", Latitude: PositionService.lat, Longitude: PositionService.lng }, function () { app.home(true); }, function () { app.home(true); });
         });
     },
+    autoOrder2: function (EndCity,EndAddress,TimeToRealize,callback) {
+
+       
+            var s = Service.getSettings();
+            //notify
+            NotificationLocal.Notify("autoOrder", s, null, null);
+            Service.callService("MobileAutoOrder", { GUID_Transporter: s.transporterId, OrderSource: "Auto", OrderSourceDescription: "autoOrder", Latitude: PositionService.lat, Longitude: PositionService.lng, EndCity: EndCity, EndAddress: EndAddress, TimeToRealize: TimeToRealize }, function () { app.home(true); }, function () { app.home(true); });
+            //if (callback)
+            //    callback();
+    },
     getOrders: function (callback) {
         var self = this;
         this.callService("datamobile", { Id: "transporterorders", IdTransporter: this._settings.transporterId }, function (orders) {

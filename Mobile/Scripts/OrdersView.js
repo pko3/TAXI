@@ -135,17 +135,21 @@ var OrdersView = function () {
             Longitude: PositionService.lng
         };
 
+        //dame defaultny cas na vybavenie 
+        data.TimeToRealize = Globals.constants.OrderDetail_Defauls_timeToRealize;
+        //data.TimeToRealizeFrom = Date.UTC;
+
         //notify
         NotificationLocal.Notify("changeOffer", data, null, null);
 
-        
-        if(action == "Up" && (data.Status == "New" || data.Status == "Offered"))
-        {
-            Service.orders.Current = Service.findOrder(data.GUID_TransporterOrder);
-            if (Service.orders.Current)
-                app.route("detail");
-            return;
-        }
+        //pre ponuku sa povodne islo do detailu, ale to zmenime. 
+        //if(action == "Up" && (data.Status == "New" || data.Status == "Offered"))
+        //{
+        //    Service.orders.Current = Service.findOrder(data.GUID_TransporterOrder);
+        //    if (Service.orders.Current)
+        //        app.route("detail");
+        //    return;
+        //}
 
         Service.callService("transporteroffer", data);
     };

@@ -41,6 +41,11 @@
         }
     },
 
+    showNew: function (title, content, timeout, okCallback, cancelCallback) {
+
+       
+    },
+
     showConfirm: function (message, title, okCallback, cancelCallback) {
         if (navigator.notification) {
             var _callback = function (btn) {
@@ -126,7 +131,7 @@
         var self = this;
         $('body').on('touchmove', function (event) { event.preventDefault(); });
         $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
-        $('body').on('click', '#newOrder', function (event) { Service.autoOrder(); });
+        //$('body').on('click', '#newOrder', function (event) { Service.autoOrder(); });
         $('body').on('click', '#unbreakButton', function (event) { $("#unbreakButton").hide(); Service.unBreak(); });
         $('body').on('click', '#unalarmButton', function (event) { $("#unalarmButton").hide(); Service.unAlarm(); });
         $('body').on('click', '#taxiAlarm', function (event) { Service.alarm(); });
@@ -205,6 +210,7 @@
                 case "allsettings": page = new SettingsAllView().render(); break;
                 case "settings": page = new SettingsView().render(); break;
                 case "detail": page = new OrderDetail().render(); break;
+                case "autoorder": page = new AutoOrderView().render(); break;
                 default: this.showAlert("Undefined page:" + p, "ERROR"); return;
             }
             this.pages[p] = page;
