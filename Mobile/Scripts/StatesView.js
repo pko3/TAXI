@@ -4,8 +4,10 @@ var StatesView = function (store) {
         this.el = $('<div/>');
     };
 
-    this.render = function() {
+    this.render = function () {
+        var self = this;
         this.el.html(StatesView.template());
+        $("#statesSave").click(function () { self.save(); });
         return this;
     };
 
@@ -15,7 +17,6 @@ var StatesView = function (store) {
 
     this.showForm = function (data) {
         var self = this;
-        $("#statesSave").click(function () { self.save(); });
         app.waiting(false);
         $("#statesForm").html(StatesView.formTemplate(data));
 

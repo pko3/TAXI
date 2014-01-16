@@ -9,26 +9,23 @@
     };
 
     this.render = function () {
-        this.el.html(OrderDetail.template());
-        return this;
-    };
-
-    this.onShow = function () {
         var self = this;
+        this.el.html(OrderDetail.template());
         DetailMap.initialize($("#orderDetailMap"));
-        
+        $("#orderDetailSave").click(function () { self.save(); });
         $("#orderDetailBack").click(function () { app.home(); });
         $("#orderCall").click(function () {
             Service.recallOrder(function () {
                 self.setButtons();
             });
         });
-
-
         $("#orderTimeTab").click(function (e) { self.showTime(); });
         $("#orderDetailTab").click(function () { self.showDetail(); });
         $("#orderMapTab").click(function (e) { self.showMap(); });
+        return this;
+    };
 
+    this.onShow = function () {
         this.loadData();
     };
    
@@ -76,8 +73,7 @@
     this.setButtons = function () {
 
         var self = this;
-        $("#orderDetailSave").click(function () { self.save(); });
-
+        
         if (this.order.Status != "Waiting")
             $("#orderCall").hide();
         else if (this.order.RecallNeed) 

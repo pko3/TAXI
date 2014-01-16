@@ -28,8 +28,15 @@
     alertDismissed: function(message) {
         ErrorStorage.removeError(message);
     },
-
-
+    showNews: function (content) {
+        $("#taxiNewsContent").html(content);
+        $("#taxiNews").show();
+        app.playNew();
+        window.setTimeout(function () { app.hideNews(); }, 10000);
+    },
+    hideNews: function () {
+        $("#taxiNews").hide();
+    },
     tabSelector: function (tabName, pageName) {
         var tabCtrl = document.getElementById(tabName);
         var pageToActivate = document.getElementById(pageName);
@@ -137,18 +144,11 @@
         $('body').on('click', '#taxiAlarm', function (event) { Service.alarm(); });
         $('body').on('click', '#btnRecallMe', function (event) { Service.recallme(); });
         $('body').on('click', '#btnSubmenu', function (event) { app.submenu(); });
+        $('body').on('click', '#btnNewsClose', function (event) { app.hideNews(); });
                         
         $('#unbreakButton').hide();
         $('#unalarmButton').hide();
 
-        //deviceready
-        //pause
-        //resume
-        //online
-        //offline
-        //backbutton
-        //menubutton
-        //searchbutton
         try {
             document.addEventListener('pause', function () { app.info("Pause"); }, false);
             document.addEventListener('resume', function () { app.info("Resume"); }, false);
@@ -185,7 +185,7 @@
     },
     home: function (refresh) {
         app.route("orders");
-        if (refresh)
+        if (refresh && app.currentPage && app.currentPage.loadData)
             app.currentPage.loadData();
     },
     settings: function () {
@@ -200,20 +200,22 @@
         var page = this.pages[p];
         if (!page) {
             switch (p) {
-                case "orders": page = new OrdersView().render(); this.homePage = page; break;
-                case "messages": page = new MessageView().render(); break;
-                case "history": page = new OrdersHistoryView().render(); break;
-                case "stand": page = new StandView().render(); break;
-                case "historyme": page = new OrdersHistoryView().render(); break;
-                case "states": page = new StatesView().render(); break;
-                case "map": page = new MapView().render(); break;
-                case "allsettings": page = new SettingsAllView().render(); break;
-                case "settings": page = new SettingsView().render(); break;
-                case "detail": page = new OrderDetail().render(); break;
-                case "autoorder": page = new AutoOrderView().render(); break;
+                case "orders": page = new OrdersView(); this.homePage = page; break;
+                case "messages": page = new MessageView(); break;
+                case "history": page = new OrdersHistoryView(); break;
+                case "stand": page = new StandView(); break;
+                case "historyme": page = new OrdersHistoryView(); break;
+                case "states": page = new StatesView(); break;
+                case "map": page = new MapView(); break;
+                case "allsettings": page = new SettingsAllView(); break;
+                case "settings": page = new SettingsView(); break;
+                case "detail": page = new OrderDetail(); break;
+                case "autoorder": page = new AutoOrderView(); break;
                 default: this.showAlert("Undefined page:" + p, "ERROR"); return;
             }
             this.pages[p] = page;
+            $('body').append(page.el);
+            page.render();
         }
         this.currentPageName = p;
         this.slidePage(page);
@@ -222,8 +224,6 @@
         var currentPageDest, self = this;
 
         if (!this.currentPage) {
-            //$(page.el).attr('class', 'page stage-center');
-            $('body').append(page.el);
             this.currentPage = page;
             setTimeout(function () {
                 if (page.onShow) 
@@ -237,26 +237,14 @@
         if (this.currentPage === page)
             return;
 
-        //if (page.index < this.currentPage.index) {
-        //    $(page.el).attr('class', 'page stage-left');
-        //    currentPageDest = "stage-right";
-        //} else {
-        //    $(page.el).attr('class', 'page stage-right');
-        //    currentPageDest = "stage-left";
-        //}
-
-        $('body').append(page.el);
-
         setTimeout(function () {
-            $(self.currentPage.el).hide();//.attr('class', 'page transition ' + currentPageDest);
+            $(self.currentPage.el).hide();
             $(page.el).show();
-            //$(page.el).attr('class', 'page stage-center transition');
             if (page.onShow)
                 page.onShow();
             else
                 self.waiting(true);
             self.currentPage = page;
-            //$('.stage-right, .stage-left').remove();
         });
     },
     refreshData: function (dataIds, callback) {

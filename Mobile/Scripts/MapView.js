@@ -6,7 +6,6 @@ var MapView = function (store) {
     };
 
     this.render = function() {
-        //this.el.html(MapView.template(store));
         Map.initialize(this.el);
         return this;
     };
@@ -18,8 +17,6 @@ var MapView = function (store) {
     this.initialize();
 }
 
-//MapView.template = Handlebars.compile($("#map-tpl").html());
-
 var Map = {
     date: null,
     marker: null,
@@ -29,6 +26,7 @@ var Map = {
     mapDiv: null,
     mess: null,
     messError: null,
+    geocoder: null,
     apiIsOk: false,
     initialize: function (el) {
         var header = $('<div class="header"><button data-route="orders" class="icon ico_back">&nbsp;</button></div>').appendTo(el);
@@ -43,6 +41,7 @@ var Map = {
     },
     apiOK: function () {
         Map.apiIsOk = true;
+        Map.geocoder = new google.maps.Geocoder();
     },
     success: function (position) {
         Map.date = new Date().toTimeString();
@@ -107,5 +106,70 @@ var Map = {
         catch (err) {
             Map.message(err.message, true);
         }
-    }
+    },
+    geocode: function (props, postback) {
+        var self = this, a = {}, lat, lng;
+        if (self.geocoder)
+            self.geocoder.geocode(props, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[0]) {
+                        a = self.placeToAddress(results[0]);
+                        lat = a.Latitude;
+                        lng = a.Longitude;
+                    }
+                }
+
+                if (postback) {
+                    postback({
+                        lat: lat, lng: lng,
+                        City: a.City,
+                        Status: status,
+                        Address: (a.Street ? a.Street + " " + (a.StreetNumber ? a.StreetNumber : "") : (a.PointOfInterest ? a.PointOfInterest + " " : ""))
+                    });
+                }
+            });
+        else
+            postback({});
+    },
+    placeToAddress: function (place) {
+        var address = {};
+        if (place.geometry) {
+            address.Latitude = place.geometry.location.lat();
+            address.Longitude = place.geometry.location.lng();
+        }
+        $(place.address_components).each(
+            function () {
+                var a = this;
+                if (a.types.length > 0)
+                    switch (a.types[0]) {
+                        case "country":
+                            address.Country = a.long_name;
+                            address.CountryShortName = a.short_name;
+                            break;
+                        case "locality":
+                            address.City = a.long_name;
+                            break;
+                        case "sublocality":
+                            address.sublocality = a.long_name;
+                            break;
+                        case "postal_code":
+                            address.PostalCode = a.long_name;
+                            break;
+                        case "route":
+                            address.Street = a.long_name;
+                            break;
+                        case "street_number":
+                            address.StreetNumber = a.long_name;
+                            break;
+                        case "point_of_interest":
+                            address.PointOfInterest = a.long_name;
+                            break;
+                        case "establishment":
+                            address.PointOfInterest = a.long_name;
+                            break;
+                    }
+            }
+        );
+        return address;
+    },
 };

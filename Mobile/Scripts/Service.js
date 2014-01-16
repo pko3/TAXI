@@ -49,11 +49,8 @@
         //disable vyber auta pre permanent driver: 
         $("#transporterId").prop("disabled", true); 
 
-        //initialize lists
-        listInitialize();
-
         this.login(callback);
-        //callback();
+        //initialize lists
     },
     login: function (callback) {
         app.log("Service.login");
@@ -66,7 +63,6 @@
                 s.userId = d.userId; 
                 s.sessionId = d.sessionId;
                 s.bool_DriverPermanent = false;
-
                 //permamnet driver ! 
                 if (d.ItemsDictKeys!=null)
                 {
@@ -92,15 +88,10 @@
 
                 Service.saveSettings(s);
                 if (Service.isComplet()) {
+                    Lists.listInitialize();
                     PositionService.startWatch();
                     Service.loginHistory();
-
                     app.refreshTransporter(callback);
-                    //navigator.geolocation.getCurrentPosition(function (position) {
-                    //    PositionService.lat = position.coords.latitude;
-                    //    PositionService.lng = position.coords.longitude;
-                    //    Service.loginHistory()
-                    //}, function () { Service.loginHistory() });
                 }
                 else {
                     if (Service.isAuthenticated && s.transporterId==null)
@@ -175,9 +166,6 @@
     autoOrder: function () {
         app.showConfirm("Prijať objednávku?", "Objednávka", function () {
 
-
-
-
             var s = Service.getSettings();
 
             //notify
@@ -187,8 +175,6 @@
         });
     },
     autoOrder2: function (EndCity,EndAddress,TimeToRealize,callback) {
-
-       
             var s = Service.getSettings();
             //notify
             NotificationLocal.Notify("autoOrder", s, null, null);

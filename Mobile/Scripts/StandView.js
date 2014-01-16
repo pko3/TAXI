@@ -6,38 +6,34 @@
     };
 
     this.render = function () {
+        var self = this;
         this.el.html(StandView.template());
+        $("#standBack").click(function () { app.home(); });
+        //klik na header
+        $("#standHeader").click(function () {
+            //console.log("header click");
+            self.getData();
+        });
         return this;
     };
 
+    this.onShow = function () {
+        this.loadData();
+    };
+
     this.loadData = function () {
-        var self = this;
         $('.stand-list').hide();
         app.waiting();
 
         //default view - stand from service : 
-        self.getData();
+        this.getData();
 
         //hide waiting cursor
         app.waiting(false);
     };
     
-    this.onShow = function () {
-        this.loadData();
-        var self = this;
-        $("#standBack").click(function () { app.home(); });
-
-    };
-
- 
-
-    
     this.renderStands = function (standresult)
     {
-
-
-
-
         var self = this;
 
         $('.stand-list').html(StandView.liTemplate(standresult.Items));
@@ -57,13 +53,6 @@
         //klik na down
         $(".forstanddown").click(function () { Stand.LeaveStand(Stand.ToHomeScreen()); });
 
-        //klik na header
-        $("#standHeader").click(function ()
-        {
-            console.log("header click");
-            self.getData();
-        });
-
         app.waiting(false);
         $('.stand-list').show();
     }
@@ -82,9 +71,6 @@
             if (Globals.GLOB_GUID_Stand == standresult.Items[i].GUID) standresult.Items[i].CanLeave = true;
             
         }
-
-        
-
     }
 
     this.getData = function (e)
@@ -102,7 +88,6 @@
     }
 
     this.initialize();
-
 
     this.joinStand = function (standGUID) {
         var self = this;
@@ -141,7 +126,7 @@ var Stand = {
     LeaveStand : function (callback)
     {
         app.log("Leave stand:" + Globals.GLOB_GUID_Stand);
-        
+        //app.showNews("Leave stand:" + Globals.GLOB_GUID_Stand);
         var s = Service.getSettings();
         Service.callService("TransporterLeaveStand", {
             GUID_Transporter: s.transporterId,

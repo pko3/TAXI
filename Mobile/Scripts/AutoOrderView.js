@@ -4,8 +4,10 @@ var AutoOrderView = function (store) {
         this.el = $('<div/>');
     };
 
-    this.render = function() {
+    this.render = function () {
         this.el.html(AutoOrderView.template());
+        var self = this;
+        $("#autoorderSave").click(function () { self.save(); });
         return this;
     };
 
@@ -13,21 +15,22 @@ var AutoOrderView = function (store) {
         this.showForm({});
     };
 
+    this.loadData = function () {
+        this.showForm({});
+    };
+
     this.showForm = function (data) {
         var self = this;
-        $("#autoorderSave").click(function () { self.save(); });
-        app.waiting(false);
+        app.waiting();
         $("#autoorderForm").html(AutoOrderView.formTemplate(data));
-        this.loadData();
-        $("#autoorderForm").show();
-        
+        Map.geocode({ 'latLng': new google.maps.LatLng(PositionService.lat, PositionService.lng) }, function (a) {
+            $("#AutoOrderTimeToRealize").val(Globals.constants.OrderDetail_Defauls_timeToRealize);
+            $("#AutoOrderEndCity").val(a.City);
+            $("#autoorderForm").show();
+            app.waiting(false);
+        });
     };
     
-    this.loadData = function () {
-        $("#TimeToRealize").val(Globals.constants.OrderDetail_Defauls_timeToRealize);
-        //$("#EndCity").val("hhh");
-    }
-
     this.save = function () {
         var f = $("#autoorderForm");
         f.hide();
@@ -41,7 +44,7 @@ var AutoOrderView = function (store) {
         var TimeToRealize = data["TimeToRealize"];
 
         //call service with callback
-        alert('autoOrder2');
+        //alert('autoOrder2');
         Service.autoOrder2(EndCity, EndAddress, TimeToRealize,app.home());
 
         ////stop waiting

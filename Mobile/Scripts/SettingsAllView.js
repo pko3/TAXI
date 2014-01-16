@@ -6,15 +6,14 @@ var SettingsAllView = function (messages) {
     };
 
     this.render = function () {
+        var self = this;
+        this.el.html(SettingsAllView.template());
+        //$("#settingsallForm").hide();
+        //$("#settingsallSave").click(function () { if(!$(this).hasClass("transparent")) self.save(); });
         return this;
     };
 
     this.onShow = function () {
-        var self = this;
-        this.el.html(SettingsAllView.template());
-        //$("#settingsallForm").hide();
-        app.waiting();
-        //$("#settingsallSave").click(function () { if(!$(this).hasClass("transparent")) self.save(); });
         this.loadForm();
     };
 
@@ -26,6 +25,8 @@ var SettingsAllView = function (messages) {
     };
 
     this.loadForm = function () {
+        app.waiting();
+
         var self = this;
         var s = Service.getSettings();
         var data = new Array;
@@ -44,8 +45,6 @@ var SettingsAllView = function (messages) {
     this.showForm = function (data) {
         if (data) data.ErrorMessage = Service.connectionError;
 
-
-
         $("#settingsallForm").html(SettingsAllView.templateForm(data));
 
         if (self.iscroll)
@@ -53,9 +52,9 @@ var SettingsAllView = function (messages) {
         else
             self.iscroll = new iScroll($('.scrollBottom', self.el)[0], { hScrollbar: false, vScrollbar: false });
 
-            $("#settingsallForm").show();
+        $("#settingsallForm").show();
            // $("#settingsallSave").removeClass("transparent");
-            app.waiting(false);
+        app.waiting(false);
     };
 
     this.initialize();

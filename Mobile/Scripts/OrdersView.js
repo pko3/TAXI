@@ -9,7 +9,8 @@ var OrdersView = function () {
 
     this.render = function () {
         this.el.html(OrdersView.template());
-       
+        $("#taxiHeader").click(function () { app.refreshData(["orders", "transporters"]); });
+
         //if (app.isDevice) {
         //    $(window).unload(function () {
         //        app.log("powermanagement.release");
@@ -36,6 +37,10 @@ var OrdersView = function () {
         //    }
         //}
         return this;
+    };
+
+    this.onShow = function () {
+        this.loadData();
     };
 
     this.loadData = function () {
@@ -152,10 +157,6 @@ var OrdersView = function () {
         //}
 
         Service.callService("transporteroffer", data);
-    };
-    this.onShow = function () {
-        $("#taxiHeader").click(function () { app.refreshData(["orders", "transporters"]); });
-        this.loadData();
     };
     this.initialize();
 }

@@ -12,7 +12,7 @@
         GLOB_StandPosition: 0,
 
         //array of local lists
-        GLOB_LocalLists: new Array("Stand", "aa", "bb"),
+        GLOB_LocalLists: new Array("Stand"),
 
 
         //CONSTANTS

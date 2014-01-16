@@ -7,30 +7,25 @@
 
     this.render = function () {
         this.el.html(OrdersHistoryView.template());
-        return this;
-    };
-
-    this.loadData = function () {
-        var self = this;
-        $('.ordersHistory-list').hide();
-        app.waiting();
-
-        //select !          
-        $("#selectHistory").val("2h");
-
-        //default view 
-        self.view2h();
-    };
-    
-    this.onShow = function () {
-        this.loadData();
         var self = this;
         $("#historyBack").click(function () { app.home(); });
         $("#selectHistory").on("change", function (e) { self.selectionChange(e); });
-
-
+        return this;
     };
 
+    this.onShow = function () {
+        this.loadData();
+    };
+
+    this.loadData = function () {
+        $('.ordersHistory-list').hide();
+        app.waiting();
+        //select !          
+        $("#selectHistory").val("2h");
+        //default view 
+        this.view2h();
+    };
+        
     this.selectionChange = function (e)
     {
         var self = this;

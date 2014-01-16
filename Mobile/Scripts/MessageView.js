@@ -7,11 +7,11 @@ var MessageView = function (messages) {
 
     this.render = function () {
         this.el.html(MessageView.template(Service.messages));
+        $("#taxiHeader").click(function () { app.refreshData(["messages"]); });
         return this;
     };
 
     this.onShow = function () {
-        $("#taxiHeader").click(function () { app.refreshData(["messages"]); });
         this.loadData();
     };
 
@@ -34,7 +34,6 @@ var MessageView = function (messages) {
             });
 
             this.render();
-        
     };
 
     this.initialize();

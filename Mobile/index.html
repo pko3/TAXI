@@ -7,6 +7,7 @@
 </head>
 <body onload="onLoad()">
 <div class='waitingDiv'>&nbsp;</div>   
+<div id="taxiNews"><button id="btnNewsClose" class="icon ico_back">&nbsp;</button><p id="taxiNewsContent"></p></div>
 
 <!-- Orders -->
 <script id="orders-tpl" type="text/x-handlebars-template">
@@ -40,7 +41,6 @@
   <div class='buttonlist orders-list'></div>
   <button id="unbreakButton" class="ico_submit">Ukončiť prestávku</button>
   <button id="unalarmButton" class="ico_submit">Ukončiť alarm</button>
-  <div id="taxiNews">News</div>
 </div>
 </script>
 
@@ -273,9 +273,9 @@
 </script>
 
 <script id="autoorderForm-template" type="text/x-handlebars-template">
-<input  name="EndCity" value="{{this.EndCity}}" type="text" placeholder="Kam mesto" />
-<input  name="EndAddress" value="{{this.EndAddress}}" type="text" placeholder="Kam adresa"  />
- <input  name="TimeToRealize" value="{{this.TimeToRealize}}" type="number" placeholder="min." />
+<input id="AutoOrderEndCity"  name="EndCity" value="{{this.EndCity}}" type="text" placeholder="Kam mesto" />
+<input id="AutoOrderEndAddress" name="EndAddress" value="{{this.EndAddress}}" type="text" placeholder="Kam adresa"  />
+ <input id="AutoOrderTimeToRealize" name="TimeToRealize" value="{{this.TimeToRealize}}" type="number" placeholder="min." />
 {{#if this.ErrorMessage}}<div class="error">{{this.ErrorMessage}}</div>{{/if}}
 </script>
 
