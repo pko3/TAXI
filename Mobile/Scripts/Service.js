@@ -121,7 +121,6 @@
                 GUID_Transporter: s.transporterId,
                 GUID_sysUser_Driver: s.userId,
                 HistoryAction: "Driver login",
-                IsTransporter: true,
                 Latitude: PositionService.lat,
                 Longitude: PositionService.lng
             },
@@ -142,7 +141,6 @@
                 GUID_Transporter: s.transporterId,
                 GUID_sysUser_Driver: null,
                 HistoryAction: "Driver logout",
-                IsTransporter: true,
                 Latitude: PositionService.lat,
                 Longitude: PositionService.lng
             },
@@ -263,7 +261,6 @@
         Service.callService("TransporterUnBreak", {
             GUID_Transporter: s.transporterId,
             GUID_sysUser_Driver: s.userId,
-            IsTransporter: true,
             Latitude: PositionService.lat,
             Longitude: PositionService.lng
         },
@@ -281,7 +278,6 @@
         Service.callService("TransporterAlarm", {
             GUID_Transporter: s.transporterId,
             GUID_sysUser_Driver: s.userId,
-            IsTransporter: true,
             Latitude: PositionService.lat,
             Longitude: PositionService.lng
         },
@@ -309,7 +305,6 @@
         Service.callService(met, {
             GUID_Transporter: s.transporterId,
             GUID_sysUser_Driver: s.userId,
-            IsTransporter: true,
             Latitude: PositionService.lat,
             Longitude: PositionService.lng
         },
@@ -334,7 +329,6 @@
         Service.callService("TransporterUnAlarm", {
             GUID_Transporter: s.transporterId,
             GUID_sysUser_Driver: s.userId,
-            IsTransporter: true,
             Latitude: PositionService.lat,
             Longitude: PositionService.lng
         },
@@ -354,7 +348,6 @@
                 GUID_Transporter: s.transporterId,
                 GUID_sysUser_Driver: s.userId,
                 GUID_TransporterOrder: Service.orders.Current.GUID,
-                IsTransporter: true,
                 Latitude: PositionService.lat,
                 Longitude: PositionService.lng
             },
@@ -403,6 +396,7 @@
         else {
             if (data) {
                 data.UserTicket = this._settings.sessionId;
+                data.IsTransporter = true;
                 //data.GUID_sysUser_Driver = this._settings.userId;
             }
             $.post(this._settings.url + "/app/" + method, data)

@@ -38,11 +38,8 @@ var StatesView = function (store) {
         data["GUID_Transporter"] = Service.transporter.GUID;
         data["Latitude"] = PositionService.lat;
         data["Longitude"] = PositionService.lng;
-        data["IsTransporter"] = true;
         Service.callService("TransporterBreak", data,
             function () {
-
-
                 //notify
                 NotificationLocal.Notify("stateschange", data, null, null);
 

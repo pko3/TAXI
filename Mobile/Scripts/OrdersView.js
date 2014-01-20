@@ -129,7 +129,6 @@ var OrdersView = function () {
         var settings = Service.getSettings(), self = this;
         var data = {
             Action: action,
-            IsTransporter: true,
             GUID_Transporter: settings.transporterId,
             Status_Transporter: settings.transporterState,
             GUID: btn.attr("data_GUID_Offer"),

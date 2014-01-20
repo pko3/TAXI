@@ -136,7 +136,6 @@
         
         var data = {
             Action: "Up",
-            IsTransporter: true,
             GUID_Transporter: settings.transporterId,
             Status_Transporter: settings.transporterState,
             GUID: this.order.GUID_Offer,
