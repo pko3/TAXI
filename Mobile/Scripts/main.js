@@ -6,17 +6,99 @@
     mediaAlert : null,
     pages: {},
     showAlert: function (message, title) {
-        //TODO: ALERT, CONFIRM!!!
+
+        var ierr = ErrorStorage.hasError(message);
+
+
         if (navigator.notification) {
-            navigator.notification.alert(message, null, title, 'OK');
+            if (ierr == 0) {
+                ErrorStorage.addError(message);
+                navigator.notification.alert(message, alertDismissed(message), title, 'OK');
+            }
+        }
+        else {
+            
+            if (ierr == 0) {
+                ErrorStorage.addError(message);
+                alert(title ? (title + ": " + message) : message);
+                ErrorStorage.removeError(message);
+            }
+        }
+    },
+    alertDismissed: function(message) {
+        ErrorStorage.removeError(message);
+    },
+
+    showNews: function (content) {
+        var soundFile = "audio/sound_new.mp3";
+        app.showNewsComplete(Translator.Translate("Warning"), soundFile, "", 10000, content)
+    },
+
+    showNewsComplete: function (title, soundFile, color, hideinmilisec, content) {
+        if (!soundFile | soundFile=="") soundFile = "audio/sound_new.mp3";
+        $("#taxiNewsContent").html(content);
+        $("#taxiNewsTitle").html(title);
+        $("#taxiNewFull").show(200);
+        app.playSound(soundFile);
+        window.setTimeout(function () { app.hideNews(); }, hideinmilisec);
+    },
+
+    hideNews: function () {
+        $("#taxiNewFull").hide(100);
+    },
+    tabSelector: function (tabName, pageName) {
+        var tabCtrl = document.getElementById(tabName);
+        var pageToActivate = document.getElementById(pageName);
+        for (var i = 0; i < tabCtrl.childNodes.length; i++) {
+            var node = tabCtrl.childNodes[i];
+            if (node.nodeType == 1) { /* Element */
+                node.style.display = (node == pageToActivate) ? 'block' : 'none';
+            }
+        }
+    },
+
+    showNew: function (title, content, timeout, okCallback, cancelCallback) {
+
+       
+    },
+
+    showConfirm: function (message, title, okCallback, cancelCallback) {
+        if (navigator.notification) {
+            var _callback = function (btn) {
+                if (btn === 1) {
+                    if (okCallback) okCallback();
+                }
+                else {
+                    if (cancelCallback) cancelCallback();
+                }
+            }
+            navigator.notification.confirm(message, _callback, title, 'OK,Cancel');
         } else {
-            alert(title ? (title + ": " + message) : message);
+            if (confirm(title ? (title + ": " + message) : message)) {
+                if (okCallback) okCallback();
+            }
+            else {
+                if (cancelCallback) cancelCallback();
+            }
         }
     },
     playNew: function(){
-        if(app.mediaNew)
+        if (app.mediaNew) {
+            app.log("app play new execute");
+            console.log("app play new execute");
             app.mediaNew.play();
+        }
     },
+
+    playSound: function (soundFile) {
+        window.setTimeout(function () {
+            if (soundFile) {
+                var toplay = new Audio(soundFile);
+                toplay.play();
+            }
+        }, 1);
+    },
+
     info: function(t){
         $("#taxiInfo").html(t);
     },
@@ -30,49 +112,55 @@
         if ($(".waitingDiv").is(":visible"))
             $(".waitingDiv").html(t);
     },
-    end: function () {
+    end: function (callback) {
+        if (Service.isAuthenticated) {
             if (navigator.app) {
-                if (confirm("Odhlásiť sa z vozidla?")) {
-
+                app.showConfirm("Odhlásiť sa z vozidla?", "Ukončenie aplikácie", function () {
                     Service.logout(function () {
-                        //app.showAlert("Boli ste odhlásení z vozidla");
-                        if (confirm("Ukončiť aplikáciu?")) {
+                        app.showConfirm("Ukončiť aplikáciu?", "Ukončenie aplikácie", function () {
                             app.log("app.exitApp");
                             navigator.app.exitApp();
-                        }
+                        }, callback);
                     });
-                    return true;
-                }
+                });
             }
             else {
-                if (confirm("Odhlásiť sa z vozidla?")) {
-                    Service.logout(function () { app.showAlert("Boli ste odhlásení z vozidla"); });
-                    return true;
-                }
-                
-                //app.showAlert("Táto funkcia nieje podporovaná");
+                app.showConfirm("Odhlásiť sa z vozidla?", "Ukončenie aplikácie", function () {
+                    Service.logout(function () {
+                        app.showAlert("Boli ste odhlásení z vozidla");
+                        callback();
+                    });
+                }, callback);
             }
-            return false;
+        }
+        else if (navigator.app) {
+            app.showConfirm("Ukončiť aplikáciu?", "Ukončenie aplikácie", function () {
+                app.log("app.exitApp");
+                navigator.app.exitApp();
+            }, callback);
+        }
+        else callback();
+    },
+    submenu: function()
+    {
+        $('#divsubmenu').toggle(100);
     },
     registerEvents: function () {
-                app.log("app.registerEvents");
-                var self = this;
-
-        
+        app.log("app.registerEvents");
+        var self = this;
+        $('body').on('touchmove', function (event) { event.preventDefault(); });
         $('body').on('click', '[data-route]', function (event) { app.route($(this).attr("data-route")); });
-        $('body').on('click', '#newOrder', function (event) { Service.autoOrder(); });
-        $('body').on('click', '#unbreakButton', function (event) { Service.unBreak(); });
-
+        //$('body').on('click', '#newOrder', function (event) { Service.autoOrder(); });
+        $('body').on('click', '#unbreakButton', function (event) { $("#unbreakButton").hide(); Service.unBreak(); });
+        $('body').on('click', '#unalarmButton', function (event) { $("#unalarmButton").hide(); Service.unAlarm(); });
+        $('body').on('click', '#taxiAlarm', function (event) { Service.alarm(); });
+        $('body').on('click', '#btnRecallMe', function (event) { Service.recallme(); });
+        $('body').on('click', '#btnSubmenu', function (event) { app.submenu(); });
+        $('body').on('click', '#btnNewsClose', function (event) { app.hideNews(); });
+                        
         $('#unbreakButton').hide();
+        $('#unalarmButton').hide();
 
-        //deviceready
-        //pause
-        //resume
-        //online
-        //offline
-        //backbutton
-        //menubutton
-        //searchbutton
         try {
             document.addEventListener('pause', function () { app.info("Pause"); }, false);
             document.addEventListener('resume', function () { app.info("Resume"); }, false);
@@ -91,12 +179,6 @@
                     e.preventDefault();
                     app.home();
                 }
-                //else {
-                //    if (confirm("Ukončiť aplikáciu?")) {
-                //        app.log("app.exitApp");
-                //        navigator.app.exitApp();
-                //    }
-                //}
             }, false);
 
         } catch (err) {
@@ -104,46 +186,18 @@
         }
 
         try {
-            if (app.isDevice) 
-                self.mediaNew = new Media(app.getPhoneGapPath() + "audio/sound1.mp3");
+            if (app.isDevice)
+                self.mediaNew = new Media(app.getPhoneGapPath() + "audio/sound_order.mp3");
             else
-                self.mediaNew = new Audio("audio/sound1.mp3");
+                self.mediaNew = new Audio("audio/sound_order.mp3");
         }
         catch (err) {
             app.log("Media: " + err);
         }
-        //    function () {
-        //        if (app.mediaNew) {
-        //            app.mediaNew.stop();
-        //            app.mediaNew.release();
-        //        }
-        //    },
-        //    function (error) {
-        //        app.log(error.message);
-        //    });
-
-        // Check of browser supports touch events...
-        //if (document.documentElement.hasOwnProperty && document.documentElement.hasOwnProperty('ontouchstart')) {
-        //    // ... if yes: register touch event listener to change the "selected" state of the item
-        //    $('.buttonlist').on('touchstart', 'button', function (event) {
-        //        $(event.target).addClass('tappable-active');
-        //    });
-        //    $('body').on('touchend', 'button', function (event) {
-        //        $('.tappable-active').removeClass('tappable-active');
-        //    });
-        //} else {
-        //    // ... if not: register mouse events instead
-        //    $('.buttonlist').on('mousedown', 'button', function (event) {
-        //        $(event.target).addClass('tappable-active');
-        //    });
-        //    $('body').on('mouseup', 'button', function (event) {
-        //        $('.tappable-active').removeClass('tappable-active');
-        //    });
-        //}
     },
     home: function (refresh) {
         app.route("orders");
-        if (refresh)
+        if (refresh && app.currentPage && app.currentPage.loadData)
             app.currentPage.loadData();
     },
     settings: function () {
@@ -154,32 +208,36 @@
         app.log("app.route: " + p);
         if (!Service.isComplet() && p != "settings")
             p = "settings";
-        //$('[data-route]').removeClass("selected");
-            var self = this;
-            var page = this.pages[p];
-            if (!page) {
-                switch (p) {
-                    case "orders": page = new OrdersView().render(); this.homePage = page; break;
-                    case "message": page = new MessageView().render(); break;
-                    case "states": page = new StatesView().render(); break;
-                    case "map": page = new MapView().render(); break;
-                    case "settings": page = new SettingsView().render(); break;
-                    default: this.showAlert("Undefined page:" + p, "ERROR"); return;
-                }
-                this.pages[p] = page;
+        var self = this;
+        var page = this.pages[p];
+        if (!page) {
+            switch (p) {
+                case "orders": page = new OrdersView(); this.homePage = page; break;
+                case "messages": page = new MessageView(); break;
+                case "history": page = new OrdersHistoryView(); break;
+                case "stand": page = new StandView(); break;
+                case "historyme": page = new OrdersHistoryView(); break;
+                case "states": page = new StatesView(); break;
+                case "map": page = new MapView(); break;
+                case "allsettings": page = new SettingsAllView(); break;
+                case "settings": page = new SettingsView(); break;
+                case "detail": page = new OrderDetail(); break;
+                case "autoorder": page = new AutoOrderView(); break;
+                case "messagenew": page = new MessageNewView(); break;
+
+                default: this.showAlert("Undefined page:" + p, "ERROR"); return;
             }
-           // $('[data-route="'+p+'"]').addClass("selected");
-            this.currentPageName = p;
-            this.slidePage(page);
+            this.pages[p] = page;
+            $('body').append(page.el);
+            page.render();
+        }
+        this.currentPageName = p;
+        this.slidePage(page);
     },
     slidePage: function (page) {
-
         var currentPageDest, self = this;
 
-        // If there is no current page (app just started) -> No transition: Position new page in the view port
         if (!this.currentPage) {
-            $(page.el).attr('class', 'page stage-center');
-            $('body').append(page.el);
             this.currentPage = page;
             setTimeout(function () {
                 if (page.onShow) 
@@ -193,40 +251,15 @@
         if (this.currentPage === page)
             return;
 
-        // Cleaning up: remove old pages that were moved out of the viewport
-         //.not('.homePage')
-        if (page.index < this.currentPage.index) {
-            // Always apply a Back transition (slide from left) when we go back to the search page
-            $(page.el).attr('class', 'page stage-left');
-            currentPageDest = "stage-right";
-        } else {
-            // Forward transition (slide from right)
-            $(page.el).attr('class', 'page stage-right');
-            currentPageDest = "stage-left";
-        }
-
-        $('body').append(page.el);
-
-        // Wait until the new page has been added to the DOM...
         setTimeout(function () {
-            // Slide out the current page: If new page slides from the right -> slide current page to the left, and vice versa
-            $(self.currentPage.el).attr('class', 'page transition ' + currentPageDest);
-            // Slide in the new page
-            $(page.el).attr('class', 'page stage-center transition');
-
+            $(self.currentPage.el).hide();
+            $(page.el).show();
             if (page.onShow)
                 page.onShow();
             else
                 self.waiting(true);
-
             self.currentPage = page;
-            
-            $('.stage-right, .stage-left').remove();
         });
-    },
-    scrollTop: function () {
-            window.scrollTo(0, 0);
-        document.body.scrollTop = 0;
     },
     refreshData: function (dataIds, callback) {
         var isCallback = false;
@@ -265,7 +298,7 @@
                    .addClass(Service.transporter.Status);
         $("#taxiText")
             .empty()
-            .html(settings.name + " " + Service.transporter.SPZ);
+            .html(settings.name + " " + Service.transporter.SPZ + " [" + Service.getTransporterStatusText()+"]");
     },
     getPhoneGapPath: function () {
         if (app.isDevice) {
@@ -282,15 +315,24 @@
         this.pages = {};
         this.registerEvents();
 
-        //try {
-        //    $('body').append($('script').attr("src", "http://maps.google.com/maps/api/js?sensor=false&callback=Map.apiOK"));
-        //}
-        //catch (err) {
-        //    app.info(err.message);
-        //}
-
         Service.initialize(function () {
             self.home();
+        });
+    },
+    radio: function (el, input)
+    {
+        var v = input.val();
+        $.each(el.children('[data_value]'), function () {
+            var $this = $(this);
+            if($this.attr('data_value') === v)
+                $this.addClass("selected");
+            else
+                $this.removeClass("selected");
+            $this.click(function () {
+                $this.siblings().removeClass("selected");
+                $this.addClass("selected");
+                input.val($this.attr("data_value"));
+            });
         });
     }
 };
@@ -304,3 +346,12 @@ function onLoad() {
     }
     
 }
+
+function showMenu() {
+    document.getElementById("submenu").style.display = "block";
+}
+function hideMenu() {
+    document.getElementById("submenu").style.display = "none";
+}
+
+

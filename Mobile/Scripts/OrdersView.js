@@ -1,4 +1,7 @@
-﻿var OrdersView = function() {
+﻿//var g_OrdersCheckSum = '';
+//var g_OrdersLastRefresh = null;
+
+var OrdersView = function () {
     this.index = 1;
     this.initialize = function() {
         this.el = $('<div/>');
@@ -6,7 +9,8 @@
 
     this.render = function () {
         this.el.html(OrdersView.template());
-       
+        $("#taxiHeader").click(function () { app.refreshData(["orders", "transporters"]); });
+
         //if (app.isDevice) {
         //    $(window).unload(function () {
         //        app.log("powermanagement.release");
@@ -35,9 +39,15 @@
         return this;
     };
 
+    this.onShow = function () {
+        this.loadData();
+    };
+
     this.loadData = function () {
         var self = this;
         $('#unbreakButton').hide();
+        $('#unalarmButton').hide();
+
         if (!Service.transporter) {
             $('.orders-list').html("");
             app.waiting(false);
@@ -48,12 +58,43 @@
         app.waiting();
         app.setHeader();
 
-        if (Service.transporter.Status == "Break") {
+        if (Service.transporter.inAlarm) {
+            $('#unalarmButton').show();
+            $('#menu').hide();
+            app.waiting(false);
+        }
+        else  if (Service.transporter.Status == "Break") {
             $('#unbreakButton').show();
+            $('#menu').hide();
             app.waiting(false);
         }
         else {
+            //$('#divsubmenu').show();
+            $('#menu').show();
             Service.getOrders(function (orders) {
+
+                ////check sum pre monzinu orders
+                //c_OrdersCheckSum = '';
+                ////nstavime datum refreshu
+                //g_OrdersLastRefresh = new Date();
+
+                $.each(orders.Items, function () {
+                    this.FormatedDate = Service.formatJsonDate(this.Date);
+                    if (this.Status == 'Cancel')
+                        this.StatusCancel = true;
+                    if (this.Status == 'Offered')
+                        this.StatusOfferGUI = true;
+
+                    //c_OrdersCheckSum += this.Status + this.Date;
+                });
+
+                ////vyhodnotit checksum 
+                //if (g_OrdersCheckSum != c_OrdersCheckSum) //zvukovy signal
+                //        app.playNew();
+                //g_OrdersCheckSum = c_OrdersCheckSum;
+
+                Service.ordersVer = orders.DataCheckSum;
+
                 $('.orders-list').html(OrdersView.liTemplate(orders.Items));
                 if (self.iscroll)
                     self.iscroll.refresh();
@@ -62,7 +103,9 @@
                 app.waiting(false);
 
                 $(".up").click(function () { self.changeOffer($(this).parent(), "Up"); });
-                $(".down").click(function () { self.changeOffer($(this).parent(), "Down"); });
+                $(".cancel").click(function () { self.changeOffer($(this).parent(), "Down"); });
+                $(".confirmCancel").click(function () { self.changeOffer($(this).parent(), "Down"); });
+                $(".content").click(function () { self.detail($(this).parent()); });
                 //$(".orderTimeToFree").click(function () { $(this).focus(); }).change(function () { alert($(this).val()); });
                 //
                 $('.orders-list').show();
@@ -70,12 +113,22 @@
             });
         }
     };
+    this.detail = function (btn) {
+        var self = this;
+        //Service.detail(btn.attr("data_localId"));
+        Service.orders.Current = Service.findOrder(btn.attr("data_Id"));
+        if (Service.orders.Current)
+            app.route("detail");
+    };
     this.changeOffer = function (btn, action) {
+
+        btn.removeClass().addClass("refWaiting");
+
+        
 
         var settings = Service.getSettings(), self = this;
         var data = {
             Action: action,
-            IsTransporter: true,
             GUID_Transporter: settings.transporterId,
             Status_Transporter: settings.transporterState,
             GUID: btn.attr("data_GUID_Offer"),
@@ -85,15 +138,26 @@
             Latitude: PositionService.lat,
             Longitude: PositionService.lng
         };
-        btn.removeClass().addClass("refWaiting");
 
-        data.Latitude = PositionService.lat,
-        data.Longitude = PositionService.lng
-        Service.callService("offer", data);
-    };
-    this.onShow = function () {
-        $("#taxiHeader").click(function () { app.refreshData(["orders", "transporters"]); });
-        this.loadData();
+        //dame defaultny cas na vybavenie 
+        data.TimeToRealize = Globals.constants.OrderDetail_Defauls_timeToRealize;
+        //data.TimeToRealizeFrom = Date.UTC;
+
+        //notify
+        NotificationLocal.Notify("changeOffer", data, null, null);
+        NotificationLocal.Notify("changeOffer"+action, data, null, null);
+
+
+        //pre ponuku sa povodne islo do detailu, ale to zmenime. 
+        //if(action == "Up" && (data.Status == "New" || data.Status == "Offered"))
+        //{
+        //    Service.orders.Current = Service.findOrder(data.GUID_TransporterOrder);
+        //    if (Service.orders.Current)
+        //        app.route("detail");
+        //    return;
+        //}
+
+        Service.callService("transporteroffer", data);
     };
     this.initialize();
 }

@@ -5,18 +5,16 @@ var SettingsView = function (messages) {
         this.el = $('<div/>');
     };
 
-    this.render = function() {
+    this.render = function () {
+        var self = this;
+        this.el.html(SettingsView.template());
+        $("#settingsSave").click(function () { if (!$(this).hasClass("transparent")) self.save(); });
+        $("#appExit").click(function () { app.end(function () { self.loadForm(); }); })
         return this;
     };
 
     this.onShow = function () {
-        var self = this;
-        this.el.html(SettingsView.template());
         $("#settingsForm").hide();
-        app.waiting();
-        $("#settingsSave").click(function () { if(!$(this).hasClass("transparent")) self.save(); });
-        $("#appExit").click(function () { if (app.end()) self.loadForm(); })
-        
         this.loadForm();
     };
     this.save = function () {
@@ -38,6 +36,7 @@ var SettingsView = function (messages) {
         });
     };
     this.loadForm = function () {
+        app.waiting();
         var self =this, data = Service.getSettings();
         if (Service.isAuthenticated) 
             Service.getTransporters(function (d) {
@@ -50,13 +49,6 @@ var SettingsView = function (messages) {
             data.ErrorMessage = Service.connectionError;
             app.waiting(false);
             $("#settingsForm").html(SettingsView.templateForm(data));
-
-            //$("input").bind('focus', function (event) {
-            //    app.scrollTop();
-            //});
-            //$("select").bind('focus', function (event) {
-            //    app.scrollTop();
-        //});
 
             if(Service.isComplet())
                 $("#settingsOrders").removeClass("transparent");

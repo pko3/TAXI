@@ -1,8 +1,11 @@
 ﻿var Service = {
     online: false,
     ordersVer: undefined,
+    messagesVer: undefined,
     transporterVer: undefined,
     transporter: null,
+    orders: null,
+    messages : null,
     isSendloginHistory: false,
     isAuthenticated: false,
     isComplet: function () {
@@ -23,6 +26,7 @@
         password: undefined,
         userId: undefined,
         transporterId: undefined,
+        transporterSPZ: undefined,
         url: undefined,
         sessionId: undefined,
         enableHighAccuracy: true
@@ -37,14 +41,16 @@
             error: function (jqXHR, textStatus, errorThrown) {
                 switch (jqXHR.status) {
                     case 403: Service.connectionError = "Chybné prihlásenie"; break;
-                    case 404: Service.connectionError = "Služba sa nenašla: " + this.url; break;
-                    default: Service.connectionError = "Služba sa nenašla: " + this.url; break;
+                    default: Service.connectionError = "Služba sa nenašla (" + jqXHR.status + "):" + this.url; break;
                 }
             }
         });
+        
+        //disable vyber auta pre permanent driver: 
+        $("#transporterId").prop("disabled", true); 
 
         this.login(callback);
-        //callback();
+        //initialize lists
     },
     login: function (callback) {
         app.log("Service.login");
@@ -54,21 +60,46 @@
             this.callService("login", { UserName: this._settings.name, Password: this._settings.password, RememberMe: true, TransporterId: this._settings.transporterId }, function (d) {
                 Service.isAuthenticated = true;
                 var s = Service.getSettings();
-                s.userId = d.userId;
+                s.userId = d.userId; 
                 s.sessionId = d.sessionId;
+                s.bool_DriverPermanent = false;
+                //permamnet driver ! 
+                if (d.ItemsDictKeys!=null)
+                {
+                    var pos = d.ItemsDictKeys.indexOf("bool_DriverPermanent");
+                    if(pos>-1)
+                    {
+                        var ispermanent = d.ItemsDictValues[pos];
+                        if (ispermanent == true)
+                        {
+                            pos = d.ItemsDictKeys.indexOf("GUID_Transporter");
+                            if (pos > -1)
+                            {
+                                var guid_transp = d.ItemsDictValues[pos];
+                                if (guid_transp) {
+                                    s.transporterId = guid_transp;
+                                    s.bool_DriverPermanent = true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+
                 Service.saveSettings(s);
                 if (Service.isComplet()) {
+                    Lists.listInitialize();
                     PositionService.startWatch();
                     Service.loginHistory();
-
                     app.refreshTransporter(callback);
-                    //navigator.geolocation.getCurrentPosition(function (position) {
-                    //    PositionService.lat = position.coords.latitude;
-                    //    PositionService.lng = position.coords.longitude;
-                    //    Service.loginHistory()
-                    //}, function () { Service.loginHistory() });
                 }
-                else if (callback) callback();
+                else {
+                    if (Service.isAuthenticated && s.transporterId==null)
+                    {
+                        $("#transporterId").prop("disabled", false);
+                    }
+                    if (callback) callback();
+                }
 
             }, function (d) {
                 //PositionService.stopWatch();
@@ -90,7 +121,6 @@
                 GUID_Transporter: s.transporterId,
                 GUID_sysUser_Driver: s.userId,
                 HistoryAction: "Driver login",
-                IsTransporter: true,
                 Latitude: PositionService.lat,
                 Longitude: PositionService.lng
             },
@@ -107,11 +137,12 @@
             PositionService.stopWatch();
             Service.isAuthenticated = false;
             var s = Service.getSettings();
+            //notify local 
+            NotificationLocal.Notify("logout",s, null, null);
             Service.callService("TaxiSetHistory", {
                 GUID_Transporter: s.transporterId,
                 GUID_sysUser_Driver: null,
                 HistoryAction: "Driver logout",
-                IsTransporter: true,
                 Latitude: PositionService.lat,
                 Longitude: PositionService.lng
             },
@@ -124,17 +155,90 @@
         else
             if (callback) callback();
     },
-    autoOrder: function () {
-        if (confirm("Prijať objednávku?")) {
-            this.callService("MobileAutoOrder", { GUID_Transporter: this._settings.transporterId, OrderSource: "Auto", OrderSourceDescription: "autoOrder", Latitude: PositionService.lat, Longitude: PositionService.lng }, function () { app.home(true); }, function () { app.home(true); });
+    findOrder: function (id) {
+        if (this.orders && this.orders.Items) {
+            var r = $.grep(this.orders.Items, function (o) { return o.GUID == id; });
+            if (r.length > 0)
+                return r[0];
         }
+        return undefined;
+    },
+    autoOrder: function () {
+        app.showConfirm("Prijať objednávku?", "Objednávka", function () {
+
+            var s = Service.getSettings();
+
+            //notify
+            NotificationLocal.Notify("autoOrder", s, null, null);
+
+            Service.callService("MobileAutoOrder", { GUID_Transporter: s.transporterId, OrderSource: "Auto", OrderSourceDescription: "autoOrder", Latitude: PositionService.lat, Longitude: PositionService.lng }, function () { app.home(true); }, function () { app.home(true); });
+        });
+    },
+    autoOrder2: function (EndCity,EndAddress,TimeToRealize,callback) {
+            var s = Service.getSettings();
+            //notify
+            NotificationLocal.Notify("autoOrder", s, null, null);
+            Service.callService("MobileAutoOrder", { GUID_Transporter: s.transporterId, OrderSource: "Auto", OrderSourceDescription: "autoOrder", Latitude: PositionService.lat, Longitude: PositionService.lng, EndCity: EndCity, EndAddress: EndAddress, TimeToRealize: TimeToRealize }, function () { app.home(true); }, function () { app.home(true); });
+            //if (callback)
+            //    callback();
     },
     getOrders: function (callback) {
-        this.callService("datamobile", { Id:"transporterorders", IdTransporter: this._settings.transporterId }, callback);
+        var self = this;
+        this.callService("datamobile", { Id: "transporterorders", IdTransporter: this._settings.transporterId }, function (orders) {
+            Service.orders = orders;
+            if (Service.orders && Service.orders.Items)
+                $.each(Service.orders.Items, function () {
+                    self.setOrderDescription(this);
+                });
+            if (callback)
+                callback(orders);
+        });
     },
+
     getMessages: function (callback) {
-        this.callService("datamobile", { Id: "transporterMessages" }, callback);
+        var self = this;
+        this.callService("datamobile", { Id: "transportermessages", IdUser: this._settings.userId }, function (messages) {
+            Service.messages = messages;
+            if (callback)
+                callback(messages);
+        });
     },
+
+
+    setOrderDescription: function (order) {
+        if (!order.GUID)
+            order.Status = "";
+        switch (order.Status) {
+            case "New": order.StatusDescription = "Poslaná"; break;
+            case "Offered": order.StatusDescription = "Ponúknutá"; break;
+            case "Reserved": order.StatusDescription = "Rezervovaná"; break;
+            case "Waiting": order.StatusDescription = "Pristavené"; break;
+            case "Cancel": order.StatusDescription = "Zrušená"; break;
+            case "Processing": order.StatusDescription = "Transport"; break;
+            default: order.StatusDescription = "Vybavená"; break;
+        }
+        //order.FormatedDate = Service.formatDate(order.OrderToDate);
+    },
+    getTransporterStatusText: function () {
+        switch (Service.transporter.Status) {
+            case "Offline": return "Mimo dosahu";
+            case "Free": return "Voľný";
+            case "Busy": return "Obsadený";
+            case "WithCustomer": return "So zákazníkom";
+            case "Break": return "Prerušenie";
+            default: return Service.transporter.Status;
+        }
+    },
+
+
+    getHistoryOrders: function (viewName, callback) {
+        this.callService("datamobile", { Id: viewName, IdTransporter: this._settings.transporterId }, callback);
+    },
+
+    //getHistoryOrdersMe: function (callback) {
+    //    this.callService("datamobile", { Id: "orders_lastforDriverMe", IdTransporter: this._settings.transporterId }, callback);
+    //},
+
     getTransporters: function (callback) {
         var self = this;
         this.callService("datamobile", { Id: "transporterssimple" }, function (d) {
@@ -156,10 +260,9 @@
     unBreak : function () {
         app.waiting();
         var s = Service.getSettings();
-        Service.callService("TransporterUnBreak",  {
+        Service.callService("TransporterUnBreak", {
             GUID_Transporter: s.transporterId,
             GUID_sysUser_Driver: s.userId,
-            IsTransporter: true,
             Latitude: PositionService.lat,
             Longitude: PositionService.lng
         },
@@ -170,6 +273,137 @@
                 app.info(d.ErrorMessage);
                 app.home(true);
             });
+    },
+    alarm: function () {
+        app.waiting();
+        var s = Service.getSettings();
+        Service.callService("TransporterAlarm", {
+            GUID_Transporter: s.transporterId,
+            GUID_sysUser_Driver: s.userId,
+            Latitude: PositionService.lat,
+            Longitude: PositionService.lng
+        },
+            function () {
+                app.home(true);
+            },
+            function (d) {
+                app.info(d.ErrorMessage);
+                app.home(true);
+            });
+    },
+    recallme: function () {
+        app.waiting();
+        var s = Service.getSettings();
+        var cls = "ico_hangup";
+        var clsrem = "ico_phone";
+        var met = "TransporterRecall";
+        if (Globals.GLOB_RecallMe) {
+            met = "TransporterUnRecall";
+            cls = "ico_phone";
+            clsrem = "ico_hangup";
+        }
+        app.log("recall calling: " + met);
+
+        Service.callService(met, {
+            GUID_Transporter: s.transporterId,
+            GUID_sysUser_Driver: s.userId,
+            Latitude: PositionService.lat,
+            Longitude: PositionService.lng
+        },
+            function () {
+                Globals.GLOB_RecallMe = !Globals.GLOB_RecallMe;
+
+                //zmena buttonu 
+                $("#btnRecallMe")
+                        .removeClass(clsrem)
+                        .addClass(cls);
+
+                app.home(true);
+            },
+            function (d) {
+                app.info(d.ErrorMessage);
+                app.home(true);
+            });
+    },
+    unAlarm: function () {
+        app.waiting();
+        var s = Service.getSettings();
+        Service.callService("TransporterUnAlarm", {
+            GUID_Transporter: s.transporterId,
+            GUID_sysUser_Driver: s.userId,
+            Latitude: PositionService.lat,
+            Longitude: PositionService.lng
+        },
+            function () {
+                app.home(true);
+            },
+            function (d) {
+                app.info(d.ErrorMessage);
+                app.home(true);
+            });
+    },
+
+    sendNewMessage: function (MessageType, MessageText, LifeTimeMinutes, isAnswer, needAnswer, SenderRole, ReceiverRole, GUID_sysUser_Sender, GUID_sysUser_Receiver, Latitude, Longitude) {
+        app.waiting();
+        Service.callService("SendMessage", {
+            MessageType: MessageType,
+            MessageText: MessageText,
+            LifeTimeMinutes: LifeTimeMinutes,
+            isAnswer: isAnswer,
+            needAnswer: needAnswer,
+            SenderRole:SenderRole,
+            ReceiverRole: ReceiverRole,
+            GUID_sysUser_Sender: GUID_sysUser_Sender,
+            GUID_sysUser_Receiver:GUID_sysUser_Receiver,
+            Latitude: Latitude,
+            Longitude: Longitude,
+
+        },
+            function () {
+                app.home(true);
+            },
+            function (d) {
+                app.info(d.ErrorMessage);
+                app.home(true);
+            });
+    },
+
+    deleteMessage: function (GUID) {
+        app.waiting();
+        console.log("delete 1 message: " + GUID);
+        Service.callService("DeleteMessage", {
+            GUID: GUID
+
+        },
+            function () {
+                app.home();
+            },
+            function (d) {
+                app.info(d.ErrorMessage);
+                app.home();
+            });
+    },
+
+    recallOrder: function (callback) {
+        app.waiting();
+        var s = Service.getSettings();
+        if (Service.orders && Service.orders.Current) {
+            Service.callService( Service.orders.Current.RecallNeed ? "OrderUnRecall":"OrderRecall", {
+                GUID_Transporter: s.transporterId,
+                GUID_sysUser_Driver: s.userId,
+                GUID_TransporterOrder: Service.orders.Current.GUID,
+                Latitude: PositionService.lat,
+                Longitude: PositionService.lng
+            },
+            function () {
+                app.waiting(false);
+                Service.orders.Current.RecallNeed = Service.orders.Current.RecallNeed ? false : true;
+                
+                if (callback)
+                    callback();
+            }
+            );
+        }
     },
     getDetail: function (entity, id, callback) {
         this.callService("itemmobile", { Id: entity + "_" + id }, callback, callback);
@@ -206,6 +440,7 @@
         else {
             if (data) {
                 data.UserTicket = this._settings.sessionId;
+                data.IsTransporter = true;
                 //data.GUID_sysUser_Driver = this._settings.userId;
             }
             $.post(this._settings.url + "/app/" + method, data)
@@ -238,14 +473,44 @@
                        successDelegate();
                  })
                 .fail(function () {
-                    app.log("Service.callService - " + Service.connectionError + ": " + this.url);
                     app.waiting(false);
-                    //Service.connectionError = "Spojenie sa nepodarilo " + this.url;
+                    app.log("Service.callService - " + Service.connectionError + ": " + this.url);
                     if (errorDelegate)
                         errorDelegate({ ErrorMessage: Service.connectionError });
                     else
                         app.showAlert(Service.connectionError + ": " + this.url, "Chyba");
                 });
         }
+    },
+    parseJsonDate: function (jsonDate) {
+        try{
+            var offset = 0; // new Date().getTimezoneOffset() * 60000;
+            var parts = /\/Date\((-?\d+)([+-]\d{2})?(\d{2})?.*/.exec(jsonDate);
+
+            if (parts[2] == undefined)
+                parts[2] = 0;
+
+            if (parts[3] == undefined)
+                parts[3] = 0;
+
+            return new Date(+parts[1] + offset + parts[2] * 3600000 + parts[3] * 60000);
+        }
+        catch (err) {
+            return undefined;
+        }
+    },
+    formatJsonDate: function (jsonDate) {
+
+      //  var date = new Date(parseInt(jsonDate.substr(6)));
+       // var formattedDate = date.format("dd-MM-yyyy");
+
+        var d = Service.parseJsonDate(jsonDate);
+       // var t = jQuery.parseJSON(1386340220807);
+      //  var tt = new Date(1386340220807);
+
+        //return d.toLocaleDateString() + " <br/><strong>" + d.toLocaleTimeString().substring(0, 5) + "</strong>"; //
+        if (d)
+            return d.getDate() + ". " + (d.getMonth()+1) + ". " + d.getFullYear() + " " + d.toTimeString().substring(0, 5);
+        return "";
     }
 }

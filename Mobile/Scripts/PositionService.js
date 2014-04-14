@@ -1,4 +1,5 @@
-﻿var PositionService = {
+﻿
+var PositionService = {
     lat:0,
     lng: 0,
     _lat: 0,
@@ -13,7 +14,7 @@
                 navigator.geolocation.clearWatch(this.watchID);
 
             this.watchID = navigator.geolocation.watchPosition(function (position) {
-                app.info("Presnosť pozície: " + position.coords.accuracy + "m");
+                app.info(Translator.Translate("Presnosť pozície") + ": " + position.coords.accuracy + "m");
                 PositionService.lat = position.coords.latitude;
                 PositionService.lng = position.coords.longitude;
             }, function (err) {
@@ -69,10 +70,25 @@
                 //app.info("Posielam ...");
                 var s = Service.getSettings();
 
+                //store previous position
+                Globals.Position_LatPrev = Globals.Position_Lat;
+                Globals.Position_LngPrev = Globals.Position_Lng;
+
+
                 var posChanged = PositionService._lat != PositionService.lat && PositionService._lng != PositionService.lng;
+
+
+
+                
                 if (posChanged) {
                     PositionService._lat = PositionService.lat;
                     PositionService._lng = PositionService.lng;
+                    Globals.Position_Lat = PositionService.lat;
+                    Globals.Position_Lng = PositionService.lng;
+                
+                    //stanoviste - zmena ! 
+                    Stand.CheckStandAvailable();
+
                 }
 
                 Service.callService("MobilePool", {
@@ -80,7 +96,7 @@
                     Lat: posChanged ? PositionService.lat : 0,
                     Lng: posChanged ? PositionService.lng : 0,
                 },
-                function (d) { PositionService.startPool(); PositionService.refreshVersionData(d); },
+                function (d) { PositionService.startPool(); app.info(""); PositionService.refreshVersionData(d); },
                 function (d) { PositionService.startPool(); if (d.ErrorMessage) app.info(d.ErrorMessage); PositionService.refreshVersionData(d); });
             }
             catch (err) {
@@ -92,14 +108,17 @@
             PositionService.startPool();
     },
     refreshVersionData: function (d) {
-        if (d.oVer && d.oVer != Service.ordersVer) {
-            Service.ordersVer = d.oVer;
+        
+        if ((d.DataCheckSum && d.DataCheckSum != Service.ordersVer)) {
+            Service.ordersVer = d.DataCheckSum;
+            console.log("app play new call");
+            app.log("app play new call");
             app.playNew();
-            app.refreshData(["orders"]);
+            app.refreshData(["orders", "transporters"]);
         }
-        if (d.tVer && d.tVer != Service.transporterVer) {
-            Service.transporterVer = d.tVer;
-            app.refreshData(["transporters"]);
-        }
+        //if (d.tVer && d.tVer != Service.transporterVer) {
+        //    Service.transporterVer = d.tVer;
+            
+        //}
     }
 }
