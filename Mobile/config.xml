@@ -2,25 +2,33 @@
 <widget xmlns       = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
         id          = "sk.dflexnr.taxi"
-        versionCode = "409"
-        version     = "1.4.9">
+        versionCode = "433"
+        version     = "1.4.33">
  
     <name>TAXI</name>
   
     <description>
         TAXI application
     </description>
- 
-    <author href="http://dflexnr.sk" email="pko@dflexnr.sk">
-        Peter Kotry
-    </author>
-  <icon src="img/phoneicon.png" />
-    
-  <preference name="load-url-timeout" value="10000" />
-  <preference name="phonegap-version" value="2.9.0" />
 
-    <access origin="*" />
-    
-    <feature name="http://api.phonegap.com/1.0/geolocation"/>
-    <feature name="http://api.phonegap.com/1.0/network"/>
+  <author href="http://www.datastream.sk" email="info@datastream.sk">
+    DataStream
+  </author>
+  
+  <icon src="img/phoneicon.png" />
+
+  <icon src="img/phoneicon57.png"          gap:platform="ios" width="57"  height="57"  />
+  <icon src="img/phoneicon72.png"       gap:platform="ios" width="72"  height="72"  />
+  <icon src="img/phoneicon120.png"       gap:platform="ios" width="120"  height="120"  />
+  <icon src="img/phoneicon152.png"       gap:platform="ios" width="152"  height="152"  />
+  <icon src="img/phoneicon76.png"       gap:platform="ios" width="76"  height="76"  />
+
+  <preference name="load-url-timeout" value="60000" />
+  <preference name="phonegap-version" value="2.9.0" />
+  <preference name="DisallowOverscroll" value="true" />
+
+  <access origin="*" />
+
+  <feature name="http://api.phonegap.com/1.0/geolocation"/>
+  <feature name="http://api.phonegap.com/1.0/network"/>
 </widget>

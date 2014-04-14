@@ -87,6 +87,8 @@
 
         $.each(data.Items, function () {
             this.FormatedDate = Service.formatJsonDate(this.OrderToDate);
+            //fake guid :
+            this.GUID = "aaa";
             this.Status = Service.setOrderDescription(this);
             this.iOrder = i++;
         });
