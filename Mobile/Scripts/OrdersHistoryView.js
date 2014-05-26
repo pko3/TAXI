@@ -35,8 +35,12 @@
         app.waiting();
 
         var sel = $("#selectHistory").val();
+        //view_orders_history1h||view_orders_history1monthme||view_orders_historyreservations
         switch (sel)
         {
+            case "1h":
+                self.view2h(); //view_orders_history1h
+                break;
             case "2h":
                 self.view2h();
                 break;
@@ -45,6 +49,12 @@
                 break;
             case "My24h":
                 self.viewMy24h();
+                break;
+            case "My1Month":
+                self.viewMymonth();   //view_orders_history1monthme
+                break;
+            case "Reservations":
+                self.viewReservations(); //view_orders_historyreservations
                 break;
             case "Test":
                 self.viewtest();
@@ -130,6 +140,13 @@
         $('.ordersHistory-list').show();
     }
 
+    this.view1h = function (e) {
+        var self = this;
+        Service.getHistoryOrders("view_orders_history1h", function (orders) {
+            self.renderOrders(orders);
+        });
+    }
+
     this.view2h = function (e)
     {
         var self = this;
@@ -141,6 +158,20 @@
     this.viewMy24h = function (e) {
         self = this;
         Service.getHistoryOrders("view_orders_history24hme", function (orders) {
+            self.renderOrders(orders);
+        });
+    }
+
+    this.viewMymonth = function (e) {
+        self = this;
+        Service.getHistoryOrders("view_orders_history1monthme", function (orders) {
+            self.renderOrders(orders);
+        });
+    }
+
+    this.viewReservations = function (e) {
+        self = this;
+        Service.getHistoryOrders("view_orders_historyreservations", function (orders) {
             self.renderOrders(orders);
         });
     }

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>TAXI driver</title>
+    <title>TAXI driver test DataStream</title>
     <meta charset="utf-8"/>
     <link href="css/styles.css" rel="stylesheet">
 </head>
@@ -137,11 +137,14 @@
     <button id="historyTitle" class="textHeaderTitle" disabled="disabled">História</button>
     <div style="position:absolute; left:200px; top:2px; right:0px;">
     <select id="selectHistory">
-        <option value="2h">Posledné 2 hodiny</option>
-        <option value="24h">Posledných 24 hodín</option>
-        <option value="My24h">Moje za 24 hod.</option>
-        <option value="MyTodayTab">Moje dnes</option>
-        <option value="MyYestTab">Moje včera</option>
+        <option value="1h">1 hodina</option>
+        <option value="2h">2 hodiny</option>
+        <option value="24h">24 hodín</option>
+        <option value="My24h">Moje 24 hod.</option>
+        <option value="My1Month">Moje 1 mesiac</option>
+        <option value="Reservations">Rezervácie</option>
+        <!--<option value="MyTodayTab">Moje dnes</option>-->
+        <!--<option value="MyYestTab">Moje včera</option>-->
     </select>
  </div>
 </div>
@@ -345,7 +348,6 @@
          {{else}}
          <div id="{{this.GUID}}" class="Cancel" style="margin-left:75px;">
          {{/if}}
-
 
             <div class="icon cancel">&nbsp;</div>
             <div class="content">
