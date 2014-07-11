@@ -27,6 +27,82 @@ body
 	font-size: 14px;
 }
 
+#taxiStatus {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    width: 200px;
+    height: 65px;
+    font-size: xx-large;
+    font-weight: bold;
+    vertical-align: middle;
+    text-align: center;
+}
+
+#taxiStatusInfo {
+    position:absolute;
+    top:0;
+    right:0px;
+    width: 50px;
+    height: 50px;
+}
+
+#taxiStatusInfo.Free {
+    background-color:green;
+}
+
+#taxiStatusInfo.NotFree {
+    background-color:red
+}
+#taxiStatusInfo.None {
+   display:none;
+}
+
+
+#taxiStatusOffers {
+    position:absolute;
+    top:0;
+    right:50px;
+    width: 50px;
+    height: 50px;
+}
+#taxiStatusOffers.New {
+    background-color:blue
+}
+#taxiStatusOffers.None {
+    background-color:transparent;
+    display:none;
+}
+
+#taxiStatusMessages {
+    position:absolute;
+    top:0;
+    right:100px;
+    width: 50px;
+    height: 50px;
+}
+#taxiStatusMessages.New {
+    background-color:blue
+}
+#taxiStatusMessages.None {
+    background-color:transparent;
+    display:none;
+}
+
+#taxiStatusPark {
+    position:absolute;
+    top:0;
+    right:150px;
+    width: 50px;
+    height: 50px;
+}
+#taxiStatusPark.New {
+    background-color:blue
+}
+#taxiStatusPark.None {
+    background-color:transparent;
+    display:none;
+}
 
 textarea {
     font-size: xx-large;
@@ -307,6 +383,12 @@ button
 {
 	background-color: #4286f5;
 	color: white;
+}
+/*toto je pre objednavku, ktora je broadcast - ako aukcia*/
+.buttonlist div.Offered.BroadCast 
+{
+	background-color: yellow;
+	color: #000000;
 }
 
 .buttonlist div.Waiting
