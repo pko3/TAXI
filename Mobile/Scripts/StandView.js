@@ -109,7 +109,7 @@
             }
 
             //uz sme prihlaseni, nemozme nastupit na stanoviste
-            if (Globals.GLOB_GUID_Stand != "" || standresult.Items[i].FreePlaces < 1) standresult.Items[i].CanStand = false;
+            if (Globals.GLOB_GUID_Stand != Globals.GUIDEmpty || standresult.Items[i].FreePlaces < 1) standresult.Items[i].CanStand = false;
 
             
             //nemoze sa prihlasit pre vzdialenost!!!
@@ -232,12 +232,19 @@ var Stand = {
 
     },
 
+    JoinStandFromNews: function(StandGuid)
+    {
+
+        var sw = new StandView();
+        sw.joinStand(StandGuid);
+
+    },
 
     CheckStandAvailable: function()
     {
 
         //ak sme na stanovisti, tak prec ! 
-        if (Globals.GLOB_GUID_Stand != "") return;
+        if (Globals.GLOB_GUID_Stand != Globals.GUIDEmpty) return;
 
 
         //od poslenej ponuky neubehlo este dost casu ? 
@@ -248,6 +255,7 @@ var Stand = {
 
         var Distanceminkm = 100000;
         var StandNear = "";
+        var StandGuid = "";
 
         var standresult = Lists.getListItems("Stand");
         for (var i = 0; i < standresult.Items.length; i++) {
@@ -257,11 +265,13 @@ var Stand = {
             if (Distancekm0 < Distanceminkm) {
                 Distanceminkm = Distancekm0;
                 StandNear = standresult.Items[i].Title;
+                StandGuid = standresult.Items[i].GUID;
             }
+            
         }
 
         //nie je na stanovisku
-        if (Globals.GLOB_GUID_Stand == "") {
+        if (Globals.GLOB_GUID_Stand == Globals.GUIDEmpty) {
 
             //od poslenej ponuky neubehlo este dost casu ? 
             var differenceSec = (Date.now() - Stand.lastOffer) / 1000;
@@ -275,7 +285,9 @@ var Stand = {
             if (availbale) {
                 console.log("CheckStandAvailable show News!!");
                 Stand.lastOffer = Date.now();
-                var content = Translator.Translate("Vo vašej blízkosti sa nachádza stanovište")+" : "+StandNear + "<br/><button id=\"btnStand\"  data-route=\"stand\" style=\"background-color:black;\" class=\"textnoicon\">Stanovištia</button>";
+                //var content = Translator.Translate("Vo vašej blízkosti sa nachádza stanovište")+" : "+StandNear + "<br/><button id=\"btnStand\"  data-route=\"stand\" style=\"background-color:black;\" class=\"textnoicon\">Stanovištia</button>";
+                var scriptText = "onclick = \"Stand.JoinStandFromNews('"+StandGuid+"')\"";
+                var content = Translator.Translate("Vo vašej blízkosti sa nachádza stanovište") + " : " + StandNear + "<br/><button id=\"btnStand\" " + scriptText + "  style=\"background-color:black;\" class=\"textnoicon\">"+Translator.Translate("Vstúpiť")+"</button>";
                 //app.showNew();
                 app.showNewsComplete(Translator.Translate("Stanovište"), MediaInternal.getNewsSoundFile("StandAvailable"), "", 10000, content);
             }
@@ -294,9 +306,23 @@ var Stand = {
 
     },
 
+
+    evaluateStand: function()
+    {
+        //out
+        if (Globals.GLOB_GUID_Stand == "" || Globals.GLOB_GUID_Stand == Globals.GUIDEmpty) {
+            Stand.setIconFree();
+            app.setStatusBarNonePark();
+        }
+        else {
+            Stand.setIconNotFree();
+            app.setStatusBarNewPark();
+        }
+    },
+
     succesLeaveStand : function ()
     {
-        Globals.GLOB_GUID_Stand = "";
+        Globals.GLOB_GUID_Stand = Globals.GUIDEmpty;
         Globals.GLOB_StandPosition = 0;
         Stand.setIconFree();
         app.setStatusBarNonePark();
@@ -305,7 +331,7 @@ var Stand = {
     LeaveStand : function (callback)
     {
 
-        if (Globals.GLOB_GUID_Stand == "")
+        if (Globals.GLOB_GUID_Stand == Globals.GUIDEmpty)
         {
             app.log("Leave stand not need");
             return;

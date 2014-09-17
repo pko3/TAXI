@@ -5,7 +5,7 @@
         GLOB_RecallMe: false,
 
         //pozicia na stanovisti 
-        GLOB_GUID_Stand: "",
+        GLOB_GUID_Stand: "00000000-0000-0000-0000-000000000000",
         GLOB_StandPosition: 0,
 
         //array of local lists
@@ -44,6 +44,10 @@
         //LOG + tracer
         traceMessage : "",
         
+
+        GUIDEmpty: "00000000-0000-0000-0000-000000000000",
+
+        SplitString : "||",
 
         //CONSTANTS
         constants: {

@@ -2,7 +2,7 @@
     online: false,
     ordersVer: undefined,
     messagesVer: undefined,
-    transporterVer: undefined,
+    transporterVer: "",
     transporter: null,
     orders: null,
     messages : null,

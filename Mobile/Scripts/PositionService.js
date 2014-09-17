@@ -159,10 +159,11 @@ var PositionService = {
             MediaInternal.playSoundInMedia("Message_New");
         }
 
+        //nieco je s transporterom na servri, napr stanoviste 
+        if (checkSum_Transporter && checkSum_Transporter != Service.transporterVer) {
+            Transporter.ProcessCheckSum(checkSum_Transporter);
+        }
 
-        //if (d.tVer && d.tVer != Service.transporterVer) {
-        //    Service.transporterVer = d.tVer;
-            
-        //}
+
     }
 }
