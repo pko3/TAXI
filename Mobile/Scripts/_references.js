@@ -24,6 +24,9 @@
 /// <reference path="MediaInternal.js" />
 /// <reference path="Diagnostic.js" />
 /// <reference path="Transporter.js" />
+/// <reference path="AutoOrderToDispView.js" />
+/// <reference path="ListView.js" />
+/// <reference path="Tools.js" />
 
 
 

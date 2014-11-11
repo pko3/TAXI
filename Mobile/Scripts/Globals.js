@@ -1,5 +1,10 @@
 ﻿var Globals = 
     {
+        items: [],
+        initialize: function () {
+            app.log("Globals initialize");
+            Globals.GetPhoneSetting();
+        },
 
         //prezvonenie
         GLOB_RecallMe: false,
@@ -57,6 +62,31 @@
             Stand_Distancekm: 0.200,
             Stand_OfferSec:180, //180
         },
+
+        GetPhoneSetting: function () {
+            var self = this;
+            Globals.items = new Array();
+            Service.getListItems("view_PhoneSettings", function (listitems) {
+                $.each(listitems.Items, function () {
+                    Globals.items.push(this);
+                });
+            });
+
+
+        },
+
+        //najde hodnotu setting value v zozname settingova
+        GetSetItem: function (Title)
+        {
+            var ret = "";
+            if (!Globals.items) return ret;
+            for (var i = 0, iLen = Globals.items.length; i < iLen; i++) {
+
+                if (Globals.items[i].Title == Title) return Globals.items[i].SettingValue;
+            }
+
+            return ret;
+        }
     }
 
 
